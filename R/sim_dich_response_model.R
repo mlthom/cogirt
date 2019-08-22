@@ -82,4 +82,5 @@ sim_dich_response <- function(N, I, J, M, K, nu_mu, nu_sigma2, lambda, gamma, om
   return(simdat)
 }
 
+
 #I'm a change.
