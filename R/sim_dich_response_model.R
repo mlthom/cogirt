@@ -81,4 +81,3 @@ sim_dich_response <- function(N, I, J, M, K, nu_mu, nu_sigma2, lambda, gamma, om
   simdat <- list(y = y, ystar = ystar, nu = nu, lambda = lambda, gamma = gamma, omega = omega, zeta = zeta)
   return(simdat)
 }
-
