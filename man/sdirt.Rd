@@ -13,6 +13,14 @@
   \item{gamma}{Matrix of experimental structure parameters.}
   \item{omega}{Subject-level effects of the experimental manipulation.}
   \item{zeta}{Condition-level prediction errors.}
+  \item{omega_mu}{Vector of means for the subject-level effects of the
+experimental manipulation (1 by K * M).}
+  \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
+experimental manipulation (K * M by K * M).}
+  \item{zeta_mu}{Vector of means for the condition-level prediction errors
+(1 by J * M).}
+  \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
+errors (J * M by J * M).}
   ...
 }}
 \usage{
