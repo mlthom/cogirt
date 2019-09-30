@@ -5,23 +5,25 @@
 #' dichotomous response model framed using generalized latent variable modeling
 #' (GLVM; Skrondal & Rabe-Hesketh, 2004).
 #'
-#' @param y Matrix of item responses (N by I * J).
-#' @param nu Matrix of item intercept parameters (N by I * J).
-#' @param lambda Matrix of item structure parameters (I * J by J * M).
-#' @param gamma Matrix of experimental structure parameters (J * M by K * M).
+#' @param y Matrix of item responses (K by I * J).
+#' @param nu Matrix of item intercept parameters (K by I * J).
 #' @param omega Examinee-level effects of the experimental manipulation
-#' (N by K * M).
-#' @param zeta Condition-level effects nested within examineess (N by J * M).
+#' (K by M * N).
+#' @param gamma Matrix of experimental structure parameters (J * M by M * N).
+#' @param lambda Matrix of item structure parameters (I * J by J * M).
+#' @param zeta Condition-level effects of the experimental manipulation
+#' (K by J * M).
 #' @param link Choose between logit or probit link functions.
 #'
-#' @return p = response probability matrix (N by I * J); yhatstar = latent
-#' response variate matrix (N by I * J); loglikelihood = model log-likelihood
+#' @return p = response probability matrix (K by I * J); yhatstar = latent
+#' response variate matrix (K by I * J); loglikelihood = model log-likelihood
 #' (scalar).
 #'
+#'
 #' @section Dimensions:
-#' N = Number of examinees; I = Number of items per condition; J = Number of
-#' conditions; M = Number of ability (or trait) dimensions; K = Number of
-#' contrasts.
+#' I = Number of items per condition; J = Number of conditions; K = Number of
+#' examinees; M Number of ability (or trait) dimensions; N Number of contrasts
+#' (should include intercept).
 #'
 #' @references
 #'
@@ -36,12 +38,13 @@
 #' @export dich_response_model
 #-------------------------------------------------------------------------------
 
-dich_response_model <- function(y, nu, lambda, gamma, omega, zeta, link  = 'logit') {
+dich_response_model <- function(y, nu, lambda, gamma, omega, zeta,
+                                link  = 'logit') {
   yhatstar <- nu + omega %*% t(gamma) %*% t(lambda) + zeta %*% t(lambda)
   p <- if(link == 'logit') {
-    plogis(yhatstar)
+    plogis(q = yhatstar)
   } else if(link == 'probit'){
-    pnorm(yhatstar)
+    pnorm(q = yhatstar)
   }
   ll <- sum(log((p^y) * (1 - p)^(1 - y)))
   mod <- list(p = p, yhatstar = yhatstar, loglikelihood = ll)

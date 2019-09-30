@@ -7,24 +7,25 @@
 dich_response_model(y, nu, lambda, gamma, omega, zeta, link = "logit")
 }
 \arguments{
-\item{y}{Matrix of item responses (N by I * J).}
+\item{y}{Matrix of item responses (K by I * J).}
 
-\item{nu}{Matrix of item intercept parameters (N by I * J).}
+\item{nu}{Matrix of item intercept parameters (K by I * J).}
 
 \item{lambda}{Matrix of item structure parameters (I * J by J * M).}
 
-\item{gamma}{Matrix of experimental structure parameters (J * M by K * M).}
+\item{gamma}{Matrix of experimental structure parameters (J * M by M * N).}
 
 \item{omega}{Examinee-level effects of the experimental manipulation
-(N by K * M).}
+(K by M * N).}
 
-\item{zeta}{Condition-level effects nested within examineess (N by J * M).}
+\item{zeta}{Condition-level effects of the experimental manipulation
+(K by J * M).}
 
 \item{link}{Choose between logit or probit link functions.}
 }
 \value{
-p = response probability matrix (N by I * J); yhatstar = latent
-response variate matrix (N by I * J); loglikelihood = model log-likelihood
+p = response probability matrix (K by I * J); yhatstar = latent
+response variate matrix (K by I * J); loglikelihood = model log-likelihood
 (scalar).
 }
 \description{
@@ -34,9 +35,9 @@ dichotomous response model framed using generalized latent variable modeling
 }
 \section{Dimensions}{
 
-N = Number of examinees; I = Number of items per condition; J = Number of
-conditions; M = Number of ability (or trait) dimensions; K = Number of
-contrasts.
+I = Number of items per condition; J = Number of conditions; K = Number of
+examinees; M Number of ability (or trait) dimensions; N Number of contrasts
+(should include intercept).
 }
 
 \examples{

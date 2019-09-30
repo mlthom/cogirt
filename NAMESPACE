@@ -3,5 +3,6 @@
 export(dich_response_deriv)
 export(dich_response_model)
 export(dich_response_sim)
-export(test_derivs)
-export(test_dervis_function)
+export(mcmhMC)
+export(mcmhSC)
+export(rmmh)

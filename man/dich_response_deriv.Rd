@@ -2,8 +2,7 @@
 % Please edit documentation in R/dich_response_deriv.R
 \name{dich_response_deriv}
 \alias{dich_response_deriv}
-\title{Derivatives and information for the Dichotomous Response Model Based on
-Posterior Inference}
+\title{Derivatives and Information for the Dichotomous Response Model}
 \usage{
 dich_response_deriv(y, nu, lambda, gamma, omega, zeta, omega_mu,
   omega_sigma2, zeta_mu, zeta_sigma2, link = "logit")
@@ -11,7 +10,7 @@ dich_response_deriv(y, nu, lambda, gamma, omega, zeta, omega_mu,
 \description{
 This function calculates the matrix of first partial dervitives, matrix of
 second partial dervitives, and information matrix for the posterior
-distribution with respect to theta. The formulas are based on Segall (1996;
+distribution with respect to omega The formulas are based on Segall (1996;
 2009).
 }
 \section{A Note About Model Notation}{

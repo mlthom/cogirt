@@ -4,29 +4,29 @@
 \alias{dich_response_sim}
 \title{Simulate Dichotomous Response Model}
 \usage{
-dich_response_sim(N, I, J, M, K, nu_mu, nu_sigma2, lambda, gamma, omega_mu,
+dich_response_sim(I, J, K, M, N, nu_mu, nu_sigma2, lambda, gamma, omega_mu,
   omega_sigma2, zeta_mu, zeta_sigma2, link = "logit")
 }
 \arguments{
-\item{N}{Number of examinees}
-
 \item{I}{Number of items per condition.}
 
 \item{J}{Number of conditions.}
 
+\item{K}{Number of examinees}
+
 \item{M}{Number of ability (or trait) dimensions.}
 
-\item{K}{Number of contrasts (should include intercept).}
+\item{N}{Number of contrasts (should include intercept).}
 
 \item{nu_mu}{Mean of the item intercept parameters (scalar).}
 
 \item{nu_sigma2}{Variance of the item intercept parameters (scalar).}
 
 \item{omega_mu}{Vector of means for the examinee-level effects of the
-experimental manipulation (1 by K * M).}
+experimental manipulation (1 by M * N).}
 
 \item{omega_sigma2}{Covariance matrix for the examinee-level effects of the
-experimental manipulation (K * M by K * M).}
+experimental manipulation (M * N by M * N).}
 
 \item{zeta_mu}{Vector of means for the condition-level effects nested within
 examinees (1 by J * M).}
@@ -48,39 +48,43 @@ The example is based on the signal detection item response theory (IRT)
 model (Thomas et al., 2018).
 }
 \examples{
-N = 50
+
 I = 20
 J = 5
+K = 50
 M = 2
-K = 2
+N = 3
 nu_mu = 0
 nu_sigma2 = 0.2
-omega_mu <- matrix(data = c(4, -0.5, 0, .5), nrow = 1, ncol = K * M)
-omega_sigma2 <- diag(x = c(.5, 0.1, 0.25, 0.1), nrow = M * K)
+omega_mu <- matrix(data = c(4.00, -0.50, 0.10, 0.00, 0.50, -0.10), nrow = 1,
+ncol = M * N)
+omega_sigma2 <- diag(x = c(0.50, 0.10, 0.01, 0.25, 0.10, 0.01), nrow = M * N)
 zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
 item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+# Equation 12 Thomas et al. (2018)
 measure_weights <-
-  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = 2, byrow = T)
-lambda <- matrix(data = 0, nrow =I * J, ncol = J * M)
+  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = T)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 for(j in 1:J){
   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
     measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
 }
-
-contrast_codes <- cbind(1, contr.poly(n = J))[, 1:K]
-gamma <- matrix(data = 0, nrow = J * M, ncol = K * M)
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
 for(j in 1:J){
   for(m in 1:M){
-    gamma[m + M * (j - 1), (1 + (m - 1) * M):(m * M)] <- contrast_codes[j, ]
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
   }
 }
 
 
-sdirt <- dich_response_sim(N = N, I = I, J = J, M = M, K = K, nu_mu = nu_mu,
+sdirt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
                   nu_sigma2 = nu_sigma2, lambda = lambda, gamma = gamma,
                   omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
                   zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2)
+
 }
 \references{
 Skrondal, A., & Rabe-Hesketh, S. (2004). \emph{Generalized latent variable

@@ -1,10 +1,9 @@
 #-------------------------------------------------------------------------------
-#' Derivatives and information for the Dichotomous Response Model Based on
-#' Posterior Inference
+#' Derivatives and Information for the Dichotomous Response Model
 #'
 #' This function calculates the matrix of first partial dervitives, matrix of
 #' second partial dervitives, and information matrix for the posterior
-#' distribution with respect to theta. The formulas are based on Segall (1996;
+#' distribution with respect to omega The formulas are based on Segall (1996;
 #' 2009).
 #'
 #' @references
@@ -27,12 +26,11 @@
 #' Segall (1996) for ease of referencing formulas.
 
 #' @export dich_response_deriv
-#' @export test_dervis_function
-#' @export test_derivs
 #-------------------------------------------------------------------------------
 
 dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
-                                omega_sigma2, zeta_mu, zeta_sigma2, link  = 'logit') {
+                                omega_sigma2, zeta_mu, zeta_sigma2,
+                                link  = 'logit') {
   a <- cbind(lambda %*% gamma, lambda)
   ro <- nrow(omega_sigma2)
   rz <- nrow(zeta_sigma2)
@@ -132,72 +130,95 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
             MARGIN = c(1, 2),
             FUN = sum)
   }
-  return(list(fpd = fpd, spd = spd, post_info = post_info,
-              fisher_info = lapply(X = post_info, FUN = function(x){x * -1})))
+  # Return estimates for lambda only
+  return(list(fpd = lapply(X = fpd, FUN = function(x){x[1:ro]}),
+              spd = lapply(X = spd, FUN = function(x){x[1:ro, 1:ro]}),
+              post_info = lapply(X = post_info, FUN = function(x){x[1:ro, 1:ro]}),
+              fisher_info = lapply(X = post_info, FUN = function(x){x[1:ro, 1:ro] * -1})
+  ))
 }
 
-# Should be deleted before realease. Used for testing.
-test_dervis_function <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
-                                 omega_sigma2, zeta_mu, zeta_sigma2, link  = 'logit'){
-  # First create a sum likelihood function that depends only on theta (combined omega and zeta)
-  # Then use my function
-  #then compare with numDeriv
-  a <- cbind(lambda %*% gamma, lambda)
-  ro <- nrow(omega_sigma2)
-  rz <- nrow(zeta_sigma2)
-  ra <- nrow(a)
-  ca <- ncol(a)
-  sigma2 <- diag(x = 0, nrow = ro + rz)
-  sigma2[1:ro, 1:ro] <- omega_sigma2
-  sigma2[(1 + ro):(ro + rz), (1 + ro):(ro + rz)] <- zeta_sigma2
-  rs <- nrow(sigma2)
-  theta <- cbind(omega, zeta)
-  mu <- c(omega_mu, zeta_mu)
-  mod <- dich_response_model(y = y, nu = nu, lambda = lambda, gamma = gamma,
-                             omega = omega, zeta = zeta, link  = 'logit')
-  p <- mod$p
-  tmp_ll <- function(theta, y, nu, a) {
-    yhatstar <- nu + theta %*% t(a)
-    p <- if(link == 'logit') {
-      plogis(yhatstar)
-    } else if(link == 'probit'){
-      pnorm(yhatstar)
-    }
-    ll <- sum(log((p^y) * (1 - p)^(1 - y)))
-    return(ll)
-  }
-  fpd <- list()
-  tmp_ll(theta[1, ], y[1, ], nu[1, ], a)
-  for(i in 1:nrow(theta)){
-    fpd[[i]] <- numDeriv::jacobian(func = tmp_ll, theta[i, ], y=y[i, ], nu=nu[i, ], a=a)
-  }
-  tmp_ll(theta[1, ], y[1, ], nu[1, ], a)
-  for(i in 1:nrow(theta)){
-    spd[[i]] <- numDeriv::hessian(func = tmp_ll, theta[i, ], y=y[i, ], nu=nu[i, ], a=a)
-  }
-  return(list(fpd = fpd, spd = spd))
-}
-
-
-test_derivs <- function(index, der_type){
-  tmp1 <- dich_response_deriv(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
-                              gamma = sdirt$gamma, omega = sdirt$omega,
-                              zeta = sdirt$zeta, omega_mu = sdirt$omega_mu,
-                              omega_sigma2 = diag(10000, 4),
-                              zeta_mu = sdirt$zeta_mu,
-                              zeta_sigma2 = diag(10000, 10))
-
-  tmp2 <- test_dervis_function(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
-                               gamma = sdirt$gamma, omega = sdirt$omega,
-                               zeta = sdirt$zeta, omega_mu = sdirt$omega_mu,
-                               omega_sigma2 = diag(10000, 4),
-                               zeta_mu = sdirt$zeta_mu,
-                               zeta_sigma2 = diag(10000, 10))
-
-  p.plot <- plot(
-    unlist(lapply(1:50,function(x){tmp1$der_type[[x]][index]})),
-    unlist(lapply(1:50,function(x){tmp2$der_type[[x]][index]}))
-  )
-  abline(a=0, b=1)
-  return(list(p.plot, tmp1$der_type[[index]], tmp2$der_type[[index]]))
-}
+# # Should be deleted before realease. Used for testing.
+# test_dervis_function <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
+#                                  omega_sigma2, zeta_mu, zeta_sigma2,
+#                                  link  = 'logit'){
+#   # First create a sum likelihood function that depends only on theta (combined
+#   # omega and zeta). Then use my function then compare with numDeriv.
+#   a <- cbind(lambda %*% gamma, lambda)
+#   ro <- nrow(omega_sigma2)
+#   rz <- nrow(zeta_sigma2)
+#   ra <- nrow(a)
+#   ca <- ncol(a)
+#   sigma2 <- diag(x = 0, nrow = ro + rz)
+#   sigma2[1:ro, 1:ro] <- omega_sigma2
+#   sigma2[(1 + ro):(ro + rz), (1 + ro):(ro + rz)] <- zeta_sigma2
+#   rs <- nrow(sigma2)
+#   theta <- cbind(omega, zeta)
+#   mu <- c(omega_mu, zeta_mu)
+#   mod <- dich_response_model(y = y, nu = nu, lambda = lambda, gamma = gamma,
+#                              omega = omega, zeta = zeta, link  = 'logit')
+#   p <- mod$p
+#   tmp_ll <- function(theta, y, nu, a) {
+#     yhatstar <- nu + theta %*% t(a)
+#     p <- if(link == 'logit') {
+#       plogis(yhatstar)
+#     } else if(link == 'probit'){
+#       pnorm(yhatstar)
+#     }
+#     ll <- sum(log((p^y) * (1 - p)^(1 - y)))
+#     return(ll)
+#   }
+#   fpd <- list()
+#   tmp_ll(theta[1, ], y[1, ], nu[1, ], a)
+#   for(i in 1:nrow(theta)){
+#     fpd[[i]] <- numDeriv::jacobian(func = tmp_ll, theta[i, ], y=y[i, ],
+#                                    nu=nu[i, ], a=a)
+#   }
+#   tmp_ll(theta[1, ], y[1, ], nu[1, ], a)
+#   spd <- list()
+#   for(i in 1:nrow(theta)){
+#     spd[[i]] <- numDeriv::hessian(func = tmp_ll, theta[i, ], y=y[i, ],
+#                                   nu=nu[i, ], a=a)
+#   }
+#   return(list(fpd = lapply(X = fpd, FUN = function(x){x[1:ro]}),
+#     spd = lapply(X = spd, FUN = function(x){x[1:ro, 1:ro]})))
+# }
+#
+# test_derivs <- function(index){
+#   tmp1 <- dich_response_deriv(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
+#                               gamma = sdirt$gamma, omega = sdirt$omega,
+#                               zeta = sdirt$zeta, omega_mu = sdirt$omega_mu,
+#                               omega_sigma2 = diag(10000, 6),
+#                               zeta_mu = sdirt$zeta_mu,
+#                               zeta_sigma2 = diag(10000, 10))
+#
+#   tmp2 <- test_dervis_function(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
+#                                gamma = sdirt$gamma, omega = sdirt$omega,
+#                                zeta = sdirt$zeta, omega_mu = sdirt$omega_mu,
+#                                omega_sigma2 = diag(10000, 6),
+#                                zeta_mu = sdirt$zeta_mu,
+#                                zeta_sigma2 = diag(10000, 10))
+#
+#   par(mfrow = c(1, 2))
+#   p.plot <- plot(
+#     x = unlist(lapply(1:nrow(sdirt$y),function(x){tmp1[["fpd"]][[x]][index]})),
+#     y = unlist(lapply(1:nrow(sdirt$y),function(x){tmp2[["fpd"]][[x]][index]})),
+#     main = "fpd",
+#     xlab = "CogIRT",
+#     ylab = "numDeriv"
+#   )
+#   abline(a=0, b=1)
+#   p.plot <- plot(
+#     x = unlist(lapply(1:nrow(sdirt$y),function(x){
+#       tmp1[["spd"]][[x]][index, index]
+#     })),
+#     y = unlist(lapply(1:nrow(sdirt$y),function(x){
+#       tmp2[["spd"]][[x]][index, index]
+#     })),
+#     main = "spd",
+#     xlab = "CogIRT",
+#     ylab = "numDeriv"
+#   )
+#   abline(a=0, b=1)
+#   return(p.plot)
+# }
