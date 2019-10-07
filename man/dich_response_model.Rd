@@ -7,26 +7,25 @@
 dich_response_model(y, nu, lambda, gamma, omega, zeta, link = "logit")
 }
 \arguments{
-\item{y}{Matrix of item responses (K by I * J).}
+\item{y}{Matrix of item responses (K by IJ).}
 
-\item{nu}{Matrix of item intercept parameters (K by I * J).}
+\item{nu}{Matrix of item intercept parameters (K by IJ).}
 
-\item{lambda}{Matrix of item structure parameters (I * J by J * M).}
+\item{lambda}{Matrix of item structure parameters (IJ by JM).}
 
-\item{gamma}{Matrix of experimental structure parameters (J * M by M * N).}
+\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
-\item{omega}{Examinee-level effects of the experimental manipulation
-(K by M * N).}
+\item{omega}{Examinee-level effects of the experimental manipulation (K by
+M*N).}
 
-\item{zeta}{Condition-level effects of the experimental manipulation
-(K by J * M).}
+\item{zeta}{Condition-level effects of the experimental manipulation (K by
+JM).}
 
 \item{link}{Choose between logit or probit link functions.}
 }
 \value{
-p = response probability matrix (K by I * J); yhatstar = latent
-response variate matrix (K by I * J); loglikelihood = model log-likelihood
-(scalar).
+p = response probability matrix (K by IJ); yhatstar = latent response
+variate matrix (K by IJ); loglikelihood = model log-likelihood (scalar).
 }
 \description{
 This function calculates predictions and log-likelihood values for a

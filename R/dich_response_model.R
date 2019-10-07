@@ -5,20 +5,18 @@
 #' dichotomous response model framed using generalized latent variable modeling
 #' (GLVM; Skrondal & Rabe-Hesketh, 2004).
 #'
-#' @param y Matrix of item responses (K by I * J).
-#' @param nu Matrix of item intercept parameters (K by I * J).
-#' @param omega Examinee-level effects of the experimental manipulation
-#' (K by M * N).
-#' @param gamma Matrix of experimental structure parameters (J * M by M * N).
-#' @param lambda Matrix of item structure parameters (I * J by J * M).
-#' @param zeta Condition-level effects of the experimental manipulation
-#' (K by J * M).
+#' @param y Matrix of item responses (K by IJ).
+#' @param nu Matrix of item intercept parameters (K by IJ).
+#' @param omega Examinee-level effects of the experimental manipulation (K by
+#' M*N).
+#' @param gamma Matrix of experimental structure parameters (JM by MN).
+#' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param zeta Condition-level effects of the experimental manipulation (K by
+#' JM).
 #' @param link Choose between logit or probit link functions.
 #'
-#' @return p = response probability matrix (K by I * J); yhatstar = latent
-#' response variate matrix (K by I * J); loglikelihood = model log-likelihood
-#' (scalar).
-#'
+#' @return p = response probability matrix (K by IJ); yhatstar = latent response
+#' variate matrix (K by IJ); loglikelihood = model log-likelihood (scalar).
 #'
 #' @section Dimensions:
 #' I = Number of items per condition; J = Number of conditions; K = Number of
