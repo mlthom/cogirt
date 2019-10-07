@@ -14,13 +14,13 @@
 #' @param nu_mu Mean of the item intercept parameters (scalar).
 #' @param nu_sigma2 Variance of the item intercept parameters (scalar).
 #' @param omega_mu Vector of means for the examinee-level effects of the
-#' experimental manipulation (1 by M * N).
+#' experimental manipulation (1 by MN).
 #' @param omega_sigma2 Covariance matrix for the examinee-level effects of the
-#' experimental manipulation (M * N by M * N).
+#' experimental manipulation (MN by MN).
 #' @param zeta_mu Vector of means for the condition-level effects nested within
-#' examinees (1 by J * M).
+#' examinees (1 by JM).
 #' @param zeta_sigma2 Covariance matrix for the condition-level effects nested
-#' within examinees (J * M by J * M).
+#' within examinees (JM by JM).
 #' @param link Choose between logit or probit links (i.e., sets epsilon variance
 #' to 1.702 or 1.000 respectively).
 #'
@@ -91,24 +91,19 @@ dich_response_sim <- function(I, J, K,  M, N, nu_mu, nu_sigma2, lambda, gamma,
     data = MASS::mvrnorm(
       n = I * J,
       mu = nu_mu,
-      Sigma = nu_sigma2),
+      Sigma = nu_sigma2
+    ),
     nrow = K,
     ncol = I * J,
-    byrow = T)
+    byrow = T
+  )
   omega <-  matrix(
-    data = MASS::mvrnorm(
-      n = K,
-      mu = omega_mu,
-      Sigma = omega_sigma2),
+    data = MASS::mvrnorm(n = K, mu = omega_mu, Sigma = omega_sigma2),
     nrow = K,
     ncol = N * M,
     byrow = F)
   zeta <- matrix(
-    data = MASS::mvrnorm(
-      n = K,
-      mu = zeta_mu,
-      Sigma = zeta_sigma2 *
-        diag(x = 1, nrow = M * J)),
+    data = MASS::mvrnorm(n = K, mu = zeta_mu, Sigma = zeta_sigma2 * diag(x = 1, nrow = M * J)),
     nrow = K,
     ncol = J * M,
     byrow = F)
@@ -119,23 +114,24 @@ dich_response_sim <- function(I, J, K,  M, N, nu_mu, nu_sigma2, lambda, gamma,
     1.000
   }
   epsilon <- matrix(
-    data = MASS::mvrnorm(
-      n = I * J * K,
-      mu = 0,
-      Sigma = scaling_constant),
+    data = MASS::mvrnorm(n = I * J * K, mu = 0, Sigma = scaling_constant),
     nrow = K,
     ncol = I * J)
   ystar <- nu + omega %*% t(gamma) %*% t(lambda) + zeta %*% t(lambda) + epsilon
   y <- apply(data.matrix(ystar > 0), 1:2, as.numeric)
-  colnames(y) <- c(sapply(X = 1:J,
-                          FUN = function(j){
-                            paste("item", 1:I, "cond", j, sep="")
-                          }))
+  colnames(y) <- c(
+    sapply(
+      X = 1:J,
+      FUN = function(j) {paste("item", 1:I, "cond", j, sep="")}
+    )
+  )
   rownames(y) <- paste("examinee", 1:K, sep = "")
   simdat <- list(y = y, ystar = ystar, nu = nu, lambda = lambda, gamma = gamma,
-                 omega = omega, zeta = zeta, nu_mu = nu_mu, nu_sigma2 = nu_sigma2, omega_mu = omega_mu,
+                 omega = omega, zeta = zeta, nu_mu = nu_mu,
+                 nu_sigma2 = nu_sigma2, omega_mu = omega_mu,
                  omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-                 zeta_sigma2 = zeta_sigma2)
+                 zeta_sigma2 = zeta_sigma2
+  )
   return(simdat)
 }
 
