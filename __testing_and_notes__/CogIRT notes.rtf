@@ -1,0 +1,75 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2576
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\froman\fcharset0 Times-Bold;}
+{\colortbl;\red255\green255\blue255;\red13\green13\blue20;}
+{\*\expandedcolortbl;;\cssrgb\c5490\c6275\c10196;}
+\margl1440\margr1440\vieww16460\viewh11280\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
++-------------------------------------------------------------------------------\
+ONGOING AND RESOLVED QUESTIONS\
++-------------------------------------------------------------------------------\
+\uc0\u8232 \
+1. What is the Newton Rhaphson algorithm (nr.R) used for?\
+\'97Right now, I use it in the compare estimators testing script. One day, I might use it in the final estimates to get info without prior info.\'a0\
+\uc0\u8232 \
+2. Why do I have separate single vs. multiple chain MCMH?\
+\'97mcmh_mc uses mcmh_sc as the objective function. I.e., the _mc script is just a wrapper to fit multiple chains.\'a0\
+\uc0\u8232 \
+3. Why use y = y in functions instead of y = NULL?\
+\'97Y is defined by the highest level function. So in lower-level functions, y is already defined by the user.\'a0\
+\uc0\u8232 \
+4. How will I get PsychoPy and R to interact.\
+\'97There is a python package called pyreadr that reads and writes .rda files. I.e., R data frames. I could use Psythpy Py to create the .rda file, and then feed this to R in a command-line script to do the adaptive testing.\'a0\
+\uc0\u8232 \
+5. How much MCHM sampling is needed in the RMMH estimation?\
+\'97An open question is how much time/effort to invest in the MCMH stages. Estimation is slowed down significantly if we have a lot of MCMH iterations. In the script used for canbt paper (see rmmhEstimationSim.R), I have 1 MCMH sample being taken. In the example in the rmmh.R file, I do something similar. I believe that at some point I found a reference to support the idea that RMMH does not need long MCMH chains. Would be nice to find this. But in general, it truly seems that a lot of MCMH steps are necessary. I might not want only 1, but maybe 10 or so.\'a0\
+\uc0\u8232 \
+6. Why are the parameter estimates for omega 1 shrinking?\
+\'97There seems to be a phenomenon whereby more extreme values of the first omega parameter shrink to a less extreme value. Namely, the d prime intercept tends to be biassed towards 0. Other parameters don\'92t show this same effect. I assume this is because high dprime values produce near ceiling accuracy results. This doesn\'92t seem to be improved by increasing the number of items. I think I found this with my old simulations as well. This might be related to estimating zeta and nu. I\'92m guessing the values shrink from the extreme high end due to uncertainty in the other parameters.\'a0
+\f1\b YEP
+\f0\b0 . This is exactly, true, if you run the rmmh script example but set est_nu = Fand est_zeta = F, the estimates are no longer biased.\'a0\
+\uc0\u8232 \
+7. Why doesn't adding item items seem to improve estimates?\
+\'97If you run the compare estimators testing script, and specifically the first example, it seems that adding items does not improve estimates. But, exploring this, I found that in the 2 parameter example, if I set mean and variance of 0 and 1, adding items does help. This makes me think that it is something again about the near ceiling accuracy and the dprime intercept. Additionally, I think if you set est_nu = Fand est_zeta = F, adding items makes things work better. Still not 100% sure about this one.\'a0\
+\uc0\u8232 \
+8. Why aren't the MCMH, RMMH, and NR estimates always consistent?\
+\'97Note that MCMH, RMMH, and NR estimates are much more consistent when you don\'92t estimate nu and zeta in the compare estimators script (they are also a lot quicker to obtain).\'a0\
+\
+9. Why do the results of adaptive testing vary so much?\
+\'97It matters a LOT how I set up the CAT. In the,  cat_cog_sim_compare script, having a few iterations (e.g., 5) with longer lists (e..g, 20) works better than shorter lists (e.g., 5) and more iterations (e.g., 10). \
+\
+10. Seems that the best way to call an R script through Python is using subprocess. \uc0\u8232 \
++-------------------------------------------------------------------------------\
+WORKFLOW TIPS\
++-------------------------------------------------------------------------------\uc0\u8232 \
+Anytime I start editing the package, I have to run:\
+File >> Open Project\
+library(devtools)\
+load_all()\
+\
+When I want to update the package as I\'92m working on it, run:\
+document()\
+load_all()\
+\
+The lintr package is good for checking whether my syntax is formatted properly. You can run the entire package at once, or a single file using\
+lintr::lint(filename = "./R/dich_response_model.R")\
+You can get hints on how to fix using\'a0\
+styler::style_text("ll <- sum(log((p^y) * (1 - p)^(1 - y)))")\
+\uc0\u8232 \
+Whenever I update the simulated data, I need to save it to the package data directory using\
+usethis::use_data(sdirt, overwrite = T)\
+usethis::use_data(sdirtSS, overwrite = T)\
+\uc0\u8232 +-------------------------------------------------------------------------------\
+NOTES FOR NEXT COMMIT\
++-------------------------------------------------------------------------------\uc0\u8232 \
+1. Added single subject examples.\
+2. Added a new data set (single subject sdirt [sdirtSS])\
+3. Created adaptive testing script (CogCAT)\
+4. Fixed the rmmh script which had a bug that only affected estimation for more than 1 subject. Ie. in the old script estimates for multiple subjects when using rmmh were flawed.\
+5. Fixed syntax to follow lintr rules.\
+6. Adding a ____testing_and_notes____ directory that is supposed to be ignored in the R build, but will show up on Github unless I add it so the githubigore list. I.e., right now it is only on the R build ignore list.\'a0\
+\uc0\u8232 \
+\
+}

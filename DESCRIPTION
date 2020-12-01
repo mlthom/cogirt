@@ -3,19 +3,19 @@ Type: Package
 Title: Cognitive Testing Using Item Response Theory
 Version: 0.1.0
 Authors@R: c(
-    person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre")),
-    person("John", "Duffy", email = "john.duffy@colostate.edu", role = "aut"))
+    person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre"))
+    )
 Description: Item response theory (IRT) and other psychometric tools for 
     experimental cognitive testing. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Imports:
   MASS,
   abind,
   mvtnorm,
   parallel,
   coda
-Suggests:
- 
+Depends: 
+    R (>= 2.10)

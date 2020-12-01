@@ -1,7 +1,7 @@
-citHeader("To cite CogCAT in publications use:")
+citHeader("To cite CogIRT in publications use:")
 
 citEntry(entry = "Article",
-  title        = "{CogCAT}: An R Package for Cognitive Testing Using Item Response Theory",
+  title        = "{CogIRT}: An R Package for Cognitive Testing Using Item Response Theory",
   author       = personList(
                             as.person("Michael Thomas"),
                             as.person("John Duff")),
@@ -14,7 +14,7 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste("Thomas, M. L. & Duffy, J. (TBD).",
-        "CogCAT: An R Package for Cognitive Testing Using Item Response Theory.",
+        "CogIRT: An R Package for Cognitive Testing Using Item Response Theory.",
         "TBD, TBD(TBD), TBD.",
         "URL TBD.")
 )

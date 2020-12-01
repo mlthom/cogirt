@@ -7,10 +7,10 @@
 #'
 #' @param y Matrix of item responses (K by IJ).
 #' @param nu Matrix of item intercept parameters (K by IJ).
-#' @param omega Examinee-level effects of the experimental manipulation (K by
-#' M*N).
-#' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param gamma Matrix of experimental structure parameters (JM by MN).
+#' @param omega Examinee-level effects of the experimental manipulation (K by
+#' MN).
 #' @param zeta Condition-level effects of the experimental manipulation (K by
 #' JM).
 #' @param link Choose between logit or probit link functions.
@@ -36,15 +36,16 @@
 #' @export dich_response_model
 #-------------------------------------------------------------------------------
 
-dich_response_model <- function(y, nu, lambda, gamma, omega, zeta,
-                                link  = 'logit') {
+dich_response_model <- function(y = NULL, nu = NULL, lambda = NULL,
+                                gamma = NULL, omega = NULL, zeta = NULL,
+                                link  = "logit") {
   yhatstar <- nu + omega %*% t(gamma) %*% t(lambda) + zeta %*% t(lambda)
-  p <- if(link == 'logit') {
+  p <- if (link == "logit") {
     plogis(q = yhatstar)
-  } else if(link == 'probit'){
+  } else if (link == "probit") {
     pnorm(q = yhatstar)
   }
-  ll <- sum(log((p^y) * (1 - p)^(1 - y)))
+  ll <- sum(log((p^y) * (1 - p) ^ (1 - y)))
   mod <- list(p = p, yhatstar = yhatstar, loglikelihood = ll)
   return(mod)
 }

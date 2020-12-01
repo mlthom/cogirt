@@ -4,30 +4,148 @@
 \alias{rmmh}
 \title{RMMH Parameter Estimates for Multiple Chains}
 \usage{
-rmmh(chains = 1, y = y, objFun = NULL, estOmega = T, estNu = T,
-  estZeta = T, lambda = lambda, gamma = gamma, omega0 = NULL,
-  nu0 = NULL, zeta0 = NULL, omega_mu = NULL, omega_sigma2 = NULL,
-  nu_mu = NULL, nu_sigma2 = NULL, zeta_mu = NULL,
-  zeta_sigma2 = NULL, burn = NULL, thin = NULL, min_tune = NULL,
-  tune_int = NULL, max_tune = NULL, niter = NULL, weight = NULL,
-  verboseRMMH = T, maxRMMHiter = 200)
+rmmh(
+  chains = 1,
+  y = y,
+  obj_fun = NULL,
+  est_omega = T,
+  est_nu = T,
+  est_zeta = T,
+  lambda = lambda,
+  gamma = gamma,
+  omega0 = NULL,
+  nu0 = NULL,
+  zeta0 = NULL,
+  omega_mu = NULL,
+  omega_sigma2 = NULL,
+  nu_mu = NULL,
+  nu_sigma2 = NULL,
+  zeta_mu = NULL,
+  zeta_sigma2 = NULL,
+  burn = NULL,
+  thin = NULL,
+  min_tune = NULL,
+  tune_int = NULL,
+  max_tune = NULL,
+  niter = NULL,
+  verbose_rmmh = T,
+  max_iter_rmmh = 200
+)
+}
+\arguments{
+\item{chains}{Number of chains in the MCMH sampler (scalar).}
+
+\item{y}{Matrix of item responses (K by IJ).}
+
+\item{obj_fun}{A function that calculates predictions and log-likelihood
+values for the selected model (character).}
+
+\item{est_omega}{Determines whether omega is estimated (logical).}
+
+\item{est_nu}{Determines whether nu is estimated (logical).}
+
+\item{est_zeta}{Determines whether zeta is estimated (logical).}
+
+\item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
+
+\item{omega0}{Starting values for omega.}
+
+\item{nu0}{Starting values for nu.}
+
+\item{zeta0}{Starting values for zeta.}
+
+\item{omega_mu}{Vector of means prior for omega (1 by MN).}
+
+\item{nu_mu}{Prior mean for nu (scalar).}
+
+\item{zeta_mu}{Vector of means prior for zeta (1 by JM).}
+
+\item{burn}{Number of iterations at the beginning of an MCMC run to discard
+(scalar).}
+
+\item{thin}{Determines every nth observation retained (scalar).}
+
+\item{min_tune}{Determines when tunning begins (scalar).}
+
+\item{tune_int}{MCMH tuning interval (scalar).}
+
+\item{max_tune}{Determines when tunning ends (scalar).}
+
+\item{niter}{Number of iterations of the MCMH sampler.}
+
+\item{verbose_rmmh}{Print progress of MCMH sampler.}
+
+\item{max_iter_rmmh}{Maximum number of iterations for RMMH.}
+
+\item{omega_sigma}{Covariance matrix prior for omega (MN by MN).}
+
+\item{zeta_sigma@}{Covariance matrix prior for zeta (JM by JM).}
+
+\item{nu_sigma@}{Prior variance for nu (scalar).}
 }
 \description{
 This function calculates RMMH parameter estimates for multiple chains.
 }
 \examples{
-rmmh(chains = 3, y = sdirt$y, objFun = dich_response_model, estOmega = T,
-    estNu = T, estZeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
+# Multiple subjects example. Extended MCMH sampling.
+rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
     omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
     nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
     zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
-    burn=0, thin=10, min_tune=50, tune_int=50, max_tune = 1000, niter = 2000,
-    weight=1/1,verboseRMMH=T, maxRMMHiter=200)
+    burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
+    niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Multiple subjects example. Limited MCMH sampling.
+rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
+    omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+    burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
+    verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Single subject example. Extended MCMH sampling.
+rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
+     est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+     gamma = sdirtSS$gamma, omega0 = array(data = 0,
+     dim = dim(sdirtSS$omega)), nu0 = array(data = 0,
+     dim = c(ncol(sdirtSS$nu), 1)),
+     zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),
+     omega_mu = sdirtSS$omega_mu, omega_sigma2 = sdirtSS$omega_sigma2,
+     nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
+     zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
+     burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
+     niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Single subject example. Limited MCMH sampling.
+rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
+     est_omega = T, est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+     gamma = sdirtSS$gamma,
+     omega0 = array(data = 0, dim = dim(sdirtSS$omega)),
+     nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1)),
+     zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),
+     omega_mu = sdirtSS$omega_mu, omega_sigma2 = sdirtSS$omega_sigma2,
+     nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
+     zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
+     burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
+     verbose_rmmh = T, max_iter_rmmh = 200)
 
 }
 \references{
+Cai, L. (2010). High-dimensional exploratory item factor analysis by a
+Metropolis-Hastings Robbins-Monro algorithm. \emph{Psychometrika, 75(1)},
+33-57.
 
+Cai, L. (2010). Metropolis-Hastings Robbins-Monro algorithm for confirmatory
+item factor analysis. \emph{Journal of Educational and Behavioral Statistics,
+35(3)}, 307-335.
 }

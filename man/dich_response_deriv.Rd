@@ -4,15 +4,65 @@
 \alias{dich_response_deriv}
 \title{Derivatives and Information for the Dichotomous Response Model}
 \usage{
-dich_response_deriv(y, nu, lambda, gamma, omega, zeta, omega_mu,
-  omega_sigma2, zeta_mu, zeta_sigma2, link = "logit")
+dich_response_deriv(
+  y,
+  nu,
+  lambda,
+  gamma,
+  omega,
+  zeta,
+  omega_mu,
+  omega_sigma2,
+  zeta_mu,
+  zeta_sigma2,
+  link = "logit"
+)
+}
+\arguments{
+\item{y}{Matrix of item responses (K by IJ).}
+
+\item{nu}{Matrix of item intercept parameters (K by IJ).}
+
+\item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
+
+\item{omega}{Examinee-level effects of the experimental manipulation (K by
+MN).}
+
+\item{zeta}{Condition-level effects of the experimental manipulation (K by
+JM).}
+
+\item{omega_mu}{Vector of means prior for omega (1 by MN).}
+
+\item{zeta_mu}{Vector of means prior for zeta (1 by JM).}
+
+\item{link}{Choose between logit or probit link functions.}
+
+\item{omega_sigma@}{Covariance matrix prior for omega (MN by MN).}
+
+\item{zeta_sigma@}{Covariance matrix prior for zeta (JM by JM).}
+}
+\value{
+List with elements fpd (1 by MN vector of first partial derivatives
+for omega), spd (MN by MN matrix of second partial derivatives for omega),
+post_info (MN by MN posterior information matrix for omega), and fisher_info
+(MN by MN Fisher information matrix for omega). Within each of these
+elements, there are sub-elements for all K examinees.
 }
 \description{
-This function calculates the matrix of first partial dervitives, matrix of
-second partial dervitives, and information matrix for the posterior
+This function calculates the matrix of first partial derivatives, the matrix
+of second partial derivatives, and information matrix for the posterior
 distribution with respect to omega The formulas are based on Segall (1996;
 2009).
 }
+\section{Dimensions}{
+
+I = Number of items per condition; J = Number of conditions; K = Number of
+examinees; M Number of ability (or trait) dimensions; N Number of contrasts
+(should include intercept).
+}
+
 \section{A Note About Model Notation}{
 
 The function converts GLLVM notation to the more typical IRT notation used by
@@ -23,7 +73,8 @@ Segall (1996) for ease of referencing formulas.
 dich_response_deriv(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
                 gamma = sdirt$gamma, omega = sdirt$omega, zeta = sdirt$zeta,
                 omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
-                zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2)
+                zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+                link  = "logit")
 
 }
 \references{

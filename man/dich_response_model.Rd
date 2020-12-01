@@ -4,7 +4,15 @@
 \alias{dich_response_model}
 \title{Dichotomous Response Model}
 \usage{
-dich_response_model(y, nu, lambda, gamma, omega, zeta, link = "logit")
+dich_response_model(
+  y = NULL,
+  nu = NULL,
+  lambda = NULL,
+  gamma = NULL,
+  omega = NULL,
+  zeta = NULL,
+  link = "logit"
+)
 }
 \arguments{
 \item{y}{Matrix of item responses (K by IJ).}
@@ -16,7 +24,7 @@ dich_response_model(y, nu, lambda, gamma, omega, zeta, link = "logit")
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
 \item{omega}{Examinee-level effects of the experimental manipulation (K by
-M*N).}
+MN).}
 
 \item{zeta}{Condition-level effects of the experimental manipulation (K by
 JM).}
