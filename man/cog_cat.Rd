@@ -23,7 +23,7 @@ Segall 2009).
 }
 \examples{
 rda = sdirtSS
-rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, nrep = 5))
+rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, 5))
 rda$y[which(!rda$list \%in\% c(1))] <- NA
 cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 

@@ -11,6 +11,7 @@ mcmh_sc(
   est_nu = T,
   est_zeta = T,
   lambda = NULL,
+  kappa = NULL,
   gamma = NULL,
   omega0 = NULL,
   nu0 = NULL,
@@ -44,6 +45,8 @@ values for the selected model (character).}
 \item{est_zeta}{Determines whether zeta is estimated (logical).}
 
 \item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{kappa}{Matrix of item guessing parameters (K by IJ).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
@@ -100,8 +103,8 @@ tuning the scale and covariance matrix follows BDA and SAS 9.2 User Guide,
 }
 \examples{
 mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-    omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,

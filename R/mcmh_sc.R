@@ -13,6 +13,7 @@
 #' @param est_nu Determines whether nu is estimated (logical).
 #' @param est_zeta Determines whether zeta is estimated (logical).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param kappa Matrix of item guessing parameters (K by IJ).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param omega0 Starting values for omega.
 #' @param nu0 Starting values for nu.
@@ -50,8 +51,8 @@
 #'
 #' @examples
 #'mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-#'     omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
 #'     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -65,9 +66,9 @@
 
 mcmh_sc <- function(
   y = y, obj_fun = NULL, est_omega = T, est_nu = T, est_zeta = T, lambda = NULL,
-  gamma = NULL, omega0 = NULL, nu0 = NULL, zeta0 = NULL, omega_mu = NULL,
-  omega_sigma2 = NULL, nu_mu = NULL, nu_sigma2 = NULL, zeta_mu = NULL,
-  zeta_sigma2 = NULL, burn = NULL, thin = NULL, min_tune = NULL,
+  kappa = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL, zeta0 = NULL,
+  omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL, nu_sigma2 = NULL,
+  zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL, thin = NULL, min_tune = NULL,
   tune_int = NULL, max_tune = NULL, niter = NULL, weight = 1,
   verbose_mcmh = F
   ) {
@@ -153,8 +154,8 @@ mcmh_sc <- function(
         byrow = T
       )
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega0,
-                    zeta = zeta0)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega0, zeta = zeta0)$p
       tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = omega0,
@@ -162,8 +163,8 @@ mcmh_sc <- function(
         sigma = omega_sigma2
       ))
       p1 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega1,
-                    zeta = zeta0)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega1, zeta = zeta0)$p
       tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = T)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = omega1,
@@ -277,8 +278,8 @@ mcmh_sc <- function(
         byrow = T
       )
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega0,
-                    zeta = zeta0)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega0, zeta = zeta0)$p
       tmp0 <- colSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = nu0,
@@ -286,8 +287,8 @@ mcmh_sc <- function(
         sigma = nu_sigma2
       ))
       p1 <- obj_fun(y = y, nu = array(data = nu1, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega0,
-                    zeta = zeta0)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega0, zeta = zeta0)$p
       tmp1 <- colSums(x = log((p1 ^ y) * (1 - p1) ^ (1 - y)), na.rm = T)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = nu1,
@@ -397,8 +398,8 @@ mcmh_sc <- function(
         byrow = T
       )
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega0,
-                    zeta = zeta0)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega0, zeta = zeta0)$p
       tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = zeta0,
@@ -406,8 +407,8 @@ mcmh_sc <- function(
         sigma = zeta_sigma2
       ))
       p1 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
-                    lambda = lambda, gamma = gamma, omega = omega0,
-                    zeta = zeta1)$p
+                    lambda = lambda, kappa = kappa, gamma = gamma,
+                    omega = omega0, zeta = zeta1)$p
       tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = T)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = zeta1,
@@ -497,7 +498,8 @@ mcmh_sc <- function(
     }
     #Update logLikelihood and estimates
     ll <- obj_fun(y = y, nu = array(data = nu1, dim = dim(y)), lambda = lambda,
-                 gamma = gamma, omega = omega1, zeta = zeta1)$loglikelihood
+                 kappa = kappa, gamma = gamma, omega = omega1, zeta = zeta1
+                 )$loglikelihood
     omega0 <- omega1
     nu0 <- nu1
     zeta0 <- zeta1

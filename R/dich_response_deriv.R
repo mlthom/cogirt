@@ -9,6 +9,7 @@
 #' @param y Matrix of item responses (K by IJ).
 #' @param nu Matrix of item intercept parameters (K by IJ).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param kappa Matrix of item guessing parameters (K by IJ).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param omega Examinee-level effects of the experimental manipulation (K by
 #' MN).
@@ -45,7 +46,7 @@
 #'                 gamma = sdirt$gamma, omega = sdirt$omega, zeta = sdirt$zeta,
 #'                 omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
 #'                 zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
-#'                 link  = "logit")
+#'                 link  = "probit")
 #'
 #' @section A Note About Model Notation:
 #' The function converts GLLVM notation to the more typical IRT notation used by
@@ -54,10 +55,15 @@
 #' @export dich_response_deriv
 #-------------------------------------------------------------------------------
 
-dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
-                                omega_sigma2, zeta_mu, zeta_sigma2,
-                                link  = "logit") {
+dich_response_deriv <- function(y, nu, lambda, kappa = NULL, gamma, omega, zeta,
+                                omega_mu, omega_sigma2, zeta_mu, zeta_sigma2,
+                                link  = "probit") {
   a <- cbind(lambda %*% gamma, lambda)
+  c <- if (is.null(x = kappa)) {
+    array(data = 0, dim = dim(x = y))
+  } else {
+    kappa
+  }
   ro <- nrow(omega_sigma2)
   rz <- nrow(zeta_sigma2)
   ra <- nrow(a)
@@ -69,7 +75,7 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
   theta <- cbind(omega, zeta)
   mu <- c(omega_mu, zeta_mu)
   mod <- dich_response_model(y = y, nu = nu, lambda = lambda, gamma = gamma,
-                             omega = omega, zeta = zeta, link  = "logit")
+                             omega = omega, zeta = zeta, link  = link)
   p <- mod$p
   # Note that this is the OPPOSITE of the simulation. I.e., if the variance of
   # the latent response variate was 1.702 (logit) in the simualtion, then no
@@ -86,12 +92,12 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
     fpd[[i]] <- t(
       (
         D * apply(X = (
-          a * matrix(data = (p[i, ] * (y[i, ] - p[i, ])),
+          a * matrix(data = ((p[i, ] - c[i, ]) * (y[i, ] - p[i, ])),
                      nrow = ra,
                      ncol = ca,
                      byrow = F)
         ) /
-          matrix(data = p[i, ],
+          matrix(data = (1 - c[i, ]) * p[i, ],
                  nrow = ra,
                  ncol = ca,
                  byrow = F),
@@ -110,12 +116,13 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
       apply(X =
               (
                 a^2 *
-                  matrix(data = (1 - p[i, ]) * (p[i, ] * (-p[i, ]^2)),
+                  matrix(data = (1 - p[i, ]) * ((p[i, ] - c[i, ]) *
+                                                  (c[i, ] * y[i, ] - p[i, ]^2)),
                          nrow = nrow(a),
                          ncol = ncol(a),
                          byrow = F)
               ) /
-              matrix(data = p[i, ]^2,
+              matrix(data = (p[i, ]^2) * (1 - c[i, ])^2,
                      nrow = nrow(a),
                      ncol = ncol(a),
                      byrow = F),
@@ -125,12 +132,13 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
       D^2 *
       apply(X = (
         apply(X = a, MARGIN = 1, FUN = prod) *
-          matrix(data = (1 - p[i, ]) * (p[i, ] * (-p[i, ]^2)),
+          matrix(data = (1 - p[i, ]) * ((p[i, ] - c[i, ]) *
+                                          (c[i, ] * y[i, ] - p[i, ]^2)),
                  nrow = nrow(a),
                  ncol = 1,
                  byrow = F)
       ) /
-        matrix(p[i, ]^2,
+        matrix((p[i, ]^2) * (1 - c[i, ])^2,
                nrow = nrow(a),
                ncol = 1,
                byrow = F),
@@ -152,7 +160,7 @@ dich_response_deriv <- function(y, nu, lambda, gamma, omega, zeta, omega_mu,
                                  }
               ),
               dim = c(rs, rs, nrow(a))) *
-              array(data = sapply(X = (1 - p) / p * p^2,
+              array(data = sapply(X = (1 - p) / p * ((p - c) / (1 - c))^2,
                                   FUN = rep,
                                   times = rs * rs),
                     dim = c(rs, rs, nrow(a))),

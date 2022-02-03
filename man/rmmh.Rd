@@ -11,8 +11,9 @@ rmmh(
   est_omega = T,
   est_nu = T,
   est_zeta = T,
-  lambda = lambda,
-  gamma = gamma,
+  lambda = NULL,
+  kappa = NULL,
+  gamma = NULL,
   omega0 = NULL,
   nu0 = NULL,
   zeta0 = NULL,
@@ -47,6 +48,8 @@ values for the selected model (character).}
 \item{est_zeta}{Determines whether zeta is estimated (logical).}
 
 \item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{kappa}{Matrix of item guessing parameters (K by IJ).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
@@ -91,8 +94,8 @@ This function calculates RMMH parameter estimates for multiple chains.
 \examples{
 # Multiple subjects example. Extended MCMH sampling.
 rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-    omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -103,8 +106,8 @@ rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
 
 # Multiple subjects example. Limited MCMH sampling.
 rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-    omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -115,7 +118,7 @@ rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
 
 # Single subject example. Extended MCMH sampling.
 rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
-     est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+     est_nu = T, est_zeta = T, lambda = sdirtSS$lambda, kappa = sdirt$kappa,
      gamma = sdirtSS$gamma, omega0 = array(data = 0,
      dim = dim(sdirtSS$omega)), nu0 = array(data = 0,
      dim = c(ncol(sdirtSS$nu), 1)),
@@ -129,7 +132,7 @@ rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
 # Single subject example. Limited MCMH sampling.
 rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
      est_omega = T, est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
-     gamma = sdirtSS$gamma,
+     kappa = sdirt$kappa, gamma = sdirtSS$gamma,
      omega0 = array(data = 0, dim = dim(sdirtSS$omega)),
      nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1)),
      zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),

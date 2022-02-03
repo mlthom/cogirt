@@ -8,6 +8,7 @@ dich_response_deriv(
   y,
   nu,
   lambda,
+  kappa = NULL,
   gamma,
   omega,
   zeta,
@@ -15,7 +16,7 @@ dich_response_deriv(
   omega_sigma2,
   zeta_mu,
   zeta_sigma2,
-  link = "logit"
+  link = "probit"
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ dich_response_deriv(
 \item{nu}{Matrix of item intercept parameters (K by IJ).}
 
 \item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{kappa}{Matrix of item guessing parameters (K by IJ).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
@@ -74,7 +77,7 @@ dich_response_deriv(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
                 gamma = sdirt$gamma, omega = sdirt$omega, zeta = sdirt$zeta,
                 omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
                 zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
-                link  = "logit")
+                link  = "probit")
 
 }
 \references{

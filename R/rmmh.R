@@ -11,6 +11,7 @@
 #' @param est_nu Determines whether nu is estimated (logical).
 #' @param est_zeta Determines whether zeta is estimated (logical).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param kappa Matrix of item guessing parameters (K by IJ).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param omega0 Starting values for omega.
 #' @param nu0 Starting values for nu.
@@ -43,8 +44,8 @@
 #' @examples
 #' # Multiple subjects example. Extended MCMH sampling.
 #' rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-#'     omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
 #'     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -55,8 +56,8 @@
 #'
 #' # Multiple subjects example. Limited MCMH sampling.
 #' rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-#'     omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
 #'     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -67,7 +68,7 @@
 #'
 #' # Single subject example. Extended MCMH sampling.
 #' rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
-#'      est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+#'      est_nu = T, est_zeta = T, lambda = sdirtSS$lambda, kappa = sdirt$kappa,
 #'      gamma = sdirtSS$gamma, omega0 = array(data = 0,
 #'      dim = dim(sdirtSS$omega)), nu0 = array(data = 0,
 #'      dim = c(ncol(sdirtSS$nu), 1)),
@@ -81,7 +82,7 @@
 #' # Single subject example. Limited MCMH sampling.
 #' rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
 #'      est_omega = T, est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
-#'      gamma = sdirtSS$gamma,
+#'      kappa = sdirt$kappa, gamma = sdirtSS$gamma,
 #'      omega0 = array(data = 0, dim = dim(sdirtSS$omega)),
 #'      nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1)),
 #'      zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),
@@ -94,91 +95,13 @@
 #' @export rmmh
 #-------------------------------------------------------------------------------
 
-#----------------------------------------------------+++++++++++++++++++++++++++
-# Delete this once done testing
-# if(1==0){
-#   chains=1
-#   y = sdirt$y
-#   obj_fun = dich_response_model
-#   est_omega = T
-#   est_nu = T
-#   est_zeta = T
-#   lambda = sdirt$lambda
-#   gamma = sdirt$gamma
-#   omega0 = array(data = 0, dim = dim(sdirt$omega))
-#   nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1))
-#   zeta0 = array(data = 0, dim = dim(sdirt$zeta))
-#   omega_mu = sdirt$omega_mu
-#   omega_sigma2 = sdirt$omega_sigma2
-#   nu_mu = matrix(sdirt$nu_mu)
-#   nu_sigma2 = matrix(sdirt$nu_sigma2)
-#   zeta_mu = sdirt$zeta_mu
-#   zeta_sigma2 = sdirt$zeta_sigma2
-#   burn=50
-#   thin=10
-#   min_tune=10
-#   tune_int=10
-#   max_tune=100
-#   niter=100
-#   verbose_rmmh=T
-#   max_iter_rmmh=200
-# }
-#
-# if(1==0){
-#   chains=1
-#   y = sdirtSS$y
-#   obj_fun = dich_response_model
-#   est_omega = T
-#   est_nu = F
-#   est_zeta = F
-#   lambda = sdirtSS$lambda
-#   gamma = sdirtSS$gamma
-#   omega0 = array(data = 0, dim = dim(sdirtSS$omega))
-#   nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1))
-#   zeta0 = array(data = 0, dim = dim(sdirtSS$zeta))
-#   omega_mu = sdirtSS$omega_mu
-#   omega_sigma2 = sdirtSS$omega_sigma2
-#   nu_mu = matrix(sdirtSS$nu_mu)
-#   nu_sigma2 = matrix(sdirtSS$nu_sigma2)
-#   zeta_mu = sdirtSS$zeta_mu
-#   zeta_sigma2 = sdirtSS$zeta_sigma2
-#   burn=50
-#   thin=10
-#   min_tune=10
-#   tune_int=10
-#   max_tune=100
-#   niter=100
-#   verbose_rmmh=T
-#   max_iter_rmmh=200
-# }
-#----------------------------------------------------+++++++++++++++++++++++++++
-
 rmmh <- function(
-  chains = 1,
-  y = y,
-  obj_fun = NULL,
-  est_omega = T,
-  est_nu = T,
-  est_zeta = T,
-  lambda = lambda,
-  gamma = gamma,
-  omega0 = NULL,
-  nu0 = NULL,
-  zeta0 = NULL,
-  omega_mu = NULL,
-  omega_sigma2 = NULL,
-  nu_mu = NULL,
-  nu_sigma2 = NULL,
-  zeta_mu = NULL,
-  zeta_sigma2 = NULL,
-  burn = NULL,
-  thin = NULL,
-  min_tune = NULL,
-  tune_int = NULL,
-  max_tune = NULL,
-  niter = NULL,
-  verbose_rmmh = T,
-  max_iter_rmmh = 200
+  chains = 1, y = y, obj_fun = NULL, est_omega = T, est_nu = T, est_zeta = T,
+  lambda = NULL, kappa = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL,
+  zeta0 = NULL, omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL,
+  nu_sigma2 = NULL, zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL,
+  thin = NULL, min_tune = NULL, tune_int = NULL, max_tune = NULL,
+  niter = NULL, verbose_rmmh = T, max_iter_rmmh = 200
 ) {
   if (!requireNamespace("abind", quietly = TRUE)) {
     stop("Package \"abind\" needed for the rmmh function to work. Please
@@ -196,12 +119,12 @@ rmmh <- function(
   }
   mcmhburn <- mcmh_mc(
     chains = chains, y = y, obj_fun = obj_fun, est_omega = est_omega,
-    est_nu = est_nu, est_zeta = est_zeta, lambda = lambda, gamma = gamma,
-    omega0 = omega0, nu0 = nu0, zeta0 = zeta0, omega_mu = omega_mu,
-    omega_sigma2 = omega_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
-    zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2, burn = burn, thin = thin,
-    min_tune = min_tune, tune_int = tune_int, max_tune = max_tune,
-    niter = niter
+    est_nu = est_nu, est_zeta = est_zeta, lambda = lambda, kappa = kappa,
+    gamma = gamma, omega0 = omega0, nu0 = nu0, zeta0 = zeta0,
+    omega_mu = omega_mu, omega_sigma2 = omega_sigma2, nu_mu = nu_mu,
+    nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2,
+    burn = burn, thin = thin, min_tune = min_tune, tune_int = tune_int,
+    max_tune = max_tune, niter = niter
   )
 
   # Update initial estimates and variance of candidates
@@ -214,7 +137,7 @@ rmmh <- function(
   if (est_zeta) {
     zeta0 <- mcmhburn$zetaEAP
   }
-  # Set up RMMH loop parmaeters
+  # Set up RMMH loop parameters
   tol <- .01
   log_lik <- 0
   iter <- 0
@@ -237,27 +160,15 @@ rmmh <- function(
     )
   }
 
-  #--------------------------------------------------+++++++++++++++++++++++++++
-  # Delete this once done testing
-  #plot(NULL, xlim = c(0,max_iter_rmmh), ylim = c(sdirtSS$omega_mu[1] - 3 * sdirtSS$omega_sigma2[1,1], sdirtSS$omega_mu[1] + 3 * sdirtSS$omega_sigma2[1,1]))
-  #abline(h = sdirtSS$omega[1], col = "red")
-  #abline(h = sdirtSS$omega_mu[1], col = "green")
-  #--------------------------------------------------+++++++++++++++++++++++++++
-
   while (go && (iter < max_iter_rmmh)) {
-
-    #------------------------------------------------+++++++++++++++++++++++++++
-    # Delete this once done testing
-    #points(x = iter, y = omega0[1], col = "blue")
-    #------------------------------------------------+++++++++++++++++++++++++++
-
     iter <- iter + 1
+
     # STEP 1: Stochastic imputation --------------------------------------------
     mc_draws_at_iteration_k <- mcmh_mc(
       chains = 3, y = y, obj_fun = obj_fun, est_omega = est_omega,
-      est_nu = est_nu, est_zeta = est_zeta, lambda = lambda, gamma = gamma,
-      omega0 = omega0, nu0 = nu0, zeta0 = zeta0, omega_mu = omega_mu,
-      omega_sigma2 = omega_sigma2, nu_mu = matrix(nu_mu),
+      est_nu = est_nu, est_zeta = est_zeta, lambda = lambda, kappa = kappa,
+      gamma = gamma, omega0 = omega0, nu0 = nu0, zeta0 = zeta0,
+      omega_mu = omega_mu, omega_sigma2 = omega_sigma2, nu_mu = matrix(nu_mu),
       nu_sigma2 = matrix(nu_sigma2), zeta_mu = zeta_mu,
       zeta_sigma2 = zeta_sigma2, burn = burn, thin = thin, min_tune = min_tune,
       tune_int = tune_int, max_tune = max_tune, niter = niter
@@ -292,6 +203,7 @@ rmmh <- function(
                   dim = dim(y)
                 ),
                 lambda = lambda,
+                kappa = kappa,
                 gamma = gamma,
                 omega = omega0,
                 zeta = if (est_zeta) {
@@ -350,6 +262,7 @@ rmmh <- function(
                 dim = dim(y)
               ),
               lambda = lambda,
+              kappa = kappa,
               gamma = gamma,
               omega = omega0,
               zeta = if (est_zeta) {
@@ -380,9 +293,16 @@ rmmh <- function(
     info1 <- info0 + gain * (info - info0)
 
     # STEP 3: Robbins-Monro update ---------------------------------------------
-    omega1 <- omega0 + gain * grad %*% solve(info1)
+    # Note using ginv instead of solve because appears to be more stable. Later
+    # added error handling for cases when matrix is singular.
+    inv <- try(expr = MASS::ginv(X = info1, tol = .Machine$double.xmin))
+    if (all(class(x = inv) == "try-error")) {
+      omega1 <- mcmhburn$omegaEAP
+    } else {
+      omega1 <- omega0 + gain * grad %*% inv
+    }
     p <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)), lambda = lambda,
-                 gamma = gamma, omega = omega1, zeta = zeta0)$p
+                 kappa = kappa, gamma = gamma, omega = omega1, zeta = zeta0)$p
     log_lik <- sum(x = log((p^y) * (1 - p) ^ (1 - y)), na.rm = T)
 
     # Test for completion
@@ -391,16 +311,6 @@ rmmh <- function(
       #update values
       info0 <- info1
       omega0 <- omega1
-
-      #----------------------------------------------+++++++++++++++++++++++++++
-      # Delete this once done testing
-      #cat("\n")
-      #cat("\n")
-      #print(cor(c(sdirt$omega[,1]),c(omega1[,1])))
-      #cat("\n")
-      #cat("\n")
-      #----------------------------------------------+++++++++++++++++++++++++++
-
       ongoing_omega <- c(ongoing_omega, omega1)
       if (est_nu) {
         nu0 <- mc_draws_at_iteration_k$nuEAP
@@ -448,4 +358,3 @@ rmmh <- function(
     "ongoing_omega" = ongoing_omega
   ))
 }
-

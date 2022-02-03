@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' rda = sdirtSS
-#' rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, nrep = 5))
+#' rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, 5))
 #' rda$y[which(!rda$list %in% c(1))] <- NA
 #' cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 #'
@@ -42,13 +42,14 @@ cog_cat <- function(rda = NULL, obj_fun = NULL, int_par = NULL) {
     est_nu = T,
     est_zeta = T,
     lambda = rda$lambda[which(rda$list %in% complete_lists), , drop = F],
+    kappa = rda$kappa[, which(rda$list %in% complete_lists), drop = F],
     gamma = rda$gamma,
-    omega0 = array(data = 0, dim = dim(rda$omega)),
+    omega0 = array(data = 0, dim = c(nrow(rda$y), ncol(rda$omega_mu))),
     nu0 = array(
       data = 0,
-      dim = c(ncol(rda$nu), 1)
+      dim = c(ncol(rda$y), 1)
     )[which(rda$list %in% complete_lists), , drop = F],
-    zeta0 = array(data = 0, dim = dim(rda$zeta)),
+    zeta0 = array(data = 0, dim = c(nrow(rda$y), ncol(rda$zeta_mu))),
     omega_mu = rda$omega_mu,
     omega_sigma2 = rda$omega_sigma2,
     nu_mu = matrix(rda$nu_mu),
@@ -56,27 +57,31 @@ cog_cat <- function(rda = NULL, obj_fun = NULL, int_par = NULL) {
     zeta_mu = rda$zeta_mu,
     zeta_sigma2 = rda$zeta_sigma2,
     burn = 0,
-    thin = 1,
+    thin = 5,
     min_tune = 0,
-    tune_int = Inf,
+    tune_int = 0,
     max_tune = 0,
-    niter = 1,
+    niter = 6,
     verbose_rmmh = F,
     max_iter_rmmh = 200
   )
 
-  # STEP 3: Determine which list remaining in the bank to adminster ------------
+  # STEP 3: Determine which list remaining in the bank to administer -----------
   temp <- array(
     sapply(
       incomplete_lists,
       function(x) {
         dich_response_deriv(
           y = rda$y[1, which(rda$list %in% x), drop = F],
-          nu = rda$nu[1, which(rda$list %in% x), drop = F],
+          nu = rep(
+            x = rda$nu_mu,
+            length(rda$y[1, which(rda$list %in% x), drop = F])
+          ),
           lambda = rda$lambda[which(rda$list %in% x), , drop = F],
+          kappa = rda$kappa[, which(rda$list %in% x), drop = F],
           gamma = rda$gamma,
-          omega = rda$omega,
-          zeta = rda$zeta,
+          omega = tmp$omega1,
+          zeta = rda$zeta_mu,
           omega_mu = rda$omega_mu,
           omega_sigma2 = rda$omega_sigma2,
           zeta_mu = rda$zeta_mu,
@@ -87,7 +92,7 @@ cog_cat <- function(rda = NULL, obj_fun = NULL, int_par = NULL) {
     dim = c(dim(rda$omega_sigma2), length(incomplete_lists))
   )
 
-  # STEP 4: Selet next list limited limit to intetional parameters -------------
+  # STEP 4: Select next list limited limit to intentional parameters -----------
   next_list <- incomplete_lists[which.max(
     x = apply(temp[int_par, int_par, , drop = F], 3, det)
   )]

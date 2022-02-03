@@ -12,6 +12,7 @@
 #' @param est_nu Determines whether nu is estimated (logical).
 #' @param est_zeta Determines whether zeta is estimated (logical).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param kappa Matrix of item guessing parameters (K by IJ).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param omega0 Starting values for omega.
 #' @param nu0 Starting values for nu.
@@ -41,8 +42,8 @@
 #'
 #' @examples
 #'mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, gamma = sdirt$gamma,
-#'     omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
 #'     omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
@@ -56,10 +57,10 @@
 
 mcmh_mc <- function(
   chains=NULL, y = y, obj_fun = NULL, est_omega = T, est_nu = T, est_zeta = T,
-  lambda = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL, zeta0 = NULL,
-  omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL, nu_sigma2 = NULL,
-  zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL, thin = NULL, min_tune = NULL,
-  tune_int = NULL, max_tune = NULL, niter = NULL
+  lambda = NULL, kappa = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL,
+  zeta0 = NULL, omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL,
+  nu_sigma2 = NULL, zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL,
+  thin = NULL, min_tune = NULL, tune_int = NULL, max_tune = NULL, niter = NULL
 ) {
   if (!requireNamespace("abind", quietly = TRUE)) {
     stop("Package \"abind\" needed for the mcmh_mc function to work. Please
@@ -75,11 +76,11 @@ mcmh_mc <- function(
   draws <- parallel::mclapply(
     mc.cores = parallel::detectCores(), X = 1:chains, FUN = mcmh_sc, y = y,
     obj_fun = obj_fun, est_omega = est_omega, est_nu = est_nu,
-    est_zeta = est_zeta, lambda = lambda, gamma = gamma, omega0 = omega0,
-    nu0 = nu0, zeta0 = zeta0, omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
-    nu_mu = nu_mu, nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu,
-    zeta_sigma2 = zeta_sigma2, burn = burn, thin = thin, min_tune = min_tune,
-    tune_int = tune_int, max_tune = max_tune, niter = niter
+    est_zeta = est_zeta, lambda = lambda, kappa = kappa, gamma = gamma,
+    omega0 = omega0, nu0 = nu0, zeta0 = zeta0, omega_mu = omega_mu,
+    omega_sigma2 = omega_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
+    zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2, burn = burn, thin = thin,
+    min_tune = min_tune, tune_int = tune_int, max_tune = max_tune, niter = niter
   )
   names(draws) <- paste("chain", 1:chains, sep = "")
   if (est_omega) {

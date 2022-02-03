@@ -8,6 +8,7 @@
 #' @param y Matrix of item responses (K by IJ).
 #' @param nu Matrix of item intercept parameters (K by IJ).
 #' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param kappa Matrix of item guessing parameters (K by IJ).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param omega Examinee-level effects of the experimental manipulation (K by
 #' MN).
@@ -31,19 +32,25 @@
 #'
 #' @examples
 #' mod <- dich_response_model(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
-#'                      gamma = sdirt$gamma, omega = sdirt$omega, sdirt$zeta)
+#'                      gamma = sdirt$gamma, omega = sdirt$omega,
+#'                      zeta = sdirt$zeta)
 #'
 #' @export dich_response_model
 #-------------------------------------------------------------------------------
 
 dich_response_model <- function(y = NULL, nu = NULL, lambda = NULL,
-                                gamma = NULL, omega = NULL, zeta = NULL,
-                                link  = "logit") {
+                                kappa = NULL, gamma = NULL, omega = NULL,
+                                zeta = NULL, link  = "probit") {
+  kappa <- if (is.null(x = kappa)) {
+    0
+  } else {
+    kappa
+  }
   yhatstar <- nu + omega %*% t(gamma) %*% t(lambda) + zeta %*% t(lambda)
   p <- if (link == "logit") {
-    plogis(q = yhatstar)
+    kappa + (1 - kappa) * plogis(q = yhatstar)
   } else if (link == "probit") {
-    pnorm(q = yhatstar)
+    kappa + (1 - kappa) * pnorm(q = yhatstar)
   }
   ll <- sum(log((p^y) * (1 - p) ^ (1 - y)))
   mod <- list(p = p, yhatstar = yhatstar, loglikelihood = ll)

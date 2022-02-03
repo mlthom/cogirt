@@ -8,10 +8,11 @@ dich_response_model(
   y = NULL,
   nu = NULL,
   lambda = NULL,
+  kappa = NULL,
   gamma = NULL,
   omega = NULL,
   zeta = NULL,
-  link = "logit"
+  link = "probit"
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ dich_response_model(
 \item{nu}{Matrix of item intercept parameters (K by IJ).}
 
 \item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{kappa}{Matrix of item guessing parameters (K by IJ).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
@@ -49,7 +52,8 @@ examinees; M Number of ability (or trait) dimensions; N Number of contrasts
 
 \examples{
 mod <- dich_response_model(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
-                     gamma = sdirt$gamma, omega = sdirt$omega, sdirt$zeta)
+                     gamma = sdirt$gamma, omega = sdirt$omega,
+                     zeta = sdirt$zeta)
 
 }
 \references{

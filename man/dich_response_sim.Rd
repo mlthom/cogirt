@@ -13,12 +13,14 @@ dich_response_sim(
   nu_mu,
   nu_sigma2,
   lambda,
+  kappa = NULL,
   gamma,
   omega_mu,
   omega_sigma2,
   zeta_mu,
   zeta_sigma2,
-  link = "logit"
+  item_type = NULL,
+  link = "probit"
 )
 }
 \arguments{
@@ -48,8 +50,7 @@ examinees (1 by JM).}
 \item{zeta_sigma2}{Covariance matrix for the condition-level effects nested
 within examinees (JM by JM).}
 
-\item{link}{Choose between logit or probit links (i.e., sets epsilon variance
-to 1.702 or 1.000 respectively).}
+\item{link}{Choose between logit or probit link functions.}
 }
 \value{
 y = simulated response matrix; yhatstar = simulated latent response
@@ -58,22 +59,57 @@ probability matrix; [simulation_parameters]
 \description{
 This function simulates data for a dichotomous response model framed using
 generalized latent variable modeling (GLVM; Skrondal & Rabe-Hesketh, 2004).
-The example is based on the signal detection item response theory (IRT)
-model (Thomas et al., 2018).
+Signal detection item response theory (SD-IRT) examples are based on
+Thomas et al., (2018).
 }
 \examples{
-#Multiple Subjects
 
-I = 20
-J = 5
-K = 50
-M = 2
-N = 3
-nu_mu = 0
-nu_sigma2 = 0.2
-omega_mu <- matrix(data = c(4.00, -2.00, 0.01, 0.00, 0.50, 0.00), nrow = 1,
+#Multiple Subjects -- Single Ability (Level 2)
+
+I <- 100
+J <- 5
+K <- 50
+M <- 1
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -0.50, 0.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(5.00, 1.00, 0.05), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+measure_weights <- matrix(data = c(1.0), nrow = 1, ncol = M, byrow = T)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+ lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+   measure_weights
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+sairt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
+                           nu_sigma2 = nu_sigma2, lambda = lambda,
+                           gamma = gamma, omega_mu = omega_mu,
+                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                           zeta_sigma2 = zeta_sigma2)
+
+#Multiple Subjects -- SD-IRT
+
+I <- 100
+J <- 5
+K <- 50
+M <- 2
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
 ncol = M * N)
-omega_sigma2 <- diag(x = c(0.50, 0.10, 0.01, 0.25, 0.10, 0.01), nrow = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
 zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
 item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
@@ -93,25 +129,25 @@ for(j in 1:J) {
     contrast_codes[j, ]
   }
 }
-
 
 sdirt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
-                  nu_sigma2 = nu_sigma2, lambda = lambda, gamma = gamma,
-                  omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
-                  zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2)
+                           nu_sigma2 = nu_sigma2, lambda = lambda,
+                           gamma = gamma, omega_mu = omega_mu,
+                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                           zeta_sigma2 = zeta_sigma2, item_type = item_type)
 
-#Single Subject
+#Single Subject -- SD-IRT
 
-I = 50
-J = 5
-K = 1
-M = 2
-N = 3
-nu_mu = 0
-nu_sigma2 = 0.2
-omega_mu <- matrix(data = c(4.00, -2.00, 0.01, 0.00, 0.50, 0.00), nrow = 1,
+I <- 200
+J <- 5
+K <- 1
+M <- 2
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
 ncol = M * N)
-omega_sigma2 <- diag(x = c(0.50, 0.10, 0.01, 0.25, 0.10, 0.01), nrow = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
 zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
 item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
@@ -132,12 +168,73 @@ for(j in 1:J) {
   }
 }
 
+#Multiple Subjects -- Unidimensional
 
-sdirtSS <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
-                  nu_mu = nu_mu, nu_sigma2 = nu_sigma2, lambda = lambda,
-                  gamma = gamma, omega_mu = omega_mu,
-                  omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-                  zeta_sigma2 = zeta_sigma2)
+I <- 100
+J <- 5
+K <- 100
+M <- 1
+N <- 2
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for (j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+unidim <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
+                            nu_sigma2 = nu_sigma2, lambda = lambda,
+                            gamma = gamma, omega_mu = omega_mu,
+                            omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                            zeta_sigma2 = zeta_sigma2, item_type = item_type)
+
+
+#Multiple Subjects -- Unidimensional with Guessing
+
+I <- 100
+J <- 5
+K <- 100
+M <- 1
+N <- 2
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for (j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+      contrast_codes[j, ]
+  }
+}
+kappa <- array(data = 0.5, dim = c(K, I * J))
+
+unidimguess <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                                 nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
+                                 lambda = lambda, kappa = kappa,
+                                 gamma = gamma, omega_mu = omega_mu,
+                                 omega_sigma2 = omega_sigma2,
+                                 zeta_mu = zeta_mu,
+                                 zeta_sigma2 = zeta_sigma2, item_type = NULL)
 
 }
 \references{
