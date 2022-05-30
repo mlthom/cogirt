@@ -87,14 +87,14 @@
 #' omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
 #' zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 #' zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-#' item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+#' key <- rbinom(n = I * J, size = 1, prob = .7) + 1
 #' # Equation 12 Thomas et al. (2018)
 #' measure_weights <-
 #'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
 #' lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 #' for(j in 1:J) {
 #'   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-#'     measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+#'     measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
 #' }
 #' contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
 #' gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -109,7 +109,7 @@
 #'                            nu_sigma2 = nu_sigma2, lambda = lambda,
 #'                            gamma = gamma, omega_mu = omega_mu,
 #'                            omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-#'                            zeta_sigma2 = zeta_sigma2, item_type = item_type)
+#'                            zeta_sigma2 = zeta_sigma2, key = key)
 #'
 #' #Single Subject -- SD-IRT
 #'
@@ -125,14 +125,14 @@
 #' omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
 #' zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 #' zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-#' item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+#' key <- rbinom(n = I * J, size = 1, prob = .7) + 1
 #' # Equation 12 Thomas et al. (2018)
 #' measure_weights <-
 #'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
 #' lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 #' for(j in 1:J) {
 #'   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-#'     measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+#'     measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
 #' }
 #' contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
 #' gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -173,7 +173,7 @@
 #'                             nu_sigma2 = nu_sigma2, lambda = lambda,
 #'                             gamma = gamma, omega_mu = omega_mu,
 #'                             omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-#'                             zeta_sigma2 = zeta_sigma2, item_type = item_type)
+#'                             zeta_sigma2 = zeta_sigma2, key = key)
 #'
 #'
 #' #Multiple Subjects -- Unidimensional with Guessing
@@ -209,14 +209,14 @@
 #'                                  gamma = gamma, omega_mu = omega_mu,
 #'                                  omega_sigma2 = omega_sigma2,
 #'                                  zeta_mu = zeta_mu,
-#'                                  zeta_sigma2 = zeta_sigma2, item_type = NULL)
+#'                                  zeta_sigma2 = zeta_sigma2, key = NULL)
 #'
 #' @export dich_response_sim
 #-------------------------------------------------------------------------------
 
 dich_response_sim <- function(I, J, K,  M, N, nu_mu, nu_sigma2, lambda,
                               kappa = NULL, gamma, omega_mu, omega_sigma2,
-                              zeta_mu, zeta_sigma2, item_type = NULL,
+                              zeta_mu, zeta_sigma2, key = NULL,
                               link  = "probit") {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package \"MASS\" needed for the dich_response_sim function to work.
@@ -283,7 +283,7 @@ dich_response_sim <- function(I, J, K,  M, N, nu_mu, nu_sigma2, lambda,
                  "zeta" = zeta, "nu_mu" = nu_mu, "nu_sigma2" = nu_sigma2,
                  "omega_mu" = omega_mu, "omega_sigma2" = omega_sigma2,
                  "zeta_mu" = zeta_mu, "zeta_sigma2" = zeta_sigma2,
-                 "condition" = condition, "item_type" = item_type
+                 "condition" = condition, "key" = key
   )
   return(simdat)
 }
