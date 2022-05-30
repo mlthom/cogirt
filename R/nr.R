@@ -7,7 +7,7 @@
 #' @export nr
 #-------------------------------------------------------------------------------
 
-nr <- function(rda = NULL, tol = 1e-9, max_iter = 100, verbose = T) {
+nr <- function(rda = NULL, tol = 1e-9, max_iter = 100, verbose = TRUE) {
 
   omega_nr <- rda$omega
 
@@ -46,7 +46,7 @@ nr <- function(rda = NULL, tol = 1e-9, max_iter = 100, verbose = T) {
     )
     iter <- iter + 1
   }
-  if (verbose == T) {
+  if (verbose == TRUE) {
     if (any(abs(fx$fpd[[1]]) > tol)) {
       cat("Algorithm failed to converge\n")
     } else {

@@ -12,14 +12,14 @@
 #'
 #' @examples
 #' cog_cat_sim(rda = sdirtSS, obj_fun = dich_response_model, int_par = 1,
-#' min_se = -Inf, verbose_sim = T)
+#' min_se = -Inf, verbose_sim = TRUE)
 #'
 #' @export cog_cat_sim
 #'
 #-------------------------------------------------------------------------------
 
 cog_cat_sim <- function(rda = NULL, obj_fun = NULL, int_par = NULL,
-                        min_se = NULL, verbose_sim = T) {
+                        min_se = NULL, verbose_sim = TRUE) {
   if(verbose_sim) {
     cat(
       "CAT Simulation Start Time",
@@ -35,17 +35,17 @@ cog_cat_sim <- function(rda = NULL, obj_fun = NULL, int_par = NULL,
     ylim <- c(0, rda$omega_sigma2[int_par, int_par])
     yseg <- rda$omega_sigma2[int_par, int_par] / 5
     plot(NULL, axes = F, xlim = xlim, ylim = ylim, xlab = "Parameter", ylab = "Standard Error", main = "")
-    axis(side = 1, tick = T, at = seq(xlim[1],xlim[2],xseg))
-    axis(side = 2, tick = T, at = seq(ylim[1],ylim[2],yseg))
+    axis(side = 1, tick = TRUE, at = seq(xlim[1],xlim[2],xseg))
+    axis(side = 2, tick = TRUE, at = seq(ylim[1],ylim[2],yseg))
     abline(v = rda$omega[1, int_par], lwd = 2, col = "green")
     abline(v = rda$omega_mu[1, int_par], lwd = 2, col = "red")
     tmp <- rmmh(
       chains = 3,
       y = rda$y,
       obj_fun = obj_fun,
-      est_omega = T,
-      est_nu = T,
-      est_zeta = T,
+      est_omega = TRUE,
+      est_nu = TRUE,
+      est_zeta = TRUE,
       lambda = rda$lambda,
       gamma = rda$gamma,
       omega0 = array(data = 0, dim = dim(rda$omega)),
@@ -103,7 +103,7 @@ cog_cat_sim <- function(rda = NULL, obj_fun = NULL, int_par = NULL,
         "\n",
         sep = ""
       )
-      points(x = tmp$omega1[1, int_par], y = se, pch = 15, col = "blue", xpd = T)
+      points(x = tmp$omega1[1, int_par], y = se, pch = 15, col = "blue", xpd = TRUE)
       segments(
         x0 = tmp$omega1[1, int_par] - se,
         y0 = se,

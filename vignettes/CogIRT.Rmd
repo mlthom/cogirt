@@ -1,0 +1,32 @@
+---
+title: "CogIRT"
+author: "Michael L. Thomas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CogIRT}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+#library(CogIRTRUE)
+if(1 == 0) {             #Use this option once CogIRT is installed
+  library(CogIRTRUE)
+} else {                 #Use this for now while testing
+  library(devtools)
+  if( Sys.getenv("HOME") == "/Users/mlthom") {
+    load_all(path = "/Users/mlthom/Dropbox/research/thomas/rdoc/CogIRT/")
+  } else if( Sys.getenv("HOME") == "/Users/jrduffy") {
+    load_all(path = "/Users/jrduffy/Dropbox/rdoc/CogIRT/")
+  } else if( Sys.getenv("HOME") == "/Users/nmlab") {
+    load_all(path = "/Users/nmlab/Dropbox/rdoc/CogIRT/")
+  }
+}
+```

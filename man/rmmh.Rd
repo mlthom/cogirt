@@ -8,9 +8,9 @@ rmmh(
   chains = 1,
   y = y,
   obj_fun = NULL,
-  est_omega = T,
-  est_nu = T,
-  est_zeta = T,
+  est_omega = TRUE,
+  est_nu = TRUE,
+  est_zeta = TRUE,
   lambda = NULL,
   kappa = NULL,
   gamma = NULL,
@@ -29,7 +29,7 @@ rmmh(
   tune_int = NULL,
   max_tune = NULL,
   niter = NULL,
-  verbose_rmmh = T,
+  verbose_rmmh = TRUE,
   max_iter_rmmh = 200
 )
 }
@@ -93,32 +93,32 @@ This function calculates RMMH parameter estimates for multiple chains.
 }
 \examples{
 # Multiple subjects example. Extended MCMH sampling.
-rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
-    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
-    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
-    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
-    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
-    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
-    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
-    burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
-    niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+# rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+#   est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#   gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#   nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+#   zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+#   omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+#   nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+#   zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+#   burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
+#   niter = 100, verbose_rmmh = TRUE, max_iter_rmmh = 200)
 
 # Multiple subjects example. Limited MCMH sampling.
-rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
-    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
-    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
-    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
-    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
-    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
-    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
-    burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
-    verbose_rmmh = T, max_iter_rmmh = 200)
+# rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+#   est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#   gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+#   nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+#   zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+#   omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+#   nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+#   zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+#   burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
+#   verbose_rmmh = TRUE, max_iter_rmmh = 200)
 
 # Single subject example. Extended MCMH sampling.
-rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
-     est_nu = T, est_zeta = T, lambda = sdirtSS$lambda, kappa = sdirt$kappa,
+rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = TRUE,
+     est_nu = TRUE, est_zeta = TRUE, lambda = sdirtSS$lambda, kappa = sdirt$kappa,
      gamma = sdirtSS$gamma, omega0 = array(data = 0,
      dim = dim(sdirtSS$omega)), nu0 = array(data = 0,
      dim = c(ncol(sdirtSS$nu), 1)),
@@ -127,11 +127,11 @@ rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
      nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
      zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
      burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
-     niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+     niter = 100, verbose_rmmh = TRUE, max_iter_rmmh = 200)
 
 # Single subject example. Limited MCMH sampling.
 rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
-     est_omega = T, est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+     est_omega = TRUE, est_nu = TRUE, est_zeta = TRUE, lambda = sdirtSS$lambda,
      kappa = sdirt$kappa, gamma = sdirtSS$gamma,
      omega0 = array(data = 0, dim = dim(sdirtSS$omega)),
      nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1)),
@@ -140,7 +140,7 @@ rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
      nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
      zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
      burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
-     verbose_rmmh = T, max_iter_rmmh = 200)
+     verbose_rmmh = TRUE, max_iter_rmmh = 200)
 
 }
 \references{

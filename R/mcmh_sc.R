@@ -50,8 +50,8 @@
 #' and Behavioral Statistics, 24(2), 146.
 #'
 #' @examples
-#'mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+#'     est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
 #'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
@@ -59,13 +59,13 @@
 #'     nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
 #'     zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
 #'     burn = 0, thin = 10, min_tune = 50, tune_int = 50, max_tune = 1000,
-#'     niter = 2000, weight = 1/1, verbose_mcmh = T)
+#'     niter = 2000, weight = 1/1, verbose_mcmh = TRUE)
 #'
 #' @export mcmh_sc
 #-------------------------------------------------------------------------------
 
 mcmh_sc <- function(
-  y = y, obj_fun = NULL, est_omega = T, est_nu = T, est_zeta = T, lambda = NULL,
+  y = y, obj_fun = NULL, est_omega = TRUE, est_nu = TRUE, est_zeta = TRUE, lambda = NULL,
   kappa = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL, zeta0 = NULL,
   omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL, nu_sigma2 = NULL,
   zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL, thin = NULL, min_tune = NULL,
@@ -156,7 +156,7 @@ mcmh_sc <- function(
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega0, zeta = zeta0)$p
-      tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
+      tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = TRUE)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = omega0,
         mean = omega_mu,
@@ -165,7 +165,7 @@ mcmh_sc <- function(
       p1 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega1, zeta = zeta0)$p
-      tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = T)
+      tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = TRUE)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = omega1,
         mean = omega_mu,
@@ -280,7 +280,7 @@ mcmh_sc <- function(
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega0, zeta = zeta0)$p
-      tmp0 <- colSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
+      tmp0 <- colSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = TRUE)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = nu0,
         mean = nu_mu,
@@ -289,7 +289,7 @@ mcmh_sc <- function(
       p1 <- obj_fun(y = y, nu = array(data = nu1, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega0, zeta = zeta0)$p
-      tmp1 <- colSums(x = log((p1 ^ y) * (1 - p1) ^ (1 - y)), na.rm = T)
+      tmp1 <- colSums(x = log((p1 ^ y) * (1 - p1) ^ (1 - y)), na.rm = TRUE)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = nu1,
         mean = nu_mu,
@@ -400,7 +400,7 @@ mcmh_sc <- function(
       p0 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega0, zeta = zeta0)$p
-      tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = T)
+      tmp0 <- rowSums(x = log((p0^y) * (1 - p0) ^ (1 - y)), na.rm = TRUE)
       ll0 <- tmp0 + log(x = mvtnorm::dmvnorm(
         x = zeta0,
         mean = zeta_mu,
@@ -409,7 +409,7 @@ mcmh_sc <- function(
       p1 <- obj_fun(y = y, nu = array(data = nu0, dim = dim(y)),
                     lambda = lambda, kappa = kappa, gamma = gamma,
                     omega = omega0, zeta = zeta1)$p
-      tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = T)
+      tmp1 <- rowSums(x = log((p1^y) * (1 - p1) ^ (1 - y)), na.rm = TRUE)
       ll1 <- tmp1 + log(x = mvtnorm::dmvnorm(
         x = zeta1,
         mean = zeta_mu,

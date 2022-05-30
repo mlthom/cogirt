@@ -7,9 +7,9 @@
 mcmh_sc(
   y = y,
   obj_fun = NULL,
-  est_omega = T,
-  est_nu = T,
-  est_zeta = T,
+  est_omega = TRUE,
+  est_nu = TRUE,
+  est_zeta = TRUE,
   lambda = NULL,
   kappa = NULL,
   gamma = NULL,
@@ -102,8 +102,8 @@ tuning the scale and covariance matrix follows BDA and SAS 9.2 User Guide,
 2nd Ed. "The MCMC Procedure: Tuning the Proposal Distribution".
 }
 \examples{
-mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+    est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
@@ -111,7 +111,7 @@ mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
     nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
     zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
     burn = 0, thin = 10, min_tune = 50, tune_int = 50, max_tune = 1000,
-    niter = 2000, weight = 1/1, verbose_mcmh = T)
+    niter = 2000, weight = 1/1, verbose_mcmh = TRUE)
 
 }
 \references{

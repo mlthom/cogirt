@@ -8,9 +8,9 @@ mcmh_mc(
   chains = NULL,
   y = y,
   obj_fun = NULL,
-  est_omega = T,
-  est_nu = T,
-  est_zeta = T,
+  est_omega = TRUE,
+  est_nu = TRUE,
+  est_zeta = TRUE,
   lambda = NULL,
   kappa = NULL,
   gamma = NULL,
@@ -97,8 +97,8 @@ This function calculates MCMH parameter estimates for multiple chains. See
 documentation for mcmh_sc.R for more information.
 }
 \examples{
-mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+    est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),

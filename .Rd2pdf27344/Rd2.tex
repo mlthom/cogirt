@@ -1,0 +1,1011 @@
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `CogIRT'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\inputencoding{utf8}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Cognitive Testing Using Item Response Theory}
+\item[Version]\AsIs{0.1.0}
+\item[Description]\AsIs{Item response theory (IRT) and other psychometric tools for
+experimental cognitive testing.}
+\item[License]\AsIs{GPL (>= 3)}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[RoxygenNote]\AsIs{7.1.1}
+\item[Imports]\AsIs{MASS,
+abind,
+mvtnorm,
+parallel,
+coda}
+\item[Depends]\AsIs{R (>= 2.10)}
+\item[Suggests]\AsIs{rmarkdown,
+knitr}
+\item[VignetteBuilder]\AsIs{knitr}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{cog\_cat}{Cognitive Testing Using Computerized Adaptive Testing}{cog.Rul.cat}
+%
+\begin{Description}\relax
+This function takes an rda file or list with select objects and returns omega
+estimates, an information matrix, and the next best list to administer for
+computerized adaptive testing. Adapting testing using D-optimality (see
+Segall 2009).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+cog_cat(rda = NULL, obj_fun = NULL, int_par = NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{obj\_fun}] A function that calculates predictions and log-likelihood
+values for the selected model (character).
+
+\item[\code{int\_par}] Intentional parameters. That is, the parameters to optimize
+precision (scalar).
+
+\item[\code{x}] .rda file (or list) containing all objects necessary to run rmmh.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{References}\relax
+Segall, D. O. (2009). Principles of Multidimensional Adaptive Testing. In W.
+J. van der Linden \& C. A. W. Glas (Eds.), \emph{Elements of Adaptive Testing}
+(pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8\_3
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+rda = sdirtSS
+rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, 5))
+rda$y[which(!rda$list %in% c(1))] <- NA
+cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dich\_response\_deriv}{Derivatives and Information for the Dichotomous Response Model}{dich.Rul.response.Rul.deriv}
+%
+\begin{Description}\relax
+This function calculates the matrix of first partial derivatives, the matrix
+of second partial derivatives, and information matrix for the posterior
+distribution with respect to omega The formulas are based on Segall (1996;
+2009).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+dich_response_deriv(
+  y,
+  nu,
+  lambda,
+  kappa = NULL,
+  gamma,
+  omega,
+  zeta,
+  omega_mu,
+  omega_sigma2,
+  zeta_mu,
+  zeta_sigma2,
+  link = "probit"
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}] Matrix of item responses (K by IJ).
+
+\item[\code{nu}] Matrix of item intercept parameters (K by IJ).
+
+\item[\code{lambda}] Matrix of item structure parameters (IJ by JM).
+
+\item[\code{kappa}] Matrix of item guessing parameters (K by IJ).
+
+\item[\code{gamma}] Matrix of experimental structure parameters (JM by MN).
+
+\item[\code{omega}] Examinee-level effects of the experimental manipulation (K by
+MN).
+
+\item[\code{zeta}] Condition-level effects of the experimental manipulation (K by
+JM).
+
+\item[\code{omega\_mu}] Vector of means prior for omega (1 by MN).
+
+\item[\code{zeta\_mu}] Vector of means prior for zeta (1 by JM).
+
+\item[\code{link}] Choose between logit or probit link functions.
+
+\item[\code{omega\_sigma@}] Covariance matrix prior for omega (MN by MN).
+
+\item[\code{zeta\_sigma@}] Covariance matrix prior for zeta (JM by JM).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+List with elements fpd (1 by MN vector of first partial derivatives
+for omega), spd (MN by MN matrix of second partial derivatives for omega),
+post\_info (MN by MN posterior information matrix for omega), and fisher\_info
+(MN by MN Fisher information matrix for omega). Within each of these
+elements, there are sub-elements for all K examinees.
+\end{Value}
+%
+\begin{Section}{Dimensions}
+
+I = Number of items per condition; J = Number of conditions; K = Number of
+examinees; M Number of ability (or trait) dimensions; N Number of contrasts
+(should include intercept).
+\end{Section}
+%
+\begin{Section}{A Note About Model Notation}
+
+The function converts GLLVM notation to the more typical IRT notation used by
+Segall (1996) for ease of referencing formulas.
+\end{Section}
+%
+\begin{References}\relax
+Segall, D. O. (1996). Multidimensional adaptive testing.
+\emph{Psychometrika, 61(2)}, 331-354. https://doi.org/10.1007/BF02294343
+
+Segall, D. O. (2009). Principles of Multidimensional Adaptive Testing. In W.
+J. van der Linden \& C. A. W. Glas (Eds.), \emph{Elements of Adaptive Testing}
+(pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8\_3
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+dich_response_deriv(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
+                gamma = sdirt$gamma, omega = sdirt$omega, zeta = sdirt$zeta,
+                omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+                zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+                link  = "probit")
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dich\_response\_model}{Dichotomous Response Model}{dich.Rul.response.Rul.model}
+%
+\begin{Description}\relax
+This function calculates predictions and log-likelihood values for a
+dichotomous response model framed using generalized latent variable modeling
+(GLVM; Skrondal \& Rabe-Hesketh, 2004).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+dich_response_model(
+  y = NULL,
+  nu = NULL,
+  lambda = NULL,
+  kappa = NULL,
+  gamma = NULL,
+  omega = NULL,
+  zeta = NULL,
+  link = "probit"
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}] Matrix of item responses (K by IJ).
+
+\item[\code{nu}] Matrix of item intercept parameters (K by IJ).
+
+\item[\code{lambda}] Matrix of item structure parameters (IJ by JM).
+
+\item[\code{kappa}] Matrix of item guessing parameters (K by IJ).
+
+\item[\code{gamma}] Matrix of experimental structure parameters (JM by MN).
+
+\item[\code{omega}] Examinee-level effects of the experimental manipulation (K by
+MN).
+
+\item[\code{zeta}] Condition-level effects of the experimental manipulation (K by
+JM).
+
+\item[\code{link}] Choose between logit or probit link functions.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+p = response probability matrix (K by IJ); yhatstar = latent response
+variate matrix (K by IJ); loglikelihood = model log-likelihood (scalar).
+\end{Value}
+%
+\begin{Section}{Dimensions}
+
+I = Number of items per condition; J = Number of conditions; K = Number of
+examinees; M Number of ability (or trait) dimensions; N Number of contrasts
+(should include intercept).
+\end{Section}
+%
+\begin{References}\relax
+Skrondal, A., \& Rabe-Hesketh, S. (2004). \emph{Generalized latent variable
+modeling: Multilevel, longitudinal, and structural equation models}. Boca
+Raton: Chapman \& Hall/CRC.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mod <- dich_response_model(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
+                     gamma = sdirt$gamma, omega = sdirt$omega,
+                     zeta = sdirt$zeta)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dich\_response\_sim}{Simulate Dichotomous Response Model}{dich.Rul.response.Rul.sim}
+%
+\begin{Description}\relax
+This function simulates data for a dichotomous response model framed using
+generalized latent variable modeling (GLVM; Skrondal \& Rabe-Hesketh, 2004).
+Signal detection item response theory (SD-IRT) examples are based on
+Thomas et al., (2018).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+dich_response_sim(
+  I,
+  J,
+  K,
+  M,
+  N,
+  nu_mu,
+  nu_sigma2,
+  lambda,
+  kappa = NULL,
+  gamma,
+  omega_mu,
+  omega_sigma2,
+  zeta_mu,
+  zeta_sigma2,
+  item_type = NULL,
+  link = "probit"
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{I}] Number of items per condition.
+
+\item[\code{J}] Number of conditions.
+
+\item[\code{K}] Number of examinees
+
+\item[\code{M}] Number of ability (or trait) dimensions.
+
+\item[\code{N}] Number of contrasts (should include intercept).
+
+\item[\code{nu\_mu}] Mean of the item intercept parameters (scalar).
+
+\item[\code{nu\_sigma2}] Variance of the item intercept parameters (scalar).
+
+\item[\code{omega\_mu}] Vector of means for the examinee-level effects of the
+experimental manipulation (1 by MN).
+
+\item[\code{omega\_sigma2}] Covariance matrix for the examinee-level effects of the
+experimental manipulation (MN by MN).
+
+\item[\code{zeta\_mu}] Vector of means for the condition-level effects nested within
+examinees (1 by JM).
+
+\item[\code{zeta\_sigma2}] Covariance matrix for the condition-level effects nested
+within examinees (JM by JM).
+
+\item[\code{link}] Choose between logit or probit link functions.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+y = simulated response matrix; yhatstar = simulated latent response
+probability matrix; [simulation\_parameters]
+\end{Value}
+%
+\begin{References}\relax
+Skrondal, A., \& Rabe-Hesketh, S. (2004). \emph{Generalized latent variable
+modeling: Multilevel, longitudinal, and structural equation models}. Boca
+Raton: Chapman \& Hall/CRC.
+
+Thomas, M. L., Brown, G. G., Gur, R. C., Moore, T. M., Patt,
+V. M., Risbrough, V. B., \& Baker, D. G. (2018). A signal detection-item
+response theory model for evaluating neuropsychological measures.
+\emph{Journal of Clinical and Experimental Neuropsychology, 40(8)}, 745-760.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+#Multiple Subjects -- Single Ability (Level 2)
+
+I <- 100
+J <- 5
+K <- 50
+M <- 1
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -0.50, 0.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(5.00, 1.00, 0.05), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+measure_weights <- matrix(data = c(1.0), nrow = 1, ncol = M, byrow = T)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+ lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+   measure_weights
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+sairt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
+                           nu_sigma2 = nu_sigma2, lambda = lambda,
+                           gamma = gamma, omega_mu = omega_mu,
+                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                           zeta_sigma2 = zeta_sigma2)
+
+#Multiple Subjects -- SD-IRT
+
+I <- 100
+J <- 5
+K <- 50
+M <- 2
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
+ncol = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+# Equation 12 Thomas et al. (2018)
+measure_weights <-
+  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = T)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+    measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+sdirt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
+                           nu_sigma2 = nu_sigma2, lambda = lambda,
+                           gamma = gamma, omega_mu = omega_mu,
+                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                           zeta_sigma2 = zeta_sigma2, item_type = item_type)
+
+#Single Subject -- SD-IRT
+
+I <- 200
+J <- 5
+K <- 1
+M <- 2
+N <- 3
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
+ncol = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+# Equation 12 Thomas et al. (2018)
+measure_weights <-
+  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = T)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+    measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+#Multiple Subjects -- Unidimensional
+
+I <- 100
+J <- 5
+K <- 100
+M <- 1
+N <- 2
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for (j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+
+unidim <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
+                            nu_sigma2 = nu_sigma2, lambda = lambda,
+                            gamma = gamma, omega_mu = omega_mu,
+                            omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
+                            zeta_sigma2 = zeta_sigma2, item_type = item_type)
+
+
+#Multiple Subjects -- Unidimensional with Guessing
+
+I <- 100
+J <- 5
+K <- 100
+M <- 1
+N <- 2
+nu_mu <- 0
+nu_sigma2 <- 0.2
+omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for (j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
+}
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+      contrast_codes[j, ]
+  }
+}
+kappa <- array(data = 0.5, dim = c(K, I * J))
+
+unidimguess <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                                 nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
+                                 lambda = lambda, kappa = kappa,
+                                 gamma = gamma, omega_mu = omega_mu,
+                                 omega_sigma2 = omega_sigma2,
+                                 zeta_mu = zeta_mu,
+                                 zeta_sigma2 = zeta_sigma2, item_type = NULL)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{mcmh\_mc}{MCMH Parameter Estimates for Multiple Chains}{mcmh.Rul.mc}
+%
+\begin{Description}\relax
+This function calculates MCMH parameter estimates for multiple chains. See
+documentation for mcmh\_sc.R for more information.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+mcmh_mc(
+  chains = NULL,
+  y = y,
+  obj_fun = NULL,
+  est_omega = T,
+  est_nu = T,
+  est_zeta = T,
+  lambda = NULL,
+  kappa = NULL,
+  gamma = NULL,
+  omega0 = NULL,
+  nu0 = NULL,
+  zeta0 = NULL,
+  omega_mu = NULL,
+  omega_sigma2 = NULL,
+  nu_mu = NULL,
+  nu_sigma2 = NULL,
+  zeta_mu = NULL,
+  zeta_sigma2 = NULL,
+  burn = NULL,
+  thin = NULL,
+  min_tune = NULL,
+  tune_int = NULL,
+  max_tune = NULL,
+  niter = NULL
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{chains}] Number of chains in the MCMH sampler (scalar).
+
+\item[\code{y}] Matrix of item responses (K by IJ).
+
+\item[\code{obj\_fun}] A function that calculates predictions and log-likelihood
+values for the selected model (character).
+
+\item[\code{est\_omega}] Determines whether omega is estimated (logical).
+
+\item[\code{est\_nu}] Determines whether nu is estimated (logical).
+
+\item[\code{est\_zeta}] Determines whether zeta is estimated (logical).
+
+\item[\code{lambda}] Matrix of item structure parameters (IJ by JM).
+
+\item[\code{kappa}] Matrix of item guessing parameters (K by IJ).
+
+\item[\code{gamma}] Matrix of experimental structure parameters (JM by MN).
+
+\item[\code{omega0}] Starting values for omega.
+
+\item[\code{nu0}] Starting values for nu.
+
+\item[\code{zeta0}] Starting values for zeta.
+
+\item[\code{omega\_mu}] Vector of means prior for omega (1 by MN).
+
+\item[\code{nu\_mu}] Prior mean for nu (scalar).
+
+\item[\code{zeta\_mu}] Vector of means prior for zeta (1 by JM).
+
+\item[\code{burn}] Number of iterations at the beginning of an MCMC run to discard
+(scalar).
+
+\item[\code{thin}] Determines every nth observation retained (scalar).
+
+\item[\code{min\_tune}] Determines when tunning begins (scalar).
+
+\item[\code{tune\_int}] MCMH tuning interval (scalar).
+
+\item[\code{max\_tune}] Determines when tunning ends (scalar).
+
+\item[\code{niter}] Number of iterations of the MCMH sampler.
+
+\item[\code{omega\_sigma}] Covariance matrix prior for omega (MN by MN).
+
+\item[\code{zeta\_sigma@}] Covariance matrix prior for zeta (JM by JM).
+
+\item[\code{nu\_sigma@}] Prior variance for nu (scalar).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+List with elements omega\_draws (draws from every saved iteration of
+the MCMH sampler), omegaEAP (expected a posteriori estimates for omega),
+omegaPSD (posterior standard deviation estimates for omega), omega\_psrf
+(potential scale reduction factor for omega), nuEAP (expected a posteriori
+estimates for nu), nuPSD (posterior standard deviation estimates for nu),
+nu\_psrf (potential scale reduction factor for nu), zetaEAP (expected a
+posteriori estimates for zeta), zetaPSD (posterior standard deviation
+estimates for zeta), zeta\_psrf (potential scale reduction factor for zeta).
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+    burn = 0, thin = 10, min_tune = 50, tune_int = 50, max_tune = 1000,
+    niter = 2000)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{mcmh\_sc}{MCMH Parameter Estimates for Single Chain}{mcmh.Rul.sc}
+%
+\begin{Description}\relax
+This function calculates MCMH parameter estimates for a single chain. The
+MCMH method implemented follows Patz and Junker (1999). The approach to
+tuning the scale and covariance matrix follows BDA and SAS 9.2 User Guide,
+2nd Ed. "The MCMC Procedure: Tuning the Proposal Distribution".
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+mcmh_sc(
+  y = y,
+  obj_fun = NULL,
+  est_omega = T,
+  est_nu = T,
+  est_zeta = T,
+  lambda = NULL,
+  kappa = NULL,
+  gamma = NULL,
+  omega0 = NULL,
+  nu0 = NULL,
+  zeta0 = NULL,
+  omega_mu = NULL,
+  omega_sigma2 = NULL,
+  nu_mu = NULL,
+  nu_sigma2 = NULL,
+  zeta_mu = NULL,
+  zeta_sigma2 = NULL,
+  burn = NULL,
+  thin = NULL,
+  min_tune = NULL,
+  tune_int = NULL,
+  max_tune = NULL,
+  niter = NULL,
+  weight = 1,
+  verbose_mcmh = F
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}] Matrix of item responses (K by IJ).
+
+\item[\code{obj\_fun}] A function that calculates predictions and log-likelihood
+values for the selected model (character).
+
+\item[\code{est\_omega}] Determines whether omega is estimated (logical).
+
+\item[\code{est\_nu}] Determines whether nu is estimated (logical).
+
+\item[\code{est\_zeta}] Determines whether zeta is estimated (logical).
+
+\item[\code{lambda}] Matrix of item structure parameters (IJ by JM).
+
+\item[\code{kappa}] Matrix of item guessing parameters (K by IJ).
+
+\item[\code{gamma}] Matrix of experimental structure parameters (JM by MN).
+
+\item[\code{omega0}] Starting values for omega.
+
+\item[\code{nu0}] Starting values for nu.
+
+\item[\code{zeta0}] Starting values for zeta.
+
+\item[\code{omega\_mu}] Vector of means prior for omega (1 by MN).
+
+\item[\code{nu\_mu}] Prior mean for nu (scalar).
+
+\item[\code{zeta\_mu}] Vector of means prior for zeta (1 by JM).
+
+\item[\code{burn}] Number of iterations at the beginning of an MCMC run to discard
+(scalar).
+
+\item[\code{thin}] Determines every nth observation retained (scalar).
+
+\item[\code{min\_tune}] Determines when tunning begins (scalar).
+
+\item[\code{tune\_int}] MCMH tuning interval (scalar).
+
+\item[\code{max\_tune}] Determines when tunning ends (scalar).
+
+\item[\code{niter}] Number of iterations of the MCMH sampler.
+
+\item[\code{weight}] Determines the weight of old versus new covariance matrix.
+
+\item[\code{verbose\_mcmh}] Print progress of MCMH sampler.
+
+\item[\code{omega\_sigma}] Covariance matrix prior for omega (MN by MN).
+
+\item[\code{zeta\_sigma@}] Covariance matrix prior for zeta (JM by JM).
+
+\item[\code{nu\_sigma@}] Prior variance for nu (scalar).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+List with elements omega\_draws (list of (niter - burn) / thin draws
+for K by MN omega matrix), nu\_draws (list of (niter - burn) / thin draws
+for K by IJ nu matrix), zeta\_draws (list of (niter - burn) / thin draws for K
+by JM zeta matrix), cand\_o\_var (list of K final MN by MN candidate proposal
+covariance matrices for omega for each examinee), cand\_n\_var (list of IJ
+final scalar candidate proposal variances for nu for all items), cand\_z\_var
+(list of final JM by JM candidate proposal covariance matrices for zeta for
+all examinees)
+\end{Value}
+%
+\begin{References}\relax
+Patz, R. J., \& Junker, B. W. (1999). A Straightforward Approach to Markov
+Chain Monte Carlo Methods for Item Response Models. Journal of Educational
+and Behavioral Statistics, 24(2), 146.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mcmh_sc(y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+    burn = 0, thin = 10, min_tune = 50, tune_int = 50, max_tune = 1000,
+    niter = 2000, weight = 1/1, verbose_mcmh = T)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{nr}{Newton Raphson Parameter Estimates}{nr}
+%
+\begin{Description}\relax
+This function calculates Newton Raphson parameter estimates. It is used
+mostly for testing.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+nr(rda = NULL, tol = 1e-09, max_iter = 100, verbose = T)
+\end{verbatim}
+\end{Usage}
+\inputencoding{utf8}
+\HeaderA{rmmh}{RMMH Parameter Estimates for Multiple Chains}{rmmh}
+%
+\begin{Description}\relax
+This function calculates RMMH parameter estimates for multiple chains.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+rmmh(
+  chains = 1,
+  y = y,
+  obj_fun = NULL,
+  est_omega = T,
+  est_nu = T,
+  est_zeta = T,
+  lambda = NULL,
+  kappa = NULL,
+  gamma = NULL,
+  omega0 = NULL,
+  nu0 = NULL,
+  zeta0 = NULL,
+  omega_mu = NULL,
+  omega_sigma2 = NULL,
+  nu_mu = NULL,
+  nu_sigma2 = NULL,
+  zeta_mu = NULL,
+  zeta_sigma2 = NULL,
+  burn = NULL,
+  thin = NULL,
+  min_tune = NULL,
+  tune_int = NULL,
+  max_tune = NULL,
+  niter = NULL,
+  verbose_rmmh = T,
+  max_iter_rmmh = 200
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{chains}] Number of chains in the MCMH sampler (scalar).
+
+\item[\code{y}] Matrix of item responses (K by IJ).
+
+\item[\code{obj\_fun}] A function that calculates predictions and log-likelihood
+values for the selected model (character).
+
+\item[\code{est\_omega}] Determines whether omega is estimated (logical).
+
+\item[\code{est\_nu}] Determines whether nu is estimated (logical).
+
+\item[\code{est\_zeta}] Determines whether zeta is estimated (logical).
+
+\item[\code{lambda}] Matrix of item structure parameters (IJ by JM).
+
+\item[\code{kappa}] Matrix of item guessing parameters (K by IJ).
+
+\item[\code{gamma}] Matrix of experimental structure parameters (JM by MN).
+
+\item[\code{omega0}] Starting values for omega.
+
+\item[\code{nu0}] Starting values for nu.
+
+\item[\code{zeta0}] Starting values for zeta.
+
+\item[\code{omega\_mu}] Vector of means prior for omega (1 by MN).
+
+\item[\code{nu\_mu}] Prior mean for nu (scalar).
+
+\item[\code{zeta\_mu}] Vector of means prior for zeta (1 by JM).
+
+\item[\code{burn}] Number of iterations at the beginning of an MCMC run to discard
+(scalar).
+
+\item[\code{thin}] Determines every nth observation retained (scalar).
+
+\item[\code{min\_tune}] Determines when tunning begins (scalar).
+
+\item[\code{tune\_int}] MCMH tuning interval (scalar).
+
+\item[\code{max\_tune}] Determines when tunning ends (scalar).
+
+\item[\code{niter}] Number of iterations of the MCMH sampler.
+
+\item[\code{verbose\_rmmh}] Print progress of MCMH sampler.
+
+\item[\code{max\_iter\_rmmh}] Maximum number of iterations for RMMH.
+
+\item[\code{omega\_sigma}] Covariance matrix prior for omega (MN by MN).
+
+\item[\code{zeta\_sigma@}] Covariance matrix prior for zeta (JM by JM).
+
+\item[\code{nu\_sigma@}] Prior variance for nu (scalar).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{References}\relax
+Cai, L. (2010). High-dimensional exploratory item factor analysis by a
+Metropolis-Hastings Robbins-Monro algorithm. \emph{Psychometrika, 75(1)},
+33-57.
+
+Cai, L. (2010). Metropolis-Hastings Robbins-Monro algorithm for confirmatory
+item factor analysis. \emph{Journal of Educational and Behavioral Statistics,
+35(3)}, 307-335.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Multiple subjects example. Extended MCMH sampling.
+rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+    burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
+    niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Multiple subjects example. Limited MCMH sampling.
+rmmh(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
+    est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+    gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
+    nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
+    zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
+    omega_mu = sdirt$omega_mu, omega_sigma2 = sdirt$omega_sigma2,
+    nu_mu = matrix(sdirt$nu_mu), nu_sigma2 = matrix(sdirt$nu_sigma2),
+    zeta_mu = sdirt$zeta_mu, zeta_sigma2 = sdirt$zeta_sigma2,
+    burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
+    verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Single subject example. Extended MCMH sampling.
+rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model, est_omega = T,
+     est_nu = T, est_zeta = T, lambda = sdirtSS$lambda, kappa = sdirt$kappa,
+     gamma = sdirtSS$gamma, omega0 = array(data = 0,
+     dim = dim(sdirtSS$omega)), nu0 = array(data = 0,
+     dim = c(ncol(sdirtSS$nu), 1)),
+     zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),
+     omega_mu = sdirtSS$omega_mu, omega_sigma2 = sdirtSS$omega_sigma2,
+     nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
+     zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
+     burn=50, thin=10, min_tune=10, tune_int=10, max_tune = 100,
+     niter = 100, verbose_rmmh = T, max_iter_rmmh = 200)
+
+# Single subject example. Limited MCMH sampling.
+rmmh(chains = 3, y = sdirtSS$y, obj_fun = dich_response_model,
+     est_omega = T, est_nu = T, est_zeta = T, lambda = sdirtSS$lambda,
+     kappa = sdirt$kappa, gamma = sdirtSS$gamma,
+     omega0 = array(data = 0, dim = dim(sdirtSS$omega)),
+     nu0 = array(data = 0, dim = c(ncol(sdirtSS$nu), 1)),
+     zeta0 = array(data = 0, dim = dim(sdirtSS$zeta)),
+     omega_mu = sdirtSS$omega_mu, omega_sigma2 = sdirtSS$omega_sigma2,
+     nu_mu = matrix(sdirtSS$nu_mu), nu_sigma2 = matrix(sdirtSS$nu_sigma2),
+     zeta_mu = sdirtSS$zeta_mu, zeta_sigma2 = sdirtSS$zeta_sigma2,
+     burn=0, thin=1, min_tune=0, tune_int=0, max_tune = 0, niter = 1,
+     verbose_rmmh = T, max_iter_rmmh = 200)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{sdirt}{Simulated Data for a Signal Detection IRT Model}{sdirt}
+\keyword{datasets}{sdirt}
+%
+\begin{Description}\relax
+Data and parameters were simulated based on the example provided in the
+sim\_dich\_response.R function. This dataset is for a sample size of 50.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sdirt
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with the following elements:
+\begin{description}
+
+\item[y] Matrix of dichotomous responses.
+\item[ystar] Matrix of latent response variates.
+\item[nu] Mean of the item intercept parameters (scalar).
+\item[lambda] Matrix of item structure parameters.
+\item[gamma] Matrix of experimental structure parameters.
+\item[omega] Subject-level effects of the experimental manipulation.
+\item[zeta] Condition-level prediction errors.
+\item[omega\_mu] Vector of means for the subject-level effects of the
+experimental manipulation (1 by K * M).
+\item[omega\_sigma2] Covariance matrix for the subject-level effects of the
+experimental manipulation (K * M by K * M).
+\item[zeta\_mu] Vector of means for the condition-level prediction errors
+(1 by J * M).
+\item[zeta\_sigma2] Covariance matrix for the condition-level prediction
+errors (J * M by J * M).
+...
+
+\end{description}
+
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{sdirtSS}{Simulated Data for a Signal Detection IRT Model (Single Subject)}{sdirtSS}
+\keyword{datasets}{sdirtSS}
+%
+\begin{Description}\relax
+Data and parameters were simulated based on the example provided in the
+sim\_dich\_response.R function. This data set is for a sample size of 1.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sdirtSS
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with the following elements:
+\begin{description}
+
+\item[y] Matrix of dichotomous responses.
+\item[ystar] Matrix of latent response variates.
+\item[nu] Mean of the item intercept parameters (scalar).
+\item[lambda] Matrix of item structure parameters.
+\item[gamma] Matrix of experimental structure parameters.
+\item[omega] Subject-level effects of the experimental manipulation.
+\item[zeta] Condition-level prediction errors.
+\item[omega\_mu] Vector of means for the subject-level effects of the
+experimental manipulation (1 by K * M).
+\item[omega\_sigma2] Covariance matrix for the subject-level effects of the
+experimental manipulation (K * M by K * M).
+\item[zeta\_mu] Vector of means for the condition-level prediction errors
+(1 by J * M).
+\item[zeta\_sigma2] Covariance matrix for the condition-level prediction
+errors (J * M by J * M).
+...
+
+\end{description}
+
+\end{Format}
+\printindex{}
+\end{document}

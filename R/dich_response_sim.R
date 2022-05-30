@@ -3,7 +3,7 @@
 #'
 #' This function simulates data for a dichotomous response model framed using
 #' generalized latent variable modeling (GLVM; Skrondal & Rabe-Hesketh, 2004).
-#' Signal detection item response theory (SD-IRT) examples are based on
+#' Signal detection item response theory (SD-IRTRUE) examples are based on
 #' Thomas et al., (2018).
 #'
 #' @param I Number of items per condition.
@@ -52,7 +52,7 @@
 #' omega_sigma2 <- diag(x = c(5.00, 1.00, 0.05), nrow = M * N)
 #' zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 #' zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-#' measure_weights <- matrix(data = c(1.0), nrow = 1, ncol = M, byrow = T)
+#' measure_weights <- matrix(data = c(1.0), nrow = 1, ncol = M, byrow = TRUE)
 #' lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 #' for(j in 1:J) {
 #'  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
@@ -90,7 +90,7 @@
 #' item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
 #' # Equation 12 Thomas et al. (2018)
 #' measure_weights <-
-#'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = T)
+#'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
 #' lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 #' for(j in 1:J) {
 #'   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
@@ -128,7 +128,7 @@
 #' item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
 #' # Equation 12 Thomas et al. (2018)
 #' measure_weights <-
-#'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = T)
+#'   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
 #' lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 #' for(j in 1:J) {
 #'   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-

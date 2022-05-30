@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre"))
     )
-Description: Item response theory (IRT) and other psychometric tools for 
+Description: Item response theory (IRTRUE) and other psychometric tools for 
     experimental cognitive testing. 
 License: GPL (>= 3)
 Encoding: UTF-8
@@ -19,3 +19,7 @@ Imports:
   coda
 Depends: 
     R (>= 2.10)
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

@@ -41,8 +41,8 @@
 #' estimates for zeta), zeta_psrf (potential scale reduction factor for zeta).
 #'
 #' @examples
-#'mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = T,
-#'     est_nu = T, est_zeta = T, lambda = sdirt$lambda, kappa = sdirt$kappa,
+#'mcmh_mc(chains = 3, y = sdirt$y, obj_fun = dich_response_model, est_omega = TRUE,
+#'     est_nu = TRUE, est_zeta = TRUE, lambda = sdirt$lambda, kappa = sdirt$kappa,
 #'     gamma = sdirt$gamma, omega0 = array(data = 0, dim = dim(sdirt$omega)),
 #'     nu0 = array(data = 0, dim = c(ncol(sdirt$nu), 1)),
 #'     zeta0 = array(data = 0, dim = dim(sdirt$zeta)),
@@ -56,7 +56,7 @@
 #-------------------------------------------------------------------------------
 
 mcmh_mc <- function(
-  chains=NULL, y = y, obj_fun = NULL, est_omega = T, est_nu = T, est_zeta = T,
+  chains=NULL, y = y, obj_fun = NULL, est_omega = TRUE, est_nu = TRUE, est_zeta = TRUE,
   lambda = NULL, kappa = NULL, gamma = NULL, omega0 = NULL, nu0 = NULL,
   zeta0 = NULL, omega_mu = NULL, omega_sigma2 = NULL, nu_mu = NULL,
   nu_sigma2 = NULL, zeta_mu = NULL, zeta_sigma2 = NULL, burn = NULL,
@@ -74,7 +74,7 @@ mcmh_mc <- function(
          call. = FALSE)
   }
   draws <- parallel::mclapply(
-    mc.cores = parallel::detectCores(), X = 1:chains, FUN = mcmh_sc, y = y,
+    mc.cores = 2, X = 1:chains, FUN = mcmh_sc, y = y,
     obj_fun = obj_fun, est_omega = est_omega, est_nu = est_nu,
     est_zeta = est_zeta, lambda = lambda, kappa = kappa, gamma = gamma,
     omega0 = omega0, nu0 = nu0, zeta0 = zeta0, omega_mu = omega_mu,
