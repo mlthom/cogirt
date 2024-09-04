@@ -51,7 +51,6 @@
 #' adaptive testing. If min_see is specified, max_conditions should not be.
 #' @param link the name ("logit" or "probit") of the link function to be used in
 #' the model.
-#' @param ... additional arguments.
 #'
 #' @return List with elements for all parameters estimated, standard error
 #' values for all parameters estimated, and the conditions selected for adaptive
