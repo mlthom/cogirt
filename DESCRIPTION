@@ -16,7 +16,8 @@ Imports:
   abind,
   mvtnorm,
   parallel,
-  coda
+  coda,
+  numDeriv
 Depends: 
     R (>= 2.10)
 Suggests: 
