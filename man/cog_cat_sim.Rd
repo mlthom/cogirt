@@ -89,8 +89,6 @@ adaptive testing. If min_see is specified, max_conditions should not be.}
 
 \item{link}{the name ("logit" or "probit") of the link function to be used in
 the model.}
-
-\item{...}{additional arguments.}
 }
 \value{
 List with elements for all parameters estimated, standard error
