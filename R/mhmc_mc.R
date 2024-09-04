@@ -103,7 +103,9 @@ mhmc_mc <- function(
          call. = FALSE)
   }
   draws <- parallel::mclapply(
-    mc.cores = parallel::detectCores(), X = 1:chains, FUN = mhmc_sc, y = y,
+    #mc.cores = parallel::detectCores(),
+    mc.cores = 2,
+    X = 1:chains, FUN = mhmc_sc, y = y,
     obj_fun = obj_fun, link = link, est_omega = est_omega,
     est_lambda = est_lambda, est_zeta = est_zeta, est_nu = est_nu,
     omega0 = omega0, gamma0 = gamma0, lambda0 = lambda0, zeta0 = zeta0,
