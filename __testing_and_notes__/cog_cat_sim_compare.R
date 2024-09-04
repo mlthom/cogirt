@@ -127,7 +127,7 @@ for(ns in 1:num_sim){
     iter <- iter + 1
     adap_res <- cog_cat(rda = rda_sim, obj_fun = obj_fun, int_par = int_par)
     adap_se <- matrix(
-      data = solve(adap_res$info1)[int_par, int_par],
+      data = solve(adap_res$info1[ , , 1])[int_par, int_par],
       nrow = length(int_par),
       ncol = length(int_par)
     )
@@ -183,7 +183,7 @@ for(ns in 1:num_sim){
     }
     non_adap_res <- cog_cat(rda = rda_sim, obj_fun = obj_fun, int_par = int_par)
     non_adap_se <- matrix(
-      data = solve(non_adap_res$info1)[int_par, int_par],
+      data = solve(non_adap_res$info1[, , 1])[int_par, int_par],
       nrow = length(int_par),
       ncol = length(int_par)
     )

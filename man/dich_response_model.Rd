@@ -6,33 +6,33 @@
 \usage{
 dich_response_model(
   y = NULL,
-  nu = NULL,
-  lambda = NULL,
-  kappa = NULL,
-  gamma = NULL,
   omega = NULL,
+  gamma = NULL,
+  lambda = NULL,
   zeta = NULL,
-  link = "probit"
+  nu = NULL,
+  kappa = NULL,
+  link = NULL
 )
 }
 \arguments{
 \item{y}{Matrix of item responses (K by IJ).}
 
-\item{nu}{Matrix of item intercept parameters (K by IJ).}
-
-\item{lambda}{Matrix of item structure parameters (IJ by JM).}
-
-\item{kappa}{Matrix of item guessing parameters (K by IJ).}
+\item{omega}{Examinee-level effects of the experimental manipulation (K by
+MN).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
-\item{omega}{Examinee-level effects of the experimental manipulation (K by
-MN).}
+\item{lambda}{Matrix of item structure parameters (IJ by JM).}
 
 \item{zeta}{Condition-level effects of the experimental manipulation (K by
 JM).}
 
-\item{link}{Choose between logit or probit link functions.}
+\item{nu}{Matrix of item intercept parameters (IJ by 1).}
+
+\item{kappa}{Matrix of item guessing parameters (IJ by 1).}
+
+\item{link}{Choose between "logit" or "probit" link functions.}
 }
 \value{
 p = response probability matrix (K by IJ); yhatstar = latent response
@@ -51,9 +51,8 @@ examinees; M Number of ability (or trait) dimensions; N Number of contrasts
 }
 
 \examples{
-mod <- dich_response_model(y = sdirt$y, nu = sdirt$nu, lambda = sdirt$lambda,
-                     gamma = sdirt$gamma, omega = sdirt$omega,
-                     zeta = sdirt$zeta)
+mod <- dich_response_model(y = ex1$y, omega = ex1$omega,  gamma = ex1$gamma,
+                           lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu)
 
 }
 \references{

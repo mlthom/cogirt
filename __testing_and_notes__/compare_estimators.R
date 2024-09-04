@@ -28,14 +28,14 @@ if (1 == 0){
   omega_sigma2 <- diag(x = c(0.50, 0.10, 0.01, 0.25, 0.10, 0.01), nrow = M * N)
   zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
   zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-  item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+  key <- rbinom(n = I * J, size = 1, prob = .7) + 1
   # Equation 12 Thomas et al. (2018)
   measure_weights <-
     matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
   lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
   for(j in 1:J) {
     lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-      measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+      measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
   }
   contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
   gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -70,14 +70,14 @@ if (1 == 0){
   omega_sigma2 <- diag(x = c(0.50, 0.10, 0.25, 0.10), nrow = M * N)
   zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
   zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-  item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+  key <- rbinom(n = I * J, size = 1, prob = .7) + 1
   # Equation 12 Thomas et al. (2018)
   measure_weights <-
     matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
   lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
   for(j in 1:J) {
     lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-      measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+      measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
   }
   contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
   gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -112,14 +112,14 @@ if (1 == 0){
   omega_sigma2 <- diag(x = c(1.00, 1.00), nrow = M * N)
   zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
   zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-  item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
+  key <- rbinom(n = I * J, size = 1, prob = .7) + 1
   # Equation 12 Thomas et al. (2018)
   measure_weights <-
     matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
   lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
   for(j in 1:J) {
     lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-      measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+      measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
   }
   contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
   gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -173,7 +173,7 @@ if (1 == 0){
                                    gamma = gamma, omega_mu = omega_mu,
                                    omega_sigma2 = omega_sigma2,
                                    zeta_mu = zeta_mu,
-                                   zeta_sigma2 = zeta_sigma2, item_type = NULL)
+                                   zeta_sigma2 = zeta_sigma2, key = NULL)
 }
 
 # STEP 2: MCMH Estimation ------------------------------------------------------
@@ -241,14 +241,14 @@ nr_time <- system.time(nr_est <- nr(rda = rda, verbose = F))
 # STEP 5: Plot Estimates -------------------------------------------------------
 
 xlim <- c(
-  rda$omega_mu[1, int_par_1] - 4 * rda$omega_sigma2[int_par_1, int_par_1],
-  rda$omega_mu[1, int_par_1] + 4 * rda$omega_sigma2[int_par_1, int_par_1]
+  -10,
+  10
 )
 xseg <- (xlim[2] - xlim[1]) / 5
 
 ylim <- c(
-  rda$omega_mu[1, int_par_2] - 10 * rda$omega_sigma2[int_par_2, int_par_2],
-  rda$omega_mu[1, int_par_2] + 10 * rda$omega_sigma2[int_par_2, int_par_2]
+  -10,
+  10
 )
 yseg <- (ylim[2] - ylim[1]) / 5
 

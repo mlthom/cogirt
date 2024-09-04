@@ -80,7 +80,7 @@ cog_cat_sim <- function(rda = NULL, obj_fun = NULL, int_par = NULL,
     iter <- iter + 1
     tmp <- cog_cat(rda = rda_sim, obj_fun = obj_fun, int_par = int_par)
     se <- matrix(
-      data = solve(tmp$info1)[int_par, int_par],
+      data = solve(tmp$info1[, , 1])[int_par, int_par],
       nrow = length(int_par),
       ncol = length(int_par)
     )

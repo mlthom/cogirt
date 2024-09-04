@@ -5,21 +5,26 @@
 \title{Simulate Dichotomous Response Model}
 \usage{
 dich_response_sim(
-  I,
-  J,
-  K,
-  M,
-  N,
-  nu_mu,
-  nu_sigma2,
-  lambda,
+  I = NULL,
+  J = NULL,
+  K = NULL,
+  M = NULL,
+  N = NULL,
+  omega = NULL,
+  omega_mu = NULL,
+  omega_sigma2 = NULL,
+  gamma = NULL,
+  lambda = NULL,
+  lambda_mu = NULL,
+  lambda_sigma2 = NULL,
+  nu = NULL,
+  nu_mu = NULL,
+  nu_sigma2 = NULL,
+  zeta = NULL,
+  zeta_mu = NULL,
+  zeta_sigma2 = NULL,
   kappa = NULL,
-  gamma,
-  omega_mu,
-  omega_sigma2,
-  zeta_mu,
-  zeta_sigma2,
-  item_type = NULL,
+  key = NULL,
   link = "probit"
 )
 }
@@ -34,9 +39,8 @@ dich_response_sim(
 
 \item{N}{Number of contrasts (should include intercept).}
 
-\item{nu_mu}{Mean of the item intercept parameters (scalar).}
-
-\item{nu_sigma2}{Variance of the item intercept parameters (scalar).}
+\item{omega}{Examinee-level effects of the experimental manipulation (K by
+MN).}
 
 \item{omega_mu}{Vector of means for the examinee-level effects of the
 experimental manipulation (1 by MN).}
@@ -44,11 +48,34 @@ experimental manipulation (1 by MN).}
 \item{omega_sigma2}{Covariance matrix for the examinee-level effects of the
 experimental manipulation (MN by MN).}
 
+\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
+
+\item{lambda}{Matrix of item structure parameters (IJ by JM).}
+
+\item{lambda_mu}{Vector of means for the item structure parameters (1 by JM)}
+
+\item{lambda_sigma2}{Covariance matrix for the item structure parameters (JM
+by JM)}
+
+\item{nu}{Matrix of item intercept parameters (K by IJ).}
+
+\item{nu_mu}{Mean of the item intercept parameters (scalar).}
+
+\item{nu_sigma2}{Variance of the item intercept parameters (scalar).}
+
+\item{zeta}{Condition-level effects of the experimental manipulation (K by
+JM).}
+
 \item{zeta_mu}{Vector of means for the condition-level effects nested within
 examinees (1 by JM).}
 
 \item{zeta_sigma2}{Covariance matrix for the condition-level effects nested
 within examinees (JM by JM).}
+
+\item{kappa}{Matrix of item guessing parameters (K by IJ). If kappa is not
+provided, parameter values are set to 0.}
+
+\item{key}{Option key where  1 indicates target and 2 indicates distractor.}
 
 \item{link}{Choose between logit or probit link functions.}
 }
@@ -57,167 +84,75 @@ y = simulated response matrix; yhatstar = simulated latent response
 probability matrix; [simulation_parameters]
 }
 \description{
-This function simulates data for a dichotomous response model framed using
-generalized latent variable modeling (GLVM; Skrondal & Rabe-Hesketh, 2004).
-Signal detection item response theory (SD-IRTRUE) examples are based on
-Thomas et al., (2018).
+This function calculates the matrix of first partial derivatives, the matrix
+of second partial derivatives, and the information matrix for the posterior
+distribution with respect to theta (ability) based on theslope-intercept form
+of the item response theory model.
 }
 \examples{
 
-#Multiple Subjects -- Single Ability (Level 2)
+# Example 1
 
 I <- 100
-J <- 5
-K <- 50
+J <- 1
+K <- 250
 M <- 1
-N <- 3
-nu_mu <- 0
-nu_sigma2 <- 0.2
-omega_mu <- matrix(data = c(0.00, -0.50, 0.00), nrow = 1, ncol = M * N)
-omega_sigma2 <- diag(x = c(5.00, 1.00, 0.05), nrow = M * N)
+N <- 1
+omega_mu <- matrix(data = 0, nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = 1, nrow = M * N)
+gamma <- diag(x = 1, nrow = J * M, ncol = M * N)
+lambda_mu <- matrix(data = 1, nrow = 1, ncol = M)
+lambda_sigma2 <- diag(x = 0.25, nrow = M)
 zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
-zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-measure_weights <- matrix(data = c(1.0), nrow = 1, ncol = M, byrow = TRUE)
-lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
-for(j in 1:J) {
- lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-   measure_weights
-}
-contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
-gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
-for(j in 1:J) {
-  for(m in 1:M) {
-    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
-    contrast_codes[j, ]
-  }
-}
+zeta_sigma2 <- diag(x = 0, nrow = J * M, ncol = J * M)
+nu_mu <- matrix(data = 0, nrow = 1, ncol = 1)
+nu_sigma2 <- matrix(data = 1, nrow = 1, ncol = 1)
+set.seed(624)
+ex1 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                         omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
+                         gamma = gamma, lambda_mu = lambda_mu,
+                         lambda_sigma2 = lambda_sigma2, nu_mu = nu_mu,
+                         nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu,
+                         zeta_sigma2 = zeta_sigma2)
 
-sairt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
-                           nu_sigma2 = nu_sigma2, lambda = lambda,
-                           gamma = gamma, omega_mu = omega_mu,
-                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-                           zeta_sigma2 = zeta_sigma2)
-
-#Multiple Subjects -- SD-IRT
+# Example 2
 
 I <- 100
-J <- 5
+J <- 1
 K <- 50
 M <- 2
-N <- 3
-nu_mu <- 0
-nu_sigma2 <- 0.2
-omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
-ncol = M * N)
-omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
-zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
-zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
-# Equation 12 Thomas et al. (2018)
+N <- 1
+omega_mu <- matrix(data = c(3.50, 1.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.30), nrow = M * N)
+gamma <- diag(x = 1, nrow = J * M, ncol = M * N)
+key <- rbinom(n = I * J, size = 1, prob = .7) + 1
 measure_weights <-
   matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
 lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
 for(j in 1:J) {
   lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-    measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
+    measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
 }
-contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
-gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
-for(j in 1:J) {
-  for(m in 1:M) {
-    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
-    contrast_codes[j, ]
-  }
-}
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0, nrow = J * M, ncol = J * M)
+nu_mu <- matrix(data = 0, nrow = 1, ncol = 1)
+nu_sigma2 <- matrix(data = .2, nrow = 1, ncol = 1)
+set.seed(624)
+ex2 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                         omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
+                         gamma = gamma, lambda = lambda, nu_mu = nu_mu,
+                         nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu,
+                         zeta_sigma2 = zeta_sigma2, key = key)
 
-sdirt <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
-                           nu_sigma2 = nu_sigma2, lambda = lambda,
-                           gamma = gamma, omega_mu = omega_mu,
-                           omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-                           zeta_sigma2 = zeta_sigma2, item_type = item_type)
+# Example 3
 
-#Single Subject -- SD-IRT
-
-I <- 200
-J <- 5
-K <- 1
+I <- 20
+J <- 10
+K <- 50
 M <- 2
-N <- 3
-nu_mu <- 0
-nu_sigma2 <- 0.2
-omega_mu <- matrix(data = c(2.50, -2.00, 0.40, 0.40, 0.05, 0.00), nrow = 1,
-ncol = M * N)
-omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.30, 0.10, 0.01), nrow = M * N)
-zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
-zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-item_type <- rbinom(n = I * J, size = 1, prob = .7) + 1
-# Equation 12 Thomas et al. (2018)
-measure_weights <-
-  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
-lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
-for(j in 1:J) {
-  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
-    measure_weights[item_type, ][(1 + (j - 1) * I):(j * I), ]
-}
-contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
-gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
-for(j in 1:J) {
-  for(m in 1:M) {
-    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
-    contrast_codes[j, ]
-  }
-}
-
-#Multiple Subjects -- Unidimensional
-
-I <- 100
-J <- 5
-K <- 100
-M <- 1
 N <- 2
-nu_mu <- 0
-nu_sigma2 <- 0.2
-omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
-omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
-zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
-zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
-for (j in 1:J) {
-  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
-}
-contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
-gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
-for(j in 1:J) {
-  for(m in 1:M) {
-    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
-    contrast_codes[j, ]
-  }
-}
-
-unidim <- dich_response_sim(I = I, J = J, K = K, M = M, N = N, nu_mu = nu_mu,
-                            nu_sigma2 = nu_sigma2, lambda = lambda,
-                            gamma = gamma, omega_mu = omega_mu,
-                            omega_sigma2 = omega_sigma2, zeta_mu = zeta_mu,
-                            zeta_sigma2 = zeta_sigma2, item_type = item_type)
-
-
-#Multiple Subjects -- Unidimensional with Guessing
-
-I <- 100
-J <- 5
-K <- 100
-M <- 1
-N <- 2
-nu_mu <- 0
-nu_sigma2 <- 0.2
-omega_mu <- matrix(data = c(0.00, -2.00), nrow = 1, ncol = M * N)
-omega_sigma2 <- diag(x = c(1.00, 0.01), nrow = M * N)
-zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
-zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
-for (j in 1:J) {
-  lambda[(1 + (j - 1) * I):(j * I), j] <- 1
-}
+omega_mu <- matrix(data = c(2.50, -2.00, 0.50, 0.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.10), nrow = M * N)
 contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
 gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
 for(j in 1:J) {
@@ -226,15 +161,91 @@ for(j in 1:J) {
       contrast_codes[j, ]
   }
 }
-kappa <- array(data = 0.5, dim = c(K, I * J))
+key <- rbinom(n = I * J, size = 1, prob = .7) + 1
+measure_weights <-
+  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+    measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
+}
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+nu_mu <- matrix(data = c(0.00), nrow = 1, ncol = 1)
+nu_sigma2 <- matrix(data = c(0.20), nrow = 1, ncol = 1)
+set.seed(624)
+ex3 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                         omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
+                         gamma = gamma, lambda = lambda, nu_mu = nu_mu,
+                         nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu,
+                         zeta_sigma2 = zeta_sigma2, key = key)
 
-unidimguess <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
-                                 nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
-                                 lambda = lambda, kappa = kappa,
-                                 gamma = gamma, omega_mu = omega_mu,
-                                 omega_sigma2 = omega_sigma2,
-                                 zeta_mu = zeta_mu,
-                                 zeta_sigma2 = zeta_sigma2, item_type = NULL)
+# Example 4
+
+I <- 30
+J <- 2
+K <- 500
+M <- 1
+N <- 2
+omega_mu <- matrix(data = c(0, -1), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(1.00, 0.25), nrow = M * N)
+contrast_codes <- cbind(1, contr.treatment(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+    contrast_codes[j, ]
+  }
+}
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+lam_vals <- rnorm(I, 1.5, .23)
+for (j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <- lam_vals
+}
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+nu <- matrix(data = rnorm(n = I, mean = 0, sd = .25), nrow = I * J, ncol = 1)
+set.seed(624)
+ex4 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                         omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
+                         gamma = gamma, lambda = lambda, nu = nu,
+                         zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2)
+
+# Example 5
+
+I <- 20
+J <- 10
+K <- 1
+M <- 2
+N <- 2
+omega_mu <- matrix(data = c(2.50, -2.00, 0.50, 0.00), nrow = 1, ncol = M * N)
+omega_sigma2 <- diag(x = c(0.90, 0.70, 0.30, 0.10), nrow = M * N)
+contrast_codes <- cbind(1, contr.poly(n = J))[, 1:N]
+gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
+for(j in 1:J) {
+  for(m in 1:M) {
+    gamma[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+      contrast_codes[j, ]
+  }
+}
+key <- rbinom(n = I * J, size = 1, prob = .7) + 1
+measure_weights <-
+  matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
+lambda <- matrix(data = 0, nrow = I * J, ncol = J * M)
+for(j in 1:J) {
+  lambda[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+    measure_weights[key, ][(1 + (j - 1) * I):(j * I), ]
+}
+zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
+zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
+nu_mu <- matrix(data = c(0.00), nrow = 1, ncol = 1)
+nu_sigma2 <- matrix(data = c(0.20), nrow = 1, ncol = 1)
+set.seed(624)
+ex5 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
+                         omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
+                         gamma = gamma, lambda = lambda, nu_mu = nu_mu,
+                         nu_sigma2 = nu_sigma2, zeta_mu = zeta_mu,
+                         zeta_sigma2 = zeta_sigma2, key = key)
 
 }
 \references{

@@ -7,13 +7,13 @@
 cog_cat(rda = NULL, obj_fun = NULL, int_par = NULL)
 }
 \arguments{
+\item{rda}{A rda file (or list) containing all objects necessary to run mhrm}
+
 \item{obj_fun}{A function that calculates predictions and log-likelihood
 values for the selected model (character).}
 
 \item{int_par}{Intentional parameters. That is, the parameters to optimize
 precision (scalar).}
-
-\item{x}{.rda file (or list) containing all objects necessary to run rmmh.}
 }
 \description{
 This function takes an rda file or list with select objects and returns omega
@@ -22,9 +22,8 @@ computerized adaptive testing. Adapting testing using D-optimality (see
 Segall 2009).
 }
 \examples{
-rda = sdirtSS
-rda$list <- c(sapply(X = 1:(length(rda$y) / 5), FUN = rep, 5))
-rda$y[which(!rda$list \%in\% c(1))] <- NA
+rda = ex5
+rda$y[which(!rda$condition \%in\% c(3))] <- NA
 cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 
 }
