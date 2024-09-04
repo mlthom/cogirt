@@ -123,9 +123,11 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
         if (is.null(x = constraints)) {
           stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)
-        } else if (constraints == FALSE) {
-          stop("'constraints' must be TRUE when model is '2p' or '3p' and
+        } else if(is.logical(x = constraints)){
+          if (constraints == FALSE) {
+            stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)
+          }
         }
       }
     }
