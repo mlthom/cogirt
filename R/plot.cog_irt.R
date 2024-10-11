@@ -16,7 +16,7 @@ plot.cog_irt <- function(x = object, ...) {
   } else {
     def_par <- par()["mfrow"]
     par(mfrow = n2mfrow(nr.plots = ncol(x = x$omega1), asp = 2))
-    for (i in 1:ncol(x = x$omega1)) {
+    for (i in seq_len(ncol(x = x$omega1))) {
       omega <- x$omega1[, i]
       errvar_omega <- unlist(x = lapply(X = x$info1_omega, FUN = function(x)  {
         diag(x = solve(x))[i]
