@@ -4,10 +4,10 @@
 \alias{plot.cog_irt}
 \title{Method of Plot for CogIRT S3}
 \usage{
-\method{plot}{cog_irt}(object, ...)
+\method{plot}{cog_irt}(x, ...)
 }
 \arguments{
-\item{object}{An object of class 'cog_irt'.}
+\item{x}{An x of class 'cog_irt'.}
 
 \item{...}{Additional arguments.}
 }

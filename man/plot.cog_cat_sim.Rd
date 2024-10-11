@@ -4,10 +4,10 @@
 \alias{plot.cog_cat_sim}
 \title{Method of Plot for Simulated Adaptive Testing Using CogIRT S3}
 \usage{
-\method{plot}{cog_cat_sim}(object, ...)
+\method{plot}{cog_cat_sim}(x, ...)
 }
 \arguments{
-\item{object}{An object of class 'cog_cat_sim'.}
+\item{x}{An object of class 'cog_cat_sim'.}
 
 \item{...}{Additional arguments.}
 }
