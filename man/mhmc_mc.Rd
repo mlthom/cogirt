@@ -76,6 +76,8 @@ values for the selected model (character).}
 
 \item{zeta_mu}{Mean prior for zeta (1 by JM).}
 
+\item{zeta_sigma2}{Covariance prior for zeta (JM by JM).}
+
 \item{nu_mu}{Mean prior for nu (1 by 1)}
 
 \item{nu_sigma2}{Covariance prior for nu (1 by 1)}
@@ -94,8 +96,6 @@ values for the selected model (character).}
 \item{niter}{Number of iterations of the MHMC sampler.}
 
 \item{psrf}{Estimate potential scale reduction factor (logical).}
-
-\item{zeta_sigma@}{Covariance prior for zeta (JM by JM).}
 }
 \value{
 List with elements omega_draws (draws from every saved iteration of
