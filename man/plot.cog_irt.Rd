@@ -4,12 +4,12 @@
 \alias{plot.cog_irt}
 \title{Method of Plot for CogIRT S3}
 \usage{
-\method{plot}{cog_irt}(x = object, ...)
+\method{plot}{cog_irt}(object, ...)
 }
 \arguments{
-\item{x}{An object of class 'cog_irt'.}
-
 \item{...}{Additional arguments.}
+
+\item{x}{An object of class 'cog_irt'.}
 }
 \description{
 This function produces plots for parameter estimates produced for various
