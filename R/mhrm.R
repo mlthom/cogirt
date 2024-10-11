@@ -371,7 +371,8 @@ mhrm <- function(
         data = apply(X = info1_omega,
                      MARGIN = c(2, 3),
                      FUN = function(x) {
-                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin))
+                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
+                           silent = TRUE)
                      }
         ),
         dim = dim(x = info1_omega)
@@ -579,7 +580,8 @@ mhrm <- function(
         data = apply(X = info1_lambda,
                      MARGIN = c(2, 3),
                      FUN = function(x) {
-                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin))
+                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
+                           silent = TRUE)
                      }
         ),
         dim = dim(x = info1_lambda)
@@ -829,7 +831,8 @@ mhrm <- function(
         data = apply(X = info1_nu,
                      MARGIN = c(2, 3),
                      FUN = function(x) {
-                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin))
+                       try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
+                           silent = TRUE)
                      }
         ),
         dim = dim(x = info1_nu)
