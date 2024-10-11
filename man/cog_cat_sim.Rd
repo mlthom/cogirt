@@ -100,52 +100,6 @@ This function performs simulated adapting testing using the D-optimality
 criterion (Segall, 2009) which allows the user to focus on a subset of
 intentional abilities (or traits).
 }
-\examples{
-# Adapt until minimum standard error criterion met
-res1 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
-            contrast_codes = "contr.poly", num_conditions = 10,
-            num_contrasts = 2, constraints = NULL, key = ex3$key,
-            omega = ex3$omega, item_disc = ex3$lambda, item_int = ex3$nu,
-            conditions = ex3$condition, int_par = 1, start_conditions = 3,
-            min_se = .3, link = "probit")
-
-# Adapt until maximum conditions criterion met
-res2 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
-            contrast_codes = "contr.poly", num_conditions = 10,
-            num_contrasts = 2, constraints = NULL, key = ex3$key,
-            omega = ex3$omega, item_disc = ex3$lambda, item_int = ex3$nu,
-            conditions = ex3$condition, int_par = 1, start_conditions = 3,
-            max_conditions = 5, link = "probit")
-
-# Use omit_conditions argument to restrict testing conditions (useful for
-# setting up a non-adaptive or restricted-adaptive comparison)
-res3 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
-            contrast_codes = "contr.poly", num_conditions = 10,
-            num_contrasts = 2, constraints = NULL, key = ex3$key,
-            omega = ex3$omega, item_disc = ex3$lambda, item_int = ex3$nu,
-            conditions = ex3$condition, int_par = 1, start_conditions = 3,
-            max_conditions = 3, omit_conditions = c(2:4, 6:9),
-            link = "probit")
-
-# Applied to real cpt data
-res4 <- cog_cat_sim(data = cpt$y, model = 'sdt', guessing = NULL,
-                   contrast_codes = "contr.poly",
-                   num_conditions = length(unique(cpt$condition)),
-                   num_contrasts = 2, constraints = NULL, key = cpt$key,
-                   conditions = cpt$condition, int_par = 1,
-                   start_conditions = 100,
-                   max_conditions = 3, link = "probit")
-
-# Applied to real sopt data
-res5 <- cog_cat_sim(data = sopt$y, model = '1p', guessing = NULL,
-                   contrast_codes = "contr.poly",
-                   num_conditions = length(unique(sopt$condition)),
-                   num_contrasts = 2, constraints = NULL,
-                   conditions = sopt$condition, int_par = 1,
-                   start_conditions = 3,
-                   max_conditions = 3, link = "probit")
-
-}
 \references{
 Segall, D. O. (2009). Principles of Multidimensional Adaptive Testing. In W.
 J. van der Linden & C. A. W. Glas (Eds.), \emph{Elements of Adaptive Testing}
