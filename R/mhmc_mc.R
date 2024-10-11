@@ -46,16 +46,16 @@
 #' estimates for zeta), zeta_psrf (potential scale reduction factor for zeta).
 #'
 #' @examples
-#' mhmc_mc(chains = 3, y = ex1$y, obj_fun = dich_response_model,
-#'         est_omega = TRUE, est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
-#'         omega0 = array(data = 0, dim = dim(ex1$omega)), gamma0 = ex1$gamma,
-#'         lambda0 = ex1$lambda, zeta0 = array(data = 0, dim = dim(ex1$zeta)),
-#'         nu0 = array(data = 0, dim = c(ncol(ex1$y), 1)),
-#'         omega_mu = ex1$omega_mu, omega_sigma2 = ex1$omega_sigma2,
-#'         zeta_mu = ex1$zeta_mu, zeta_sigma2 = ex1$zeta_sigma2,
-#'         nu_mu = ex1$nu_mu, nu_sigma2 = ex1$nu_sigma2, burn = 0, thin = 10,
-#'         min_tune = 50, tune_int = 50, max_tune = 1000, niter = 2000,
-#'         psrf = TRUE)
+#'# mhmc_mc(chains = 3, y = ex1$y, obj_fun = dich_response_model,
+#'#         est_omega = TRUE, est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
+#'#         omega0 = array(data = 0, dim = dim(ex1$omega)), gamma0 = ex1$gamma,
+#'#         lambda0 = ex1$lambda, zeta0 = array(data = 0, dim = dim(ex1$zeta)),
+#'#         nu0 = array(data = 0, dim = c(ncol(ex1$y), 1)),
+#'#         omega_mu = ex1$omega_mu, omega_sigma2 = ex1$omega_sigma2,
+#'#         zeta_mu = ex1$zeta_mu, zeta_sigma2 = ex1$zeta_sigma2,
+#'#         nu_mu = ex1$nu_mu, nu_sigma2 = ex1$nu_sigma2, burn = 0, thin = 10,
+#'#         min_tune = 50, tune_int = 50, max_tune = 1000, niter = 2000,
+#'#         psrf = TRUE)
 #'
 #' @keywords internal
 #-------------------------------------------------------------------------------

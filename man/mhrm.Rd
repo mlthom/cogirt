@@ -114,29 +114,30 @@ for all parameters estimated, and the model log-likelihood value.
 This function calculates mhrm parameter estimates for multiple chains.
 }
 \examples{
-mhrmfit <- mhrm(y = ex3$y, obj_fun = dich_response_model, est_omega = TRUE,
-            est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
-            omega0 = array(data = 0, dim = dim(ex3$omega)),
-            gamma0 = ex3$gamma, lambda0 = ex3$lambda,
-            zeta0 = array(data = 0, dim = dim(ex3$zeta)),
-            nu0 = array(data = 0, dim = dim(ex3$nu)), kappa0 = ex3$kappa,
-            omega_mu = ex3$omega_mu, omega_sigma2 = ex3$omega_sigma2,
-            zeta_mu = ex3$zeta_mu, zeta_sigma2 = ex3$zeta_sigma2,
-            nu_mu = ex3$nu_mu, nu_sigma2 = ex3$nu_sigma2)
-summary(mhrmfit)
-plot(mhrmfit)
+# mhrmfit <- mhrm(y = ex3$y, obj_fun = dich_response_model, est_omega = TRUE,
+#                 est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
+#                 omega0 = array(data = 0, dim = dim(ex3$omega)),
+#                 gamma0 = ex3$gamma, lambda0 = ex3$lambda,
+#                 zeta0 = array(data = 0, dim = dim(ex3$zeta)),
+#                 nu0 = array(data = 0, dim = dim(ex3$nu)),
+#                 kappa0 = ex3$kappa, omega_mu = ex3$omega_mu,
+#                 omega_sigma2 = ex3$omega_sigma2, zeta_mu = ex3$zeta_mu,
+#                 zeta_sigma2 = ex3$zeta_sigma2, nu_mu = ex3$nu_mu,
+#                 nu_sigma2 = ex3$nu_sigma2)
+# summary(mhrmfit)
+# plot(mhrmfit)
 
 # The example above could also be specified as follows
-mhrmfit <- mhrm(y = ex3$y, obj_fun = dich_response_model, est_omega = TRUE,
-            est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
-            omega0 = array(data = 0, dim = dim(ex3$omega)),
-            gamma0 = "contr.poly", lambda0 = ex3$lambda,
-            zeta0 = array(data = 0, dim = dim(ex3$zeta)),
-            nu0 = array(data = 0, dim = dim(ex3$nu)), kappa0 = ex3$kappa,
-            omega_mu = ex3$omega_mu, omega_sigma2 = ex3$omega_sigma2,
-            zeta_mu = ex3$zeta_mu, zeta_sigma2 = ex3$zeta_sigma2,
-            nu_mu = ex3$nu_mu, nu_sigma2 = ex3$nu_sigma2, J = 5, M = 2,
-            N = 2)
+# mhrmfit <- mhrm(y = ex3$y, obj_fun = dich_response_model, est_omega = TRUE,
+#                 est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
+#                 omega0 = array(data = 0, dim = dim(ex3$omega)),
+#                 gamma0 = "contr.poly", lambda0 = ex3$lambda,
+#                 zeta0 = array(data = 0, dim = dim(ex3$zeta)),
+#                 nu0 = array(data = 0, dim = dim(ex3$nu)),
+#                 kappa0 = ex3$kappa, omega_mu = ex3$omega_mu,
+#                 omega_sigma2 = ex3$omega_sigma2, zeta_mu = ex3$zeta_mu,
+#                 zeta_sigma2 = ex3$zeta_sigma2, nu_mu = ex3$nu_mu,
+#                 nu_sigma2 = ex3$nu_sigma2, J = 5, M = 2, N = 2)
 
 }
 \references{
@@ -148,3 +149,4 @@ Cai, L. (2010). Metropolis-Hastings Robbins-Monro algorithm for confirmatory
 item factor analysis. \emph{Journal of Educational and Behavioral Statistics,
 35(3)}, 307-335.
 }
+\keyword{internal}
