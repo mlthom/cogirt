@@ -11,14 +11,14 @@
 #-------------------------------------------------------------------------------
 
 plot.cog_irt <- function(object, ...) {
-  if (nrow(x = x$omega1) == 1) {
+  if (nrow(x = object$omega1) == 1) {
     cat("Plot is only valid for datasets with more than one subject.")
   } else {
     def_par <- par()["mfrow"]
-    par(mfrow = n2mfrow(nr.plots = ncol(x = x$omega1), asp = 2))
-    for (i in seq_len(ncol(x = x$omega1))) {
-      omega <- x$omega1[, i]
-      errvar_omega <- unlist(x = lapply(X = x$info1_omega, FUN = function(x)  {
+    par(mfrow = n2mfrow(nr.plots = ncol(x = object$omega1), asp = 2))
+    for (i in seq_len(ncol(x = object$omega1))) {
+      omega <- object$omega1[, i]
+      errvar_omega <- unlist(x = lapply(X = object$info1_omega, FUN = function(x)  {
         diag(x = solve(x))[i]
       }))
       se_omega <- sqrt(x = errvar_omega)
