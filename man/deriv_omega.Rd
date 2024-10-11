@@ -79,11 +79,11 @@ the slope-intercept form of the item response model).
 }
 
 \examples{
-deriv_omega(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
-            lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
-            omega_mu = ex1$omega_mu, omega_sigma2 = ex1$omega_sigma2,
-            zeta_mu = ex1$zeta_mu, zeta_sigma2 = ex1$zeta_sigma2,
-            est_zeta = FALSE, link  = "probit")
+# deriv_omega(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
+#             lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
+#             omega_mu = ex1$omega_mu, omega_sigma2 = ex1$omega_sigma2,
+#             zeta_mu = ex1$zeta_mu, zeta_sigma2 = ex1$zeta_sigma2,
+#             est_zeta = FALSE, link  = "probit")
 
 }
 \references{

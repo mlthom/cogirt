@@ -69,9 +69,9 @@ the slope-intercept form of the item response model).
 
 \examples{
 
-deriv_nu(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
-             lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
-             nu_mu = ex1$nu_mu, nu_sigma2 = ex1$nu_sigma2, link  = "probit")
+# deriv_nu(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
+#          lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
+#          nu_mu = ex1$nu_mu, nu_sigma2 = ex1$nu_sigma2, link  = "probit")
 
 }
 \references{
