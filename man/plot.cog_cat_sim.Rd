@@ -7,12 +7,11 @@
 \method{plot}{cog_cat_sim}(object, ...)
 }
 \arguments{
-\item{...}{Additional arguments.}
+\item{object}{An object of class 'cog_cat_sim'.}
 
-\item{x}{An object of class 'cog_cat_sim'.}
+\item{...}{Additional arguments.}
 }
 \description{
 This function produces plots for standard errors for
 cog_cat_sim results
 }
-\keyword{internal}

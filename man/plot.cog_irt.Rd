@@ -7,12 +7,11 @@
 \method{plot}{cog_irt}(object, ...)
 }
 \arguments{
-\item{...}{Additional arguments.}
+\item{object}{An object of class 'cog_irt'.}
 
-\item{x}{An object of class 'cog_irt'.}
+\item{...}{Additional arguments.}
 }
 \description{
 This function produces plots for parameter estimates produced for various
 CogIRT models.
 }
-\keyword{internal}

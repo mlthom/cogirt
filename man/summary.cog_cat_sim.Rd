@@ -15,4 +15,3 @@
 This function provides summary statistics for simulated computerized adaptive
 testing.
 }
-\keyword{internal}

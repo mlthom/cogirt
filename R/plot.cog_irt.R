@@ -4,10 +4,10 @@
 #' This function produces plots for parameter estimates produced for various
 #' CogIRT models.
 #'
-#' @param x An object of class 'cog_irt'.
+#' @param object An object of class 'cog_irt'.
 #' @param ... Additional arguments.
 #'
-#' @keywords internal
+#' @export
 #-------------------------------------------------------------------------------
 
 plot.cog_irt <- function(object, ...) {

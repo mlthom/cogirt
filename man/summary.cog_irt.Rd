@@ -15,4 +15,3 @@
 This function provides summary statistics for parameter estimates produced
 for various CogIRT models.
 }
-\keyword{internal}
