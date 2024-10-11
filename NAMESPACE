@@ -2,6 +2,7 @@
 
 S3method(plot,cog_cat_sim)
 S3method(plot,cog_irt)
+S3method(summary,cog_cat_sim)
 S3method(summary,cog_irt)
 export(cog_cat)
 export(cog_cat_sim)
