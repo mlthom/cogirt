@@ -7,7 +7,7 @@
 #' @param object An object of class 'cog_cat_sim'.
 #' @param ... Additional arguments.
 #'
-#' @external
+#' @export
 #-------------------------------------------------------------------------------
 
 summary.cog_cat_sim <- function(object, ...) {
