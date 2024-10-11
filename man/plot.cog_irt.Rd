@@ -15,3 +15,4 @@
 This function produces plots for parameter estimates produced for various
 CogIRT models.
 }
+\keyword{internal}

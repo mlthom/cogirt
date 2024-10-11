@@ -15,3 +15,4 @@
 This function produces plots for standard errors for
 cog_cat_sim results
 }
+\keyword{internal}

@@ -7,7 +7,7 @@
 #' @param x An object of class 'cog_cat_sim'.
 #' @param ... Additional arguments.
 #'
-#' @export
+#' @keywords internal
 #-------------------------------------------------------------------------------
 
 plot.cog_cat_sim <- function(x = object, ...) {

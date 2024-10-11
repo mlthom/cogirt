@@ -7,7 +7,7 @@
 #' @param object An object of class 'cog_irt'.
 #' @param ... Additional arguments.
 #'
-#' @export
+#' @keywords internal
 #-------------------------------------------------------------------------------
 
 summary.cog_irt <- function(object, ...) {

@@ -7,7 +7,7 @@
 #' @param x An object of class 'cog_irt'.
 #' @param ... Additional arguments.
 #'
-#' @export
+#' @keywords internal
 #-------------------------------------------------------------------------------
 
 plot.cog_irt <- function(x = object, ...) {
