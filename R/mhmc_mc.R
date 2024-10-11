@@ -24,7 +24,7 @@
 #' @param lambda_mu Mean prior for lambda (1 by JM)
 #' @param lambda_sigma2 Covariance prior for lambda (JM by JM)
 #' @param zeta_mu Mean prior for zeta (1 by JM).
-#' @param zeta_sigma@ Covariance prior for zeta (JM by JM).
+#' @param zeta_sigma2 Covariance prior for zeta (JM by JM).
 #' @param nu_mu Mean prior for nu (1 by 1)
 #' @param nu_sigma2 Covariance prior for nu (1 by 1)
 #' @param burn Number of iterations at the beginning of an MCMC run to discard
