@@ -10,7 +10,7 @@
 #' @keywords internal
 #-------------------------------------------------------------------------------
 
-plot.cog_cat_sim <- function(x = object, ...) {
+plot.cog_cat_sim <- function(object, ...) {
   if (x$max_conditions == 1) {
     cat("Plot is only valid for simulations with more than one iteration.")
   } else {

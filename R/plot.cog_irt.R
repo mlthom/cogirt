@@ -10,7 +10,7 @@
 #' @keywords internal
 #-------------------------------------------------------------------------------
 
-plot.cog_irt <- function(x = object, ...) {
+plot.cog_irt <- function(object, ...) {
   if (nrow(x = x$omega1) == 1) {
     cat("Plot is only valid for datasets with more than one subject.")
   } else {
