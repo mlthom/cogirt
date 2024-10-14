@@ -61,6 +61,16 @@
 #' J. van der Linden & C. A. W. Glas (Eds.), \emph{Elements of Adaptive Testing}
 #'  (pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8_3
 #'
+#' @examples
+#' res2 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
+#'                     contrast_codes = "contr.poly", num_conditions = 10,
+#'                     num_contrasts = 2, constraints = NULL, key = ex3$key,
+#'                     omega = ex3$omega, item_disc = ex3$lambda,
+#'                     item_int = ex3$nu, conditions = ex3$condition,
+#'                     int_par = c(1, 2), start_conditions = 3,
+#'                     max_conditions = 3, link = "probit")
+#' summary(res2)
+#' plot(res2)
 #'
 #' @export cog_cat_sim
 #-------------------------------------------------------------------------------
