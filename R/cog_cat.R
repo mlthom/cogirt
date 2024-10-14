@@ -104,7 +104,7 @@ cog_cat <- function(rda = NULL, obj_fun = NULL, int_par = NULL) {
 
   return(list(
     "omega1" = tmp_est$omega1,
-    "info1" = tmp_est$info1,
+    "se_omega" = sqrt(x = diag(x = solve(tmp_est$info1_omega[[1]]))),
     "next_condition" = next_condition
   ))
 }
