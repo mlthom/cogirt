@@ -50,11 +50,11 @@ experimental manipulation (MN by MN).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
-\item{lambda}{Matrix of item structure parameters (IJ by JM).}
+\item{lambda}{Matrix of item slope parameters (IJ by JM).}
 
-\item{lambda_mu}{Vector of means for the item structure parameters (1 by JM)}
+\item{lambda_mu}{Vector of means for the item slope parameters (1 by JM)}
 
-\item{lambda_sigma2}{Covariance matrix for the item structure parameters (JM
+\item{lambda_sigma2}{Covariance matrix for the item slope parameters (JM
 by JM)}
 
 \item{nu}{Matrix of item intercept parameters (K by IJ).}

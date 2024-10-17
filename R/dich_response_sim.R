@@ -18,9 +18,9 @@
 #' @param omega_sigma2 Covariance matrix for the examinee-level effects of the
 #' experimental manipulation (MN by MN).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
-#' @param lambda Matrix of item structure parameters (IJ by JM).
-#' @param lambda_mu Vector of means for the item structure parameters (1 by JM)
-#' @param lambda_sigma2 Covariance matrix for the item structure parameters (JM
+#' @param lambda Matrix of item slope parameters (IJ by JM).
+#' @param lambda_mu Vector of means for the item slope parameters (1 by JM)
+#' @param lambda_sigma2 Covariance matrix for the item slope parameters (JM
 #' by JM)
 #' @param nu Matrix of item intercept parameters (K by IJ).
 #' @param nu_mu Mean of the item intercept parameters (scalar).

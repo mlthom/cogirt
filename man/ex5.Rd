@@ -16,10 +16,10 @@ A list with the following elements:
   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
   experimental manipulation (K * M by K * M).}
   \item{gamma}{Matrix of experimental structure parameters.}
-  \item{lambda}{Matrix of item structure parameters.}
-  \item{lambda_mu}{Vector of means for the item structure parameters
+  \item{lambda}{Matrix of item slope parameters.}
+  \item{lambda_mu}{Vector of means for the item slope parameters
   (1 by JM).}
-  \item{lambda_sigma2}{Covariance matrix for the item structure parameters
+  \item{lambda_sigma2}{Covariance matrix for the item slope parameters
   (JM by JM).}
   \item{nu}{Mean of the item intercept parameters (scalar).}
   \item{nu_mu}{Mean of the item intercept parameters (scalar).}

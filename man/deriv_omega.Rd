@@ -28,7 +28,7 @@ MN).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}
 
-\item{lambda}{Matrix of item structure parameters (IJ by JM).}
+\item{lambda}{Matrix of item slope parameters (IJ by JM).}
 
 \item{zeta}{Condition-level effects of the experimental manipulation (K by
 JM).}

@@ -69,7 +69,7 @@ items will all receive the middle value code for linear and quadratic
 contrasts, and the last set of I items will all receive the highest value
 code for linear and quadratic contrasts.}
 
-\item{lambda0}{Matrix of item structure parameters (IJ by JM).}
+\item{lambda0}{Matrix of item slope parameters (IJ by JM).}
 
 \item{zeta0}{Starting values for zeta.}
 

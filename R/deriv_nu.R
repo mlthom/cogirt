@@ -10,7 +10,7 @@
 #' @param omega Examinee-level effects of the experimental manipulation (K by
 #' MN).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
-#' @param lambda Matrix of item structure parameters (IJ by JM).
+#' @param lambda Matrix of item slope parameters (IJ by JM).
 #' @param zeta Condition-level effects of the experimental manipulation (K by
 #' JM).
 #' @param kappa Matrix of item guessing parameters (IJ by 1). Defaults to 0.

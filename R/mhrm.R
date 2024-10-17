@@ -11,7 +11,7 @@
 #' @param est_lambda Determines whether lambda is estimated (logical).
 #' @param est_nu Determines whether nu is estimated (logical).
 #' @param est_zeta Determines whether zeta is estimated (logical).
-#' @param lambda0 Matrix of item structure parameters (IJ by JM).
+#' @param lambda0 Matrix of item slope parameters (IJ by JM).
 #' @param kappa0 Matrix of item guessing parameters (IJ by 1).
 #' @param gamma0 Either a matrix of experimental structure parameters (JM by MN)
 #' or the name in quotes of the desired R stats contrast function (i.e.,
