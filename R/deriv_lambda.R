@@ -43,14 +43,6 @@
 #' J. van der Linden & C. A. W. Glas (Eds.), \emph{Elements of Adaptive Testing}
 #'  (pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8_3
 #'
-#'
-#' @examples
-#'
-#'# deriv_lambda(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
-#'#              lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
-#'#              lambda_mu = ex1$lambda_mu, lambda_sigma2 = ex1$lambda_sigma2,
-#'#              link  = "probit")
-#'
 #' @section A Note About Model Notation:
 #' The function converts GLLVM notation to the more typical IRT notation used by
 #' Segall (1996) for ease of referencing formulas (with the exception of using

@@ -30,10 +30,6 @@
 #' modeling: Multilevel, longitudinal, and structural equation models}. Boca
 #' Raton: Chapman & Hall/CRC.
 #'
-#' @examples
-#' mod <- dich_response_model(y = ex1$y, omega = ex1$omega,  gamma = ex1$gamma,
-#'                            lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu)
-#'
 #' @export dich_response_model
 #-------------------------------------------------------------------------------
 
