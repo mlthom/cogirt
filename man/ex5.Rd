@@ -15,7 +15,7 @@ A list with the following elements:
   experimental manipulation (1 by K * M).}
   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
   experimental manipulation (K * M by K * M).}
-  \item{gamma}{Matrix of experimental structure parameters.}
+  \item{gamma}{Contrast codes.}
   \item{lambda}{Matrix of item slope parameters.}
   \item{lambda_mu}{Vector of means for the item slope parameters
   (1 by JM).}

@@ -23,7 +23,7 @@ deriv_nu(
 \item{omega}{Contrast effects (K by
 MN).}
 
-\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
+\item{gamma}{Contrast codes (JM by MN).}
 
 \item{lambda}{Matrix of item slope parameters (IJ by JM).}
 

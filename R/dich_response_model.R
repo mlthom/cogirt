@@ -8,7 +8,7 @@
 #' @param y Matrix of item responses (K by IJ).
 #' @param omega Contrast effects (K by
 #' MN).
-#' @param gamma Matrix of experimental structure parameters (JM by MN).
+#' @param gamma Contrast codes (JM by MN).
 #' @param lambda Matrix of item slope parameters (IJ by JM).
 #' @param zeta Condition-level effects of the experimental manipulation (K by
 #' JM).

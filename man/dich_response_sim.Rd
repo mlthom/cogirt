@@ -48,7 +48,7 @@ experimental manipulation (1 by MN).}
 \item{omega_sigma2}{Covariance matrix for the examinee-level effects of the
 experimental manipulation (MN by MN).}
 
-\item{gamma}{Matrix of experimental structure parameters (JM by MN).}
+\item{gamma}{Contrast codes (JM by MN).}
 
 \item{lambda}{Matrix of item slope parameters (IJ by JM).}
 
