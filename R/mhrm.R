@@ -370,7 +370,7 @@ mhrm <- function(
         if (any(
           inv_omega == "Error in svd(X) : infinite or missing values in 'x'\n")
         ) {
-          omega1 <- mhmcburn$omegaEAP
+          stop("The omega information matrix not invertable.", call. = FALSE)
         } else {
           for (i in seq(1, nrow(x = y), 1)) {
             omega1 <- rbind(
@@ -577,7 +577,7 @@ mhrm <- function(
       if (any(
         inv_lambda == "Error in svd(X) : infinite or missing values in 'x'\n")
       ) {
-        lambda1 <- mhmcburn$lambdaEAP
+        stop("The lambda information matrix not invertable.", call. = FALSE)
       } else {
         lambda1 <- NULL
         if ((is.null(x = constraints))) {
@@ -830,7 +830,7 @@ mhrm <- function(
         if (any(
           inv_nu == "Error in svd(X) : infinite or missing values in 'x'\n")
         ) {
-          nu1 <- mhmcburn$nuEAP
+          stop("The nu information matrix not invertable.", call. = FALSE)
         } else {
           if (is.null(x = constraints)) {
             for (i in 1:ncol(x = y)) {
