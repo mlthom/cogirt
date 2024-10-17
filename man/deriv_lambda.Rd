@@ -20,19 +20,19 @@ deriv_lambda(
 \arguments{
 \item{y}{Item response matrix (K by IJ).}
 
-\item{omega}{Contrast effects (K by
+\item{omega}{Contrast effects matrix (K by
 MN).}
 
-\item{gamma}{Contrast codes (JM by MN).}
+\item{gamma}{Contrast codes matrix (JM by MN).}
 
-\item{lambda}{Matrix of item slope parameters (IJ by JM).}
+\item{lambda}{Item slope matrix (IJ by JM).}
 
-\item{zeta}{Condition-level effects of the experimental manipulation (K by
+\item{zeta}{Specific effects matrix (K by
 JM).}
 
-\item{kappa}{Matrix of item guessing parameters (IJ by 1). Defaults to 0.}
+\item{kappa}{Item guessing matrix  (IJ by 1). Defaults to 0.}
 
-\item{nu}{Matrix of item intercept parameters (IJ by 1).}
+\item{nu}{Item intercept matrix  (IJ by 1).}
 
 \item{lambda_mu}{Mean prior for lambda (1 by JM)}
 

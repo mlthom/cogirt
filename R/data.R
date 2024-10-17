@@ -12,7 +12,7 @@
 #'   experimental manipulation (1 by K * M).}
 #'   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
 #'   experimental manipulation (K * M by K * M).}
-#'   \item{gamma}{Contrast codes.}
+#'   \item{gamma}{Contrast codes matrix.}
 #'   \item{lambda}{Matrix of item slope parameters.}
 #'   \item{lambda_mu}{Vector of means for the item slope parameters
 #'   (1 by JM).}
@@ -26,7 +26,7 @@
 #'   (1 by J * M).}
 #'   \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
 #'   errors (J * M by J * M).}
-#'   \item{kappa}{Matrix of item guessing parameters (K by IJ).}
+#'   \item{kappa}{Item guessing matrix  (K by IJ).}
 #'   \item{condition}{Condition vector indiciting distinct conditions or time
 #'   points.}
 #'   \item{key}{Item key vector where 1 indicates target and 2 indicates
@@ -49,7 +49,7 @@
 #'   experimental manipulation (1 by K * M).}
 #'   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
 #'   experimental manipulation (K * M by K * M).}
-#'   \item{gamma}{Contrast codes.}
+#'   \item{gamma}{Contrast codes matrix.}
 #'   \item{lambda}{Matrix of item slope parameters.}
 #'   \item{lambda_mu}{Vector of means for the item slope parameters
 #'   (1 by JM).}
@@ -63,7 +63,7 @@
 #'   (1 by J * M).}
 #'   \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
 #'   errors (J * M by J * M).}
-#'   \item{kappa}{Matrix of item guessing parameters (K by IJ).}
+#'   \item{kappa}{Item guessing matrix  (K by IJ).}
 #'   \item{condition}{Condition vector indiciting distinct conditions or time
 #'   points.}
 #'   \item{key}{Item key vector where 1 indicates target and 2 indicates
@@ -87,7 +87,7 @@
 #'   experimental manipulation (1 by K * M).}
 #'   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
 #'   experimental manipulation (K * M by K * M).}
-#'   \item{gamma}{Contrast codes.}
+#'   \item{gamma}{Contrast codes matrix.}
 #'   \item{lambda}{Matrix of item slope parameters.}
 #'   \item{lambda_mu}{Vector of means for the item slope parameters
 #'   (1 by JM).}
@@ -101,7 +101,7 @@
 #'   (1 by J * M).}
 #'   \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
 #'   errors (J * M by J * M).}
-#'   \item{kappa}{Matrix of item guessing parameters (K by IJ).}
+#'   \item{kappa}{Item guessing matrix  (K by IJ).}
 #'   \item{condition}{Condition vector indiciting distinct conditions or time
 #'   points.}
 #'   \item{key}{Item key vector where 1 indicates target and 2 indicates
@@ -125,7 +125,7 @@
 #'   experimental manipulation (1 by K * M).}
 #'   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
 #'   experimental manipulation (K * M by K * M).}
-#'   \item{gamma}{Contrast codes.}
+#'   \item{gamma}{Contrast codes matrix.}
 #'   \item{lambda}{Matrix of item slope parameters.}
 #'   \item{lambda_mu}{Vector of means for the item slope parameters
 #'   (1 by JM).}
@@ -139,7 +139,7 @@
 #'   (1 by J * M).}
 #'   \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
 #'   errors (J * M by J * M).}
-#'   \item{kappa}{Matrix of item guessing parameters (K by IJ).}
+#'   \item{kappa}{Item guessing matrix  (K by IJ).}
 #'   \item{condition}{Condition vector indiciting distinct conditions or time
 #'   points.}
 #'   \item{key}{Item key vector where 1 indicates target and 2 indicates
@@ -164,7 +164,7 @@
 #'   experimental manipulation (1 by K * M).}
 #'   \item{omega_sigma2}{Covariance matrix for the subject-level effects of the
 #'   experimental manipulation (K * M by K * M).}
-#'   \item{gamma}{Contrast codes.}
+#'   \item{gamma}{Contrast codes matrix.}
 #'   \item{lambda}{Matrix of item slope parameters.}
 #'   \item{lambda_mu}{Vector of means for the item slope parameters
 #'   (1 by JM).}
@@ -178,7 +178,7 @@
 #'   (1 by J * M).}
 #'   \item{zeta_sigma2}{Covariance matrix for the condition-level prediction
 #'   errors (J * M by J * M).}
-#'   \item{kappa}{Matrix of item guessing parameters (K by IJ).}
+#'   \item{kappa}{Item guessing matrix  (K by IJ).}
 #'   \item{condition}{Condition vector indiciting distinct conditions or time
 #'   points.}
 #'   \item{key}{Item key vector where 1 indicates target and 2 indicates

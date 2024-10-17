@@ -7,14 +7,14 @@
 #' slope-intercept form of the 1-, 2-, or 3-P item response theory model.
 #'
 #' @param y Item response matrix (K by IJ).
-#' @param omega Contrast effects (K by
+#' @param omega Contrast effects matrix (K by
 #' MN).
-#' @param gamma Contrast codes (JM by MN).
-#' @param lambda Matrix of item slope parameters (IJ by JM).
-#' @param zeta Condition-level effects of the experimental manipulation (K by
+#' @param gamma Contrast codes matrix (JM by MN).
+#' @param lambda Item slope matrix (IJ by JM).
+#' @param zeta Specific effects matrix (K by
 #' JM).
-#' @param kappa Matrix of item guessing parameters (IJ by 1). Defaults to 0.
-#' @param nu Matrix of item intercept parameters (IJ by 1).
+#' @param kappa Item guessing matrix  (IJ by 1). Defaults to 0.
+#' @param nu Item intercept matrix  (IJ by 1).
 #' @param nu_mu Mean prior for nu (1 by 1)
 #' @param nu_sigma2 Covariance prior for nu (1 by 1)
 #' @param link Choose between "logit" or "probit" link functions.

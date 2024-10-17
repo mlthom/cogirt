@@ -69,13 +69,13 @@ items will all receive the middle value code for linear and quadratic
 contrasts, and the last set of I items will all receive the highest value
 code for linear and quadratic contrasts.}
 
-\item{lambda0}{Matrix of item slope parameters (IJ by JM).}
+\item{lambda0}{Item slope matrix (IJ by JM).}
 
 \item{zeta0}{Starting values for zeta.}
 
 \item{nu0}{Starting values for nu (IJ by 1).}
 
-\item{kappa0}{Matrix of item guessing parameters (IJ by 1).}
+\item{kappa0}{Item guessing matrix  (IJ by 1).}
 
 \item{omega_mu}{Vector of means prior for omega (1 by MN).}
 

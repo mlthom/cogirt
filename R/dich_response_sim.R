@@ -11,27 +11,27 @@
 #' @param K Number of examinees
 #' @param M Number of ability (or trait) dimensions.
 #' @param N Number of contrasts (should include intercept).
-#' @param omega Contrast effects (K by
+#' @param omega Contrast effects matrix (K by
 #' MN).
 #' @param omega_mu Vector of means for the examinee-level effects of the
 #' experimental manipulation (1 by MN).
 #' @param omega_sigma2 Covariance matrix for the examinee-level effects of the
 #' experimental manipulation (MN by MN).
-#' @param gamma Contrast codes (JM by MN).
-#' @param lambda Matrix of item slope parameters (IJ by JM).
+#' @param gamma Contrast codes matrix (JM by MN).
+#' @param lambda Item slope matrix (IJ by JM).
 #' @param lambda_mu Vector of means for the item slope parameters (1 by JM)
 #' @param lambda_sigma2 Covariance matrix for the item slope parameters (JM
 #' by JM)
-#' @param nu Matrix of item intercept parameters (K by IJ).
+#' @param nu Item intercept matrix  (K by IJ).
 #' @param nu_mu Mean of the item intercept parameters (scalar).
 #' @param nu_sigma2 Variance of the item intercept parameters (scalar).
-#' @param zeta Condition-level effects of the experimental manipulation (K by
+#' @param zeta Specific effects matrix (K by
 #' JM).
 #' @param zeta_mu Vector of means for the condition-level effects nested within
 #' examinees (1 by JM).
 #' @param zeta_sigma2 Covariance matrix for the condition-level effects nested
 #' within examinees (JM by JM).
-#' @param kappa kappa	Matrix of item guessing parameters (IJ by 1). If kappa is not
+#' @param kappa kappa	Item guessing matrix  (IJ by 1). If kappa is not
 #' provided, parameter values are set to 0.
 #' @param link Choose between logit or probit link functions.
 #' @param key Option key where  1 indicates target and 2 indicates distractor.

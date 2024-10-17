@@ -18,19 +18,19 @@ dich_response_model(
 \arguments{
 \item{y}{Item response matrix (K by IJ).}
 
-\item{omega}{Contrast effects (K by
+\item{omega}{Contrast effects matrix (K by
 MN).}
 
-\item{gamma}{Contrast codes (JM by MN).}
+\item{gamma}{Contrast codes matrix (JM by MN).}
 
-\item{lambda}{Matrix of item slope parameters (IJ by JM).}
+\item{lambda}{Item slope matrix (IJ by JM).}
 
-\item{zeta}{Condition-level effects of the experimental manipulation (K by
+\item{zeta}{Specific effects matrix (K by
 JM).}
 
-\item{nu}{Matrix of item intercept parameters (IJ by 1).}
+\item{nu}{Item intercept matrix  (IJ by 1).}
 
-\item{kappa}{Matrix of item guessing parameters (IJ by 1).}
+\item{kappa}{Item guessing matrix  (IJ by 1).}
 
 \item{link}{Choose between "logit" or "probit" link functions.}
 }
