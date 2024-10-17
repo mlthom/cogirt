@@ -108,7 +108,8 @@ deriv_lambda <- function(y = NULL, omega = NULL, gamma = NULL, lambda = NULL,
     mu <- lambda_mu
   }
   mod <- dich_response_model(y = y, nu = nu, lambda = lambda, gamma = gamma,
-                             omega = omega, zeta = zeta, link  = link)
+                             omega = omega, zeta = zeta, kappa = kappa,
+                             link  = link)
   p <- mod$p
   D <- if (link == "logit") {
     1.000
