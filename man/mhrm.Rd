@@ -51,7 +51,7 @@ values for the selected model (character).}
 
 \item{omega0}{Starting values for omega.}
 
-\item{gamma0}{Either a matrix of experimental structure parameters (JM by MN)
+\item{gamma0}{Either a matrix of contrast codes (JM by MN)
 or the name in quotes of the desired R stats contrast function (i.e.,
 "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", or
 "contr.SAS"). If using the R stats contrast function the user must also
