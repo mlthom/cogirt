@@ -20,7 +20,7 @@ deriv_lambda(
 \arguments{
 \item{y}{Matrix of item responses (K by IJ).}
 
-\item{omega}{Examinee-level effects of the experimental manipulation (K by
+\item{omega}{Contrast effects (K by
 MN).}
 
 \item{gamma}{Matrix of experimental structure parameters (JM by MN).}

@@ -39,7 +39,7 @@ dich_response_sim(
 
 \item{N}{Number of contrasts (should include intercept).}
 
-\item{omega}{Examinee-level effects of the experimental manipulation (K by
+\item{omega}{Contrast effects (K by
 MN).}
 
 \item{omega_mu}{Vector of means for the examinee-level effects of the

@@ -7,7 +7,7 @@
 #' on the slope-intercept form of the 1-, 2-, or 3-P item response theory model.
 #'
 #' @param y Matrix of item responses (K by IJ).
-#' @param omega Examinee-level effects of the experimental manipulation (K by
+#' @param omega Contrast effects (K by
 #' MN).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param lambda Matrix of item slope parameters (IJ by JM).

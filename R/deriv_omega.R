@@ -8,7 +8,7 @@
 #' model.
 #'
 #' @param y Matrix of item responses (K by IJ).
-#' @param omega Examinee-level effects of the experimental manipulation (K by
+#' @param omega Contrast effects (K by
 #' MN).
 #' @param gamma Matrix of experimental structure parameters (JM by MN).
 #' @param lambda Matrix of item slope parameters (IJ by JM).

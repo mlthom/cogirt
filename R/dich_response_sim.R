@@ -11,7 +11,7 @@
 #' @param K Number of examinees
 #' @param M Number of ability (or trait) dimensions.
 #' @param N Number of contrasts (should include intercept).
-#' @param omega Examinee-level effects of the experimental manipulation (K by
+#' @param omega Contrast effects (K by
 #' MN).
 #' @param omega_mu Vector of means for the examinee-level effects of the
 #' experimental manipulation (1 by MN).
