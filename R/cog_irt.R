@@ -5,42 +5,45 @@
 #' can optionally choose to request estimates of person parameters representing
 #' effects of the experimental contrast.
 #'
-#' @param data a matrix of item responses (K by IJ). Rows should contain
-#' dichotomous responses (1 or 0) for the items indexed by each column.
-#' @param model an IRT model name. The options are "1p" for the one-parameter
+#' @param data A matrix of item responses (K by IJ). Rows should contain each
+#' subject's dichotomous responses (1 or 0) for the items indexed by each
+#' column.
+#' @param model An IRT model name. The options are "1p" for the one-parameter
 #' model, "2p" for the two parameter model, "3p" for the three-parameter, or
 #' "sdt" for a signal detection-weighted model.
-#' @param guessing either a single numeric guessing value or a matrix of item
+#' @param guessing Either a single numeric guessing value or a matrix of item
 #' guessing parameters (IJ by 1). This argument is only used when model = '3p'.
-#' @param contrast_codes either a matrix of experimental structure parameters
-#' (JM by MN) or the name in quotes of a R stats contrast function (i.e.,
-#' "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", or
-#' "contr.SAS"). If using the R stats contrast function items in the data matrix
-#' must be arranged by condition.
-#' @param num_conditions the number of conditions (required if using the R stats
+#' @param contrast_codes Either a matrix of contrast codes (JM by MN) or the
+#' name in quotes of a R stats contrast function (i.e., "contr.helmert",
+#' "contr.poly", "contr.sum", "contr.treatment", or "contr.SAS"). If using the R
+#' stats contrast function items in the data matrix must be arranged by
+#' condition.
+#' @param num_conditions The number of conditions (required if using the R stats
 #' contrast function or when constraints = TRUE).
-#' @param num_contrasts the number of contrasts including intercept (required if
+#' @param num_contrasts The number of contrasts including intercept (required if
 #' using the R stats contrast function or when constraints = TRUE).
-#' @param constraints either a logical (TRUE or FALSE) indicating that item
+#' @param constraints Either a logical (TRUE or FALSE) indicating that item
 #' parameters should be constrained to be equal over the J conditions or a 1 by
 #' I vector of items that should be constrained to be equal across conditions.
-#' @param key an item key vector where 1 indicates target and 2 indicates
+#' @param key An item key vector where 1 indicates target and 2 indicates
 #' distractor (IJ). Required when model = 'sdt'.
-#' @param link the name ("logit" or "probit") of the link function to be used in
+#' @param link The name ("logit" or "probit") of the link function to be used in
 #' the model.
-#' @param ... additional arguments.
+#' @param ... Additional arguments.
 #'
 #' @section Dimensions:
 #' I = Number of items per condition; J = Number of conditions; K = Number of
 #' examinees; M Number of ability (or trait) dimensions; N Number of contrasts
 #' (should include intercept).
 #'
-#' @return List with elements for all parameters estimated, information values
-#' for all parameters estimated, and the model log-likelihood value.
+#' @return A list with elements for all parameters estimated, information values
+#' for all parameters estimated, the model log-likelihood value, and the total
+#' number of estimated parameters in the model.
 #'
 #' @references
 #' Embretson S. E., & Reise S. P. (2000). \emph{Item response theory for
 #' psychologists.} Mahwah, N.J.: L. Erlbaum Associates.
+#'
 #' Thomas, M. L., Brown, G. G., Patt, V. M., & Duffy, J. R. (2021). Latent
 #' variable modeling and adaptive testing for experimental cognitive
 #' psychopathology research.  \emph{Educational and Psychological Measurement,
@@ -48,37 +51,68 @@
 #'
 #' @examples
 #'
+#' # Fit a 1p model to the ex1 data.
 #' oneparamfit <- cog_irt(data = ex1$y, model = "1p")
 #' summary(oneparamfit)
 #'
+#' # Fit a 2p model to the ex1 data.
 #' twoparamfit <- cog_irt(data = ex1$y, model = "2p")
 #' summary(twoparamfit)
 #'
+#' # Fit a 3p model to the ex1 data.
 #' threeparamfit <- cog_irt(data = ex1$y, model = "3p", guessing = .25)
 #' summary(threeparamfit)
 #'
+#' # Compate the fit of 1p, 2p, and 3p models.
 #' lrt(oneparamfit, twoparamfit, threeparamfit)
 #'
+#' # Plot the best fitting model.
 #' plot(twoparamfit)
-#' plot(ex1$omega[, 1], twoparamfit$omega1[, 1])
-#' abline(a = 0, b = 1)
 #'
+#' # Check for consistency with true values (only possible with simulated data).
+#' plot(ex1$omega, twoparamfit$omega1)
+#' abline(a = 0, b = 1)
+#' cor(ex1$omega, twoparamfit$omega1)
+#'
+#' # Fit the 2p model to the ex4 data, constraining the item parameters across
+#' # conditions/time points and specifying two contrast effects.
+#' # "contr.treatment" compares each level of condition to the baseline level.
+#' # Here, with only two levels of condition, one contrast effect (omega1) is
+#' # for baseline scores, and another (omega2) compares change between the second
+#' # and first measurement condition/time points.
 #' twoparamfitconstr <- cog_irt(data = ex4$y, model = '2p', contrast_codes =
 #'                             "contr.treatment", num_conditions = 2,
 #'                             num_contrasts = 2, constraints = TRUE)
 #' summary(twoparamfitconstr)
 #' plot(twoparamfitconstr)
 #'
-#' # Alternative way to specify constraints
-#' constraints <- matrix(data = c(1,2, 0, 0, 0, 0, 0, 0, 0, 0), nrow = 1,
-#'                  ncol = ncol(x = ex4$y) / 3)
+#' # An alternative way to specify constraints. Here only the first and second
+#' # item parameters are constrained to be equal across conditions/time points.
+#' constraints <- matrix(data = c(1, 2, 0, 0, 0, 0, 0, 0, 0, 0), nrow = 1,
+#'                       ncol = ncol(x = ex4$y) / 2)
 #' twoparamfitconstr <- cog_irt(data = ex4$y, model = '2p',
 #'                              contrast_codes = "contr.treatment",
 #'                              num_conditions = 2, num_contrasts = 2,
 #'                              constraints = constraints)
 #'
-#' # Real data example
-#' sdirt <- cog_irt(data = sternberg$y, model = "sdt", key = sternberg$key)
+#' # Fit the sdt model to the sternberg data. No contrast effects are specified
+#' # in this example. omega1 is discrimination (dprime) and omega1 is bias
+#' # (ccenter).
+#' sdirt <- cog_irt(data = sternberg$y, model = "sdt")
+#' plot(sdirt)
+#'
+#' # Fit the sdt model to the sternberg data. Here, different items were
+#' # administered in each condition, so item parameters are not constrained to
+#' # be equal. There are six memory load conditions, and we ask for three
+#' # contrasts using "contr.poly". Thus, we will get intercept, linear, and
+#' # quadratic effects of memory load for both discrimination (dprime) and
+#' # bias (ccenter). omega1, omega2, and omega3 are the intercept, linear, and
+#' # quadratic effects for discrimination (dprime), and omega1, omega2, and
+#' # omega3 are the intercept, linear, and quadratic effects for bias (ccenter).
+#' sdirt_contrasts <- cog_irt(data = sternberg$y, model = "sdt",
+#'                            contrast_codes = "contr.poly", key = sternberg$key,
+#'                            num_conditions = 6, num_contrasts = 3)
+#' plot(sdirt_contrasts)
 #'
 #' @export cog_irt
 #-------------------------------------------------------------------------------
