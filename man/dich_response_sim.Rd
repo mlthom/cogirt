@@ -39,7 +39,7 @@ dich_response_sim(
 
 \item{N}{Number of contrasts (should include intercept).}
 
-\item{omega}{Contrast effects (K by
+\item{omega}{Contrast effects matrix (K by
 MN).}
 
 \item{omega_mu}{Vector of means for the examinee-level effects of the
@@ -48,22 +48,22 @@ experimental manipulation (1 by MN).}
 \item{omega_sigma2}{Covariance matrix for the examinee-level effects of the
 experimental manipulation (MN by MN).}
 
-\item{gamma}{Contrast codes (JM by MN).}
+\item{gamma}{Contrast codes matrix (JM by MN).}
 
-\item{lambda}{Matrix of item slope parameters (IJ by JM).}
+\item{lambda}{Item slope matrix (IJ by JM).}
 
 \item{lambda_mu}{Vector of means for the item slope parameters (1 by JM)}
 
 \item{lambda_sigma2}{Covariance matrix for the item slope parameters (JM
 by JM)}
 
-\item{nu}{Matrix of item intercept parameters (K by IJ).}
+\item{nu}{Item intercept matrix  (K by IJ).}
 
 \item{nu_mu}{Mean of the item intercept parameters (scalar).}
 
 \item{nu_sigma2}{Variance of the item intercept parameters (scalar).}
 
-\item{zeta}{Condition-level effects of the experimental manipulation (K by
+\item{zeta}{Specific effects matrix (K by
 JM).}
 
 \item{zeta_mu}{Vector of means for the condition-level effects nested within
@@ -72,7 +72,7 @@ examinees (1 by JM).}
 \item{zeta_sigma2}{Covariance matrix for the condition-level effects nested
 within examinees (JM by JM).}
 
-\item{kappa}{kappa    Matrix of item guessing parameters (IJ by 1). If kappa is not
+\item{kappa}{kappa    Item guessing matrix  (IJ by 1). If kappa is not
 provided, parameter values are set to 0.}
 
 \item{key}{Option key where  1 indicates target and 2 indicates distractor.}
