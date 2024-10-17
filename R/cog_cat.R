@@ -2,11 +2,15 @@
 #' Cognitive Testing Using Computerized Adaptive Testing
 #'
 #' This function takes an rda file or list with select objects and returns omega
-#' estimates, an information matrix, and the next best list to administer for
-#' computerized adaptive testing. Adapting testing using D-optimality (see
-#' Segall 2009).
+#' estimates, standard error of omega, and the next best condition to administer
+#' for single subject computerized adaptive testing. Adaptive testing uses
+#' D-optimality (see Segall, 2009).
 #'
-#' @param rda A rda file (or list) containing all objects necessary to run mhrm
+#' @param rda An rda file (or list) containing y, kappa, gamma, lambda,
+#' condition, omega_mu, omega_sigma2, zeta_mu, zeta_sigma2, nu_mu, and
+#' nu_sigma2. y should be a 1 by IJ row vector. All items not administered
+#' should have NA values in y. See package documentation for definitions and
+#' dimensions of these other objects.
 #' @param obj_fun A function that calculates predictions and log-likelihood
 #' values for the selected model (character).
 #' @param int_par Intentional parameters. That is, the parameters to optimize
