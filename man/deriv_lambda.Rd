@@ -67,14 +67,6 @@ Segall (1996) for ease of referencing formulas (with the exception of using
 the slope-intercept form of the item response model).
 }
 
-\examples{
-
-# deriv_lambda(y = ex1$y, omega = ex1$omega, gamma = ex1$gamma,
-#              lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu,
-#              lambda_mu = ex1$lambda_mu, lambda_sigma2 = ex1$lambda_sigma2,
-#              link  = "probit")
-
-}
 \references{
 Carlson, J. E. (1987). {Multidimensional Item Response Theory Estimation: A
 computer program} (Reprot No. ONR87-2). The American College Testing Program.

@@ -50,11 +50,6 @@ examinees; M Number of ability (or trait) dimensions; N Number of contrasts
 (should include intercept).
 }
 
-\examples{
-mod <- dich_response_model(y = ex1$y, omega = ex1$omega,  gamma = ex1$gamma,
-                           lambda = ex1$lambda, zeta = ex1$zeta, nu = ex1$nu)
-
-}
 \references{
 Skrondal, A., & Rabe-Hesketh, S. (2004). \emph{Generalized latent variable
 modeling: Multilevel, longitudinal, and structural equation models}. Boca

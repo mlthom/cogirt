@@ -113,21 +113,6 @@ for all parameters estimated, and the model log-likelihood value.
 \description{
 This function calculates mhrm parameter estimates for multiple chains.
 }
-\examples{
-# mhrmfit <- mhrm(y = ex3$y, obj_fun = dich_response_model, est_omega = TRUE,
-#                 est_lambda = FALSE, est_zeta = TRUE, est_nu = TRUE,
-#                 omega0 = array(data = 0, dim = dim(ex3$omega)),
-#                 gamma0 = ex3$gamma, lambda0 = ex3$lambda,
-#                 zeta0 = array(data = 0, dim = dim(ex3$zeta)),
-#                 nu0 = array(data = 0, dim = dim(ex3$nu)),
-#                 kappa0 = ex3$kappa, omega_mu = ex3$omega_mu,
-#                 omega_sigma2 = ex3$omega_sigma2, zeta_mu = ex3$zeta_mu,
-#                 zeta_sigma2 = ex3$zeta_sigma2, nu_mu = ex3$nu_mu,
-#                 nu_sigma2 = ex3$nu_sigma2)
-# summary(mhrmfit)
-# plot(mhrmfit)
-
-}
 \references{
 Cai, L. (2010). High-dimensional exploratory item factor analysis by a
 Metropolis-Hastings Robbins-Monro algorithm. \emph{Psychometrika, 75(1)},
