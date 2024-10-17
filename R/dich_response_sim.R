@@ -31,7 +31,7 @@
 #' examinees (1 by JM).
 #' @param zeta_sigma2 Covariance matrix for the condition-level effects nested
 #' within examinees (JM by JM).
-#' @param kappa Matrix of item guessing parameters (K by IJ). If kappa is not
+#' @param kappa kappa	Matrix of item guessing parameters (IJ by 1). If kappa is not
 #' provided, parameter values are set to 0.
 #' @param link Choose between logit or probit link functions.
 #' @param key Option key where  1 indicates target and 2 indicates distractor.
