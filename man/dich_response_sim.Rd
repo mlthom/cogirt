@@ -72,7 +72,7 @@ examinees (1 by JM).}
 \item{zeta_sigma2}{Covariance matrix for the condition-level effects nested
 within examinees (JM by JM).}
 
-\item{kappa}{Matrix of item guessing parameters (K by IJ). If kappa is not
+\item{kappa}{kappa    Matrix of item guessing parameters (IJ by 1). If kappa is not
 provided, parameter values are set to 0.}
 
 \item{key}{Option key where  1 indicates target and 2 indicates distractor.}
