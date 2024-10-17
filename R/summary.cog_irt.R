@@ -1,8 +1,7 @@
 #-------------------------------------------------------------------------------
 #' Method of Summary for cog_irt S3
 #'
-#' This function provides summary statistics for parameter estimates produced
-#' for various CogIRT models.
+#' This function provides summary statistics for CogIRT models.
 #'
 #' @param object An object of class 'cog_irt'.
 #' @param ... Additional arguments.
