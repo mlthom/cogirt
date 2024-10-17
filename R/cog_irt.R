@@ -87,7 +87,11 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
                     contrast_codes = NULL,  num_conditions = NULL,
                     num_contrasts = NULL, constraints = NULL, key = NULL,
                     link = "probit", ...) {
-  y <- data
+  y <- as.matrix(x = data)
+  if (!is.numeric(x = y)) {
+    stop("'y' contains non-numeric data.",
+         call. = FALSE)
+  }
   if (is.null(x = model)) {
     stop("'model' argument not specified.",
          call. = FALSE)
@@ -103,6 +107,18 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   if (model != "3p" && !is.null(guessing)) {
     message("'model' is not '3p'. 'guessing' argument is ignored")
     guessing <- NULL
+  }
+  if (!is.null(guessing) && !is.numeric(guessing)) {
+    stop("'guessing' contains non-numeric data.", call. = FALSE)
+  }
+  if (!is.null(guessing)) {
+    if ((is.matrix(guessing) && nrow(guessing) == ncol(y)) ||
+        length(guessing) == 1) {
+    } else {
+      stop("'guessing' should either be a single numeric guessing value or a
+              matrix of item guessing parameters (IJ by 1).",
+           call. = FALSE)
+    }
   }
   if (model %in% c("1p", "2p", "3p") && !is.null(x = key)) {
     message("'model' is not 'sdt'. 'key' argument is ignored")
@@ -226,7 +242,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     if (length(x = guessing) == 1) {
       kappa0 <- array(data = guessing, dim = c(I * J, 1))
     } else {
-      kappa0 <- kappa0
+      kappa0 <- guessing
     }
   } else {
     kappa0 <- array(data = 0, dim = c(I * J, 1))

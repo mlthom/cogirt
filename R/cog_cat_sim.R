@@ -83,16 +83,76 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
                         start_conditions = NULL, max_conditions = Inf,
                         omit_conditions = NULL, min_se = -Inf,
                         link = "probit") {
-
+  y <- as.matrix(x = data)
+  if (!is.numeric(x = y)) {
+    stop("'y' contains non-numeric data.",
+         call. = FALSE)
+  }
+  if (is.null(x = model)) {
+    stop("'model' argument not specified.",
+         call. = FALSE)
+  }
+  if (! model %in% c("1p", "2p", "3p", "sdt")) {
+    stop("'model' argument is not correctly specified.",
+         call. = FALSE)
+  }
+  if (model == "3p" && is.null(guessing)) {
+    stop("'model' = '3p' but 'guessing' is NULL.",
+         call. = FALSE)
+  }
+  if (model != "3p" && !is.null(guessing)) {
+    message("'model' is not '3p'. 'guessing' argument is ignored")
+    guessing <- NULL
+  }
+  if (!is.null(guessing) && !is.numeric(guessing)) {
+    stop("'guessing' contains non-numeric data.", call. = FALSE)
+  }
+  if (!is.null(guessing)) {
+    if ((is.matrix(guessing) && nrow(guessing) == ncol(y)) ||
+        length(guessing) == 1) {
+    } else {
+      stop("'guessing' should either be a single numeric guessing value or a
+              matrix of item guessing parameters (IJ by 1).",
+           call. = FALSE)
+    }
+  }
+  if (model %in% c("1p", "2p", "3p") && !is.null(x = key)) {
+    message("'model' is not 'sdt'. 'key' argument is ignored")
+  }
+  if (model == "sdt") {
+    if (is.null(x = key)) {
+      stop("'model' sdt specified but key argument is missing.",
+           call. = FALSE)
+    }
+    if (ncol(x = y) != length(x = key)) {
+      stop("Key length does not match the number of columns in data.",
+           call. = FALSE)
+    }
+  }
+  if (model %in% c("2p", "3p")) {
+    if (!is.null(x = num_conditions)) {
+      if (num_conditions > 1) {
+        if (is.null(x = constraints)) {
+          stop("'constraints' must be TRUE when model is '2p' or '3p' and
+               'num_conditions' > 1", call. = FALSE)
+        } else if(is.logical(x = constraints)){
+          if (constraints == FALSE) {
+            stop("'constraints' must be TRUE when model is '2p' or '3p' and
+               'num_conditions' > 1", call. = FALSE)
+          }
+        }
+      }
+    }
+  }
   if (is.infinite(x = max_conditions)) {
     max_conditions <- length(x = unique(x = conditions))
   }
-  K <- nrow(x = data)
+  K <- nrow(x = y)
   if (!is.null(x = num_contrasts)) N <- num_contrasts else N <- 1
   if (model == "sdt") M <- 2 else M <- 1
   omega0 <- array(data = 0, dim = c(K, M * N))
   completed_conditions <- matrix(data = start_conditions,
-                                 nrow = nrow(x = data),
+                                 nrow = nrow(x = y),
                                  ncol = length(x = start_conditions),
                                  byrow = TRUE)
   iter <- 1
@@ -102,7 +162,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
 
   if (is.null(x = item_int) || is.null(x = item_disc)  || is.null(x = omega)) {
     tmp_arg <- list(
-      data = data, model = model, guessing = guessing,
+      data = y, model = model, guessing = guessing,
       contrast_codes = contrast_codes, num_conditions = num_conditions,
       num_contrasts = num_contrasts, constraints = constraints, key = key,
       est_lambda = if (is.null(x = item_disc) & model %in% c("2p", "3p")) {
@@ -136,7 +196,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
     FUN = "*"
   )
   tmp_res <- cog_irt(
-    data = data, model = model, guessing = guessing,
+    data = y, model = model, guessing = guessing,
     contrast_codes = contrast_codes, num_conditions = num_conditions,
     num_contrasts = num_contrasts, constraints = constraints, key = key,
     omega0 = omega0, est_lambda = FALSE, est_nu = FALSE,
@@ -227,7 +287,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
       FUN = "*"
     )
     tmp_res <- cog_irt(
-      data = data, model = model, guessing = guessing,
+      data = y, model = model, guessing = guessing,
       contrast_codes = contrast_codes, num_conditions = num_conditions,
       num_contrasts = num_contrasts, constraints = constraints, key = key,
       omega0 = tmp_res$omega1[, , drop = FALSE], est_lambda = FALSE,
