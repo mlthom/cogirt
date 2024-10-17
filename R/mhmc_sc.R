@@ -7,7 +7,7 @@
 #' scale and covariance matrix follows BDA and SAS 9.2 User Guide,
 #' 2nd Ed. "The MCMC Procedure: Tuning the Proposal Distribution".
 #'
-#' @param y Matrix of item responses (K by IJ).
+#' @param y Item response matrix (K by IJ).
 #' @param obj_fun A function that calculates predictions and log-likelihood
 #' values for the selected model (character).
 #' @param link Choose between "logit" or "probit" link functions.

@@ -16,7 +16,7 @@ dich_response_model(
 )
 }
 \arguments{
-\item{y}{Matrix of item responses (K by IJ).}
+\item{y}{Item response matrix (K by IJ).}
 
 \item{omega}{Contrast effects (K by
 MN).}

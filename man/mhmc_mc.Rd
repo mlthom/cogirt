@@ -39,7 +39,7 @@ mhmc_mc(
 \arguments{
 \item{chains}{Number of chains in the MHMC sampler (scalar).}
 
-\item{y}{Matrix of item responses (K by IJ).}
+\item{y}{Item response matrix (K by IJ).}
 
 \item{obj_fun}{A function that calculates predictions and log-likelihood
 values for the selected model (character).}

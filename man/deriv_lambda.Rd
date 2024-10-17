@@ -18,7 +18,7 @@ deriv_lambda(
 )
 }
 \arguments{
-\item{y}{Matrix of item responses (K by IJ).}
+\item{y}{Item response matrix (K by IJ).}
 
 \item{omega}{Contrast effects (K by
 MN).}

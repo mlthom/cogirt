@@ -37,7 +37,7 @@ mhmc_sc(
 )
 }
 \arguments{
-\item{y}{Matrix of item responses (K by IJ).}
+\item{y}{Item response matrix (K by IJ).}
 
 \item{obj_fun}{A function that calculates predictions and log-likelihood
 values for the selected model (character).}

@@ -3,7 +3,7 @@
 #'
 #' This function calculates mhrm parameter estimates for multiple chains.
 #'
-#' @param y Matrix of item responses (K by IJ).
+#' @param y Item response matrix (K by IJ).
 #' @param obj_fun A function that calculates predictions and log-likelihood
 #' values for the selected model (character).
 #' @param link Choose between "logit" or "probit" link functions.

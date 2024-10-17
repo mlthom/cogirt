@@ -7,7 +7,7 @@
 #' slope-intercept form of the 1-, 2-, or 3-parameter item response theory
 #' model.
 #'
-#' @param y Matrix of item responses (K by IJ).
+#' @param y Item response matrix (K by IJ).
 #' @param omega Contrast effects (K by
 #' MN).
 #' @param gamma Contrast codes (JM by MN).

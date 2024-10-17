@@ -5,7 +5,7 @@
 #' documentation for mhmc_sc.R for more information.
 #'
 #' @param chains Number of chains in the MHMC sampler (scalar).
-#' @param y Matrix of item responses (K by IJ).
+#' @param y Item response matrix (K by IJ).
 #' @param obj_fun A function that calculates predictions and log-likelihood
 #' values for the selected model (character).
 #' @param link Choose between "logit" or "probit" link functions.

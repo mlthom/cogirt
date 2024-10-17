@@ -5,7 +5,7 @@
 #' dichotomous response model framed using generalized latent variable modeling
 #' (GLVM; Skrondal & Rabe-Hesketh, 2004).
 #'
-#' @param y Matrix of item responses (K by IJ).
+#' @param y Item response matrix (K by IJ).
 #' @param omega Contrast effects (K by
 #' MN).
 #' @param gamma Contrast codes (JM by MN).
