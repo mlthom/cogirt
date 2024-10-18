@@ -339,11 +339,10 @@ mhrm <- function(
 
       # STEP 3: Robbins-Monro update -------------------------------------------
       # Note using ginv instead of solve because appears to be more stable
-
       # Omega
       inv_omega <- array(
         data = apply(X = info1_omega,
-                     MARGIN = c(2, 3),
+                     MARGIN = c(3),
                      FUN = function(x) {
                        try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
                            silent = TRUE)
@@ -366,8 +365,26 @@ mhrm <- function(
           }
         }
       }
-
-
+      probs <- apply(omega1, 1, function(row) {
+        mvtnorm::dmvnorm(row, mean = omega_mu, sigma = omega_sigma2)
+      })
+      if (any(probs < .001 | probs > .999)) {
+        for (i in which(probs < .001 | probs > .999)) {
+          omega1[i, ] <- pmax(
+            pmin(omega1[i, ], omega_mu + 2 * diag(x = omega_sigma2)),
+            omega_mu - 2 * diag(x = omega_sigma2)
+          )
+        }
+        warning(paste(
+          "Omega estimates were Winsorized using 2 * omega_sigma2 during",
+          "estimation due to implausible values. This may be caused by some",
+          "subjects having all correct or all incorrect response vectors",
+          "one or more conditions or timepoints. omega_sigma2 can be supplied",
+          "as an optional parameter to control this behavior. Interpret the",
+          "results for subjects with constant response profiles cautiously.",
+          sep = " "
+        ), call. = FALSE)
+      }
       p <- obj_fun(
         y = y,
         omega = omega1,
@@ -552,7 +569,7 @@ mhrm <- function(
       # Lambda
       inv_lambda <- array(
         data = apply(X = info1_lambda,
-                     MARGIN = c(2, 3),
+                     MARGIN = c(3),
                      FUN = function(x) {
                        try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
                            silent = TRUE)
@@ -622,6 +639,26 @@ mhrm <- function(
             dim = dim(lambda0)
           )
         }
+      }
+      probs <- apply(lambda1, 1, function(row) {
+        mvtnorm::dmvnorm(row, mean = lambda_mu, sigma = lambda_sigma2)
+      })
+      if (any(probs < .001 | probs > .999)) {
+        for (i in which(probs < .001 | probs > .999)) {
+          lambda1[i, ] <- pmax(
+            pmin(lambda1[i, ], lambda_mu + 2 * diag(x = lambda_sigma2)),
+            lambda_mu - 2 * diag(x = lambda_sigma2)
+          )
+        }
+        warning(paste(
+          "lambda estimates were Winsorized using 2 * lambda_sigma2 during",
+          "estimation due to implausible values. This may be caused by some",
+          "subjects having all correct or all incorrect response vectors",
+          "one or more conditions or timepoints. lambda_sigma2 can be supplied",
+          "as an optional parameter to control this behavior. Interpret the",
+          "results for subjects with constant response profiles cautiously.",
+          sep = " "
+        ), call. = FALSE)
       }
       p <- obj_fun(
         y = y,
@@ -803,7 +840,7 @@ mhrm <- function(
       # Nu
       inv_nu <- array(
         data = apply(X = info1_nu,
-                     MARGIN = c(2, 3),
+                     MARGIN = c(3),
                      FUN = function(x) {
                        try(expr = MASS::ginv(X = x, tol = .Machine$double.xmin),
                            silent = TRUE)
@@ -852,6 +889,26 @@ mhrm <- function(
                                    grad_nu)
           }
         }
+      }
+      probs <- apply(nu1, 1, function(row) {
+        mvtnorm::dmvnorm(row, mean = nu_mu, sigma = nu_sigma2)
+      })
+      if (any(probs < .001 | probs > .999)) {
+        for (i in which(probs < .001 | probs > .999)) {
+          nu1[i, ] <- pmax(
+            pmin(nu1[i, ], nu_mu + 2 * diag(x = nu_sigma2)),
+            nu_mu - 2 * diag(x = nu_sigma2)
+          )
+        }
+        warning(paste(
+          "lambda estimates were Winsorized using 2 * lambda_sigma2 during",
+          "estimation due to implausible values. This may be caused by some",
+          "subjects having all correct or all incorrect response vectors",
+          "one or more conditions or timepoints. lambda_sigma2 can be supplied",
+          "as an optional parameter to control this behavior. Interpret the",
+          "results for subjects with constant response profiles cautiously.",
+          sep = " "
+        ), call. = FALSE)
       }
       p <- obj_fun(
         y = y,
