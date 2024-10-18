@@ -143,12 +143,12 @@
 #'
 #' # Example 4
 #'
-#' I <- 30
+#' I <- 25
 #' J <- 2
-#' K <- 500
+#' K <- 200
 #' M <- 1
 #' N <- 2
-#' omega_mu <- matrix(data = c(0, -1), nrow = 1, ncol = M * N)
+#' omega_mu <- matrix(data = c(1, -2), nrow = 1, ncol = M * N)
 #' omega_sigma2 <- diag(x = c(1.00, 0.25), nrow = M * N)
 #' contrast_codes <- cbind(1, contr.treatment(n = J))[, 1:N]
 #' gamma <- matrix(data = 0, nrow = J * M, ncol = M * N)
@@ -165,7 +165,7 @@
 #' }
 #' zeta_mu <- matrix(data = rep(x = 0, times = M * J), nrow = 1, ncol = J * M)
 #' zeta_sigma2 <- diag(x = 0.2, nrow = J * M, ncol = J * M)
-#' nu <- matrix(data = rnorm(n = I, mean = 0, sd = .25), nrow = I * J, ncol = 1)
+#' nu <- matrix(data = rnorm(n = I, mean = 0, sd = 2), nrow = I * J, ncol = 1)
 #' set.seed(624)
 #' ex4 <- dich_response_sim(I = I, J = J, K = K, M = M, N = N,
 #'                          omega_mu = omega_mu, omega_sigma2 = omega_sigma2,
