@@ -84,7 +84,7 @@ summary(twoparamfit)
 threeparamfit <- cog_irt(data = ex1$y, model = "3p", guessing = .25)
 summary(threeparamfit)
 
-# Compate the fit of 1p, 2p, and 3p models.
+# Compare the fit of 1p, 2p, and 3p models.
 lrt(oneparamfit, twoparamfit, threeparamfit)
 
 # Plot the best fitting model.
@@ -101,33 +101,48 @@ cor(ex1$omega, twoparamfit$omega1)
 # Here, with only two levels of condition, one contrast effect (omega1) is
 # for baseline scores, and another (omega2) compares change between the second
 # and first measurement condition/time points.
-twoparamfitconstr <- cog_irt(data = ex4$y, model = '2p', contrast_codes =
-                            "contr.treatment", num_conditions = 2,
-                            num_contrasts = 2, constraints = TRUE)
-summary(twoparamfitconstr)
-plot(twoparamfitconstr)
+twoparamfit_cnstr <- cog_irt(data = ex4$y, model = '2p', contrast_codes =
+                             "contr.treatment", num_conditions = 2,
+                             num_contrasts = 2, constraints = TRUE)
+summary(twoparamfit_cnstr)
+plot(twoparamfit_cnstr)
+
+# Check for consistency with true values (only possible with simulated data).
+plot(ex4$omega[, 1], twoparamfit_cnstr$omega1[, 1])
+abline(a = 0, b = 1)
+cor(ex4$omega[, 1], twoparamfit_cnstr$omega1[, 1])
+plot(ex4$omega[, 2], twoparamfit_cnstr$omega1[, 2])
+abline(a = 0, b = 1)
+cor(ex4$omega[, 2], twoparamfit_cnstr$omega1[, 2])
 
 # An alternative way to specify constraints. Here only the first and second
 # item parameters are constrained to be equal across conditions/time points.
-constraints <- matrix(data = c(1, 2, 0, 0, 0, 0, 0, 0, 0, 0), nrow = 1,
-                 ncol = ncol(x = ex4$y) / 2)
-twoparamfitconstr <- cog_irt(data = ex4$y, model = '2p',
+constraints <- matrix(data = c(1, 2, rep(0, ncol(x = ex4$y) - 2)), nrow = 1,
+                      ncol = ncol(x = ex4$y) / 2)
+twoparamfit_cnstr <- cog_irt(data = ex4$y, model = '2p',
                              contrast_codes = "contr.treatment",
                              num_conditions = 2, num_contrasts = 2,
                              constraints = constraints)
 
-# Fit the sdt model to the sternberg data. Here, different items were
-# administered in each condition, so item parameters are not constrained to be
-# equal. There are six memory load conditions, and we ask for three contrasts
-# using "contr.poly". Thus, we will get intercept, linear, and quadratic effects
-# of memory load for both memory discrimination (dprime) and bias (ccenter).
-# omega1, omega2, and omega3 are the intercept, linear, and quadratic effects
-# for memory discrimination (dprime), and omega1, omega2, and omega3 are the
-# intercept, linear, and quadratic effects for bias (ccenter).
-sdirt <- cog_irt(data = sternberg$y, model = "sdt",
-                 contrast_codes = "contr.poly", key = sternberg$key,
-                 num_conditions = 6, num_contrasts = 3)
-plot(sdirt)
+# Fit the SDT model to the n-back data. No contrast effects are specified
+# in this example. omega1 is for discrimination (dprime) and omega2 is for bias
+# (ccenter).
+nback_fit <- cog_irt(data = nback$y, model = "sdt", key = nback$key)
+plot(nback_fit)
+
+# Fit the SDT model to the n-back data. In this case, different items were
+# administered in each condition, so item parameters are not constrained to
+# be equal. There are four memory load conditions, and we specify three
+# contrasts using "contr.poly". This provides intercept and linear
+# effects of memory load for both discrimination (dprime) and
+# bias (ccenter). omega1 and omega2 represent the intercept and linear
+# effects for discrimination (dprime), while omega3 and omega4 represent
+# the intercept and linear effects for bias (ccenter).
+nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
+                           contrast_codes = "contr.poly", key = nback$key,
+                           num_conditions = length(unique(nback$condition)),
+                           num_contrasts = 2)
+plot(nback_fit_contr)
 
 }
 \references{
