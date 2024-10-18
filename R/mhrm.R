@@ -158,6 +158,9 @@ mhrm <- function(
       gamma0 <- tmp
     }
   }
+  omega_warn <- FALSE
+  lambda_warn <- FALSE
+  nu_warn <- FALSE
   # STEP 0: MCMC burn in -------------------------------------------------------
   if (verbose_mhrm) {
     cat(
@@ -375,15 +378,15 @@ mhrm <- function(
             omega_mu - 2 * diag(x = omega_sigma2)
           )
         }
-        warning(paste(
-          "Omega estimates were Winsorized using 2 * omega_sigma2 during",
-          "estimation due to implausible values. This may be caused by some",
-          "subjects having all correct or all incorrect response vectors",
-          "one or more conditions or timepoints. omega_sigma2 can be supplied",
-          "as an optional parameter to control this behavior. Interpret the",
-          "results for subjects with constant response profiles cautiously.",
-          sep = " "
-        ), call. = FALSE)
+        if (!omega_warn) {
+          warning(paste(
+            "Omega estimates were Winsorized due to implausible values,",
+            "likely caused by subjects with all correct or incorrect",
+            "responses. Interpret results for these subjects cautiously.",
+            sep = " "
+          ), call. = FALSE)
+          omega_warn <- TRUE
+        }
       }
       p <- obj_fun(
         y = y,
@@ -650,15 +653,15 @@ mhrm <- function(
             lambda_mu - 2 * diag(x = lambda_sigma2)
           )
         }
-        warning(paste(
-          "lambda estimates were Winsorized using 2 * lambda_sigma2 during",
-          "estimation due to implausible values. This may be caused by some",
-          "subjects having all correct or all incorrect response vectors",
-          "one or more conditions or timepoints. lambda_sigma2 can be supplied",
-          "as an optional parameter to control this behavior. Interpret the",
-          "results for subjects with constant response profiles cautiously.",
-          sep = " "
-        ), call. = FALSE)
+        if (!lambda_warn) {
+          warning(paste(
+            "Lambda estimates were Winsorized due to implausible values,",
+            "likely caused by items with all correct or incorrect",
+            "responses. Interpret results for these items cautiously.",
+            sep = " "
+          ), call. = FALSE)
+          lambda_warn <- TRUE
+        }
       }
       p <- obj_fun(
         y = y,
@@ -900,15 +903,15 @@ mhrm <- function(
             nu_mu - 2 * diag(x = nu_sigma2)
           )
         }
-        warning(paste(
-          "lambda estimates were Winsorized using 2 * lambda_sigma2 during",
-          "estimation due to implausible values. This may be caused by some",
-          "subjects having all correct or all incorrect response vectors",
-          "one or more conditions or timepoints. lambda_sigma2 can be supplied",
-          "as an optional parameter to control this behavior. Interpret the",
-          "results for subjects with constant response profiles cautiously.",
-          sep = " "
-        ), call. = FALSE)
+        if (!lambda_warn) {
+          warning(paste(
+            "Nu estimates were Winsorized due to implausible values,",
+            "likely caused by items with all correct or incorrect",
+            "responses. Interpret results for these items cautiously.",
+            sep = " "
+          ), call. = FALSE)
+          nu_warn <- TRUE
+        }
       }
       p <- obj_fun(
         y = y,
