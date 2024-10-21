@@ -2,7 +2,7 @@
 % Please edit documentation in R/cog_cat_sim.R
 \name{cog_cat_sim}
 \alias{cog_cat_sim}
-\title{Perform Simulated Computerized Adaptive Testing for Task Conditions}
+\title{Perform Simulated Computerized Adaptive Testing}
 \usage{
 cog_cat_sim(
   data = NULL,
@@ -26,74 +26,77 @@ cog_cat_sim(
 )
 }
 \arguments{
-\item{data}{a matrix of item responses (K by IJ). Rows should contain
+\item{data}{A matrix of item responses (K by IJ). Rows should contain
 dichotomous responses (1 or 0) for the items indexed by each column.}
 
-\item{model}{an IRT model name. The options are "1p" for the one-parameter
-model, "2p" for the two parameter model, "3p" for the three-parameter, or
-"sdt" for a signal detection-weighted model.}
+\item{model}{An IRT model name. The options are "1p" for the one-parameter
+model, "2p" for the two-parameter model, "3p" for the three-parameter model,
+or "sdt" for a signal detection-weighted model.}
 
-\item{guessing}{either a single numeric guessing value or a matrix of item
+\item{guessing}{Either a single numeric guessing value or a matrix of item
 guessing parameters (IJ by 1). This argument is only used when model = '3p'.}
 
-\item{contrast_codes}{either a matrix of experimental structure parameters
-(JM by MN) or the name in quotes of a R stats contrast function (i.e.,
-"contr.helmert", "contr.poly", "contr.sum", "contr.treatment", or
-"contr.SAS"). If using the R stats contrast function items in the data matrix
-must be arranged by condition.}
+\item{contrast_codes}{Either a matrix of contrast codes (JM by MN) or the
+name in quotes of a R stats contrast function (i.e., "contr.helmert",
+"contr.poly", "contr.sum", "contr.treatment", or "contr.SAS"). If using the R
+stats contrast function items in the data matrix must be arranged by
+condition.}
 
-\item{num_conditions}{the number of conditions (required if using the R stats
-contrast function or when constraints = TRUE).}
-
-\item{num_contrasts}{the number of contrasts including intercept (required if
+\item{num_conditions}{The total number of possible conditions (required if
 using the R stats contrast function or when constraints = TRUE).}
 
-\item{constraints}{either a logical (TRUE or FALSE) indicating that item
-parameters should be constrained to be equal over the J conditions or a 1 by
+\item{num_contrasts}{The number of contrasts, including intercept (required if
+using the R stats contrast function or when constraints = TRUE).}
+
+\item{constraints}{Either a logical (TRUE or FALSE) indicating that item
+parameters should be constrained to be equal over the J conditions, or a 1 by
 I vector of items that should be constrained to be equal across conditions.}
 
-\item{key}{an item key vector where 1 indicates target and 2 indicates
-distractor (IJ). Required when model = 'sdt'.}
+\item{key}{An item key vector where 1 indicates a target and 2 indicates
+a distractor (IJ). Required when model = 'sdt'.}
 
-\item{omega}{a matrix of true omega parameters if known. These are
+\item{omega}{A matrix of true omega parameters if known. These are
 estimated using the complete data if not supplied by the user.}
 
-\item{item_disc}{a matrix of item discrimination parameters. These are
+\item{item_disc}{A matrix of item discrimination parameters if known. These
+are estimated using the complete data if not supplied by the user.}
+
+\item{item_int}{A matrix of item intercept parameters if known. These are
 estimated using the complete data if not supplied by the user.}
 
-\item{item_int}{a matrix of item intercept parameters. These are estimated
-using the complete data if not supplied by the user.}
-
-\item{conditions}{a list of experimental conditions that the adaptive testing
-algorithm will choose from. The word conditions is used here to refer to a
-single item or a group of items that are administered together prior to the
-next iteration of adaptive testing. For cognitive experiments, multiple
+\item{conditions}{A list of experimental conditions that the adaptive testing
+algorithm will choose from. The word "conditions" here refers to a
+single item or a group of items that should be administered together before
+the next iteration of adaptive testing. For cognitive experiments, multiple
 conditions can be assigned the same experimental level (e.g., memory load
 level).}
 
-\item{int_par}{the index of the intentional parameters. That is, the column
+\item{int_par}{The index of the intentional parameters, i.e., the column
 of the experimental effects matrix (omega) that should be optimized.}
 
-\item{start_conditions}{a vector of condition(s) that are completed prior to
+\item{start_conditions}{A vector of condition(s) completed prior to
 the onset of adaptive testing.}
 
-\item{max_conditions}{the maximum number of conditions to administer before
+\item{max_conditions}{The maximum number of conditions to administer before
 terminating adaptive testing. If max_conditions is specified, min_se should
-not be.}
+not be. Note that this is the number of additional conditions to administer
+beyond the starting conditions.}
 
-\item{omit_conditions}{a vector of conditions to be ommitted from the
+\item{omit_conditions}{A vector of conditions to be omitted from the
 simulation.}
 
 \item{min_se}{The minimum standard error of estimate needed to terminate
-adaptive testing. If min_see is specified, max_conditions should not be.}
+adaptive testing. If min_se is specified, max_conditions should not be.}
 
-\item{link}{the name ("logit" or "probit") of the link function to be used in
+\item{link}{The name ("logit" or "probit") of the link function to be used in
 the model.}
 }
 \value{
-List with elements for all parameters estimated, standard error
-values for all parameters estimated, and the conditions selected for adaptive
-testing.
+A list with elements with the model used (model), true omega
+parameters (omega), various simulation parameters, final omega estimates
+(omega1) and information matrices (info1_omega), ongoing estimates of omega
+(ongoing_omega_est) and standard error of the estimates (ongoing_se_omega),
+and completed conditions (completed_conditions).
 }
 \description{
 This function performs simulated adapting testing using the D-optimality
@@ -101,15 +104,15 @@ criterion (Segall, 2009) which allows the user to focus on a subset of
 intentional abilities (or traits).
 }
 \examples{
-res2 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
+sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
                     contrast_codes = "contr.poly", num_conditions = 10,
                     num_contrasts = 2, constraints = NULL, key = ex3$key,
                     omega = ex3$omega, item_disc = ex3$lambda,
                     item_int = ex3$nu, conditions = ex3$condition,
                     int_par = c(1, 2), start_conditions = 3,
                     max_conditions = 3, link = "probit")
-summary(res2)
-plot(res2)
+summary(sim_res)
+plot(sim_res)
 
 }
 \references{

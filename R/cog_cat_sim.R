@@ -1,60 +1,63 @@
 #-------------------------------------------------------------------------------
-#' Perform Simulated Computerized Adaptive Testing for Task Conditions
+#' Perform Simulated Computerized Adaptive Testing
 #'
 #' This function performs simulated adapting testing using the D-optimality
 #' criterion (Segall, 2009) which allows the user to focus on a subset of
 #' intentional abilities (or traits).
 #'
-#' @param data a matrix of item responses (K by IJ). Rows should contain
+#' @param data A matrix of item responses (K by IJ). Rows should contain
 #' dichotomous responses (1 or 0) for the items indexed by each column.
-#' @param model an IRT model name. The options are "1p" for the one-parameter
-#' model, "2p" for the two parameter model, "3p" for the three-parameter, or
-#' "sdt" for a signal detection-weighted model.
-#' @param guessing either a single numeric guessing value or a matrix of item
+#' @param model An IRT model name. The options are "1p" for the one-parameter
+#' model, "2p" for the two-parameter model, "3p" for the three-parameter model,
+#' or "sdt" for a signal detection-weighted model.
+#' @param guessing Either a single numeric guessing value or a matrix of item
 #' guessing parameters (IJ by 1). This argument is only used when model = '3p'.
-#' @param contrast_codes either a matrix of experimental structure parameters
-#' (JM by MN) or the name in quotes of a R stats contrast function (i.e.,
-#' "contr.helmert", "contr.poly", "contr.sum", "contr.treatment", or
-#' "contr.SAS"). If using the R stats contrast function items in the data matrix
-#' must be arranged by condition.
-#' @param num_conditions the number of conditions (required if using the R stats
-#' contrast function or when constraints = TRUE).
-#' @param num_contrasts the number of contrasts including intercept (required if
+#' @param contrast_codes Either a matrix of contrast codes (JM by MN) or the
+#' name in quotes of a R stats contrast function (i.e., "contr.helmert",
+#' "contr.poly", "contr.sum", "contr.treatment", or "contr.SAS"). If using the R
+#' stats contrast function items in the data matrix must be arranged by
+#' condition.
+#' @param num_conditions The total number of possible conditions (required if
 #' using the R stats contrast function or when constraints = TRUE).
-#' @param constraints either a logical (TRUE or FALSE) indicating that item
-#' parameters should be constrained to be equal over the J conditions or a 1 by
+#' @param num_contrasts The number of contrasts, including intercept (required if
+#' using the R stats contrast function or when constraints = TRUE).
+#' @param constraints Either a logical (TRUE or FALSE) indicating that item
+#' parameters should be constrained to be equal over the J conditions, or a 1 by
 #' I vector of items that should be constrained to be equal across conditions.
-#' @param key an item key vector where 1 indicates target and 2 indicates
-#' distractor (IJ). Required when model = 'sdt'.
-#' @param omega a matrix of true omega parameters if known. These are
+#' @param key An item key vector where 1 indicates a target and 2 indicates
+#' a distractor (IJ). Required when model = 'sdt'.
+#' @param omega A matrix of true omega parameters if known. These are
 #' estimated using the complete data if not supplied by the user.
-#' @param item_disc a matrix of item discrimination parameters. These are
+#' @param item_disc A matrix of item discrimination parameters if known. These
+#' are estimated using the complete data if not supplied by the user.
+#' @param item_int A matrix of item intercept parameters if known. These are
 #' estimated using the complete data if not supplied by the user.
-#' @param item_int a matrix of item intercept parameters. These are estimated
-#' using the complete data if not supplied by the user.
-#' @param conditions a list of experimental conditions that the adaptive testing
-#' algorithm will choose from. The word conditions is used here to refer to a
-#' single item or a group of items that are administered together prior to the
-#' next iteration of adaptive testing. For cognitive experiments, multiple
+#' @param conditions A list of experimental conditions that the adaptive testing
+#' algorithm will choose from. The word "conditions" here refers to a
+#' single item or a group of items that should be administered together before
+#' the next iteration of adaptive testing. For cognitive experiments, multiple
 #' conditions can be assigned the same experimental level (e.g., memory load
 #' level).
-#' @param int_par the index of the intentional parameters. That is, the column
+#' @param int_par The index of the intentional parameters, i.e., the column
 #' of the experimental effects matrix (omega) that should be optimized.
-#' @param start_conditions a vector of condition(s) that are completed prior to
+#' @param start_conditions A vector of condition(s) completed prior to
 #' the onset of adaptive testing.
-#' @param max_conditions the maximum number of conditions to administer before
+#' @param max_conditions The maximum number of conditions to administer before
 #' terminating adaptive testing. If max_conditions is specified, min_se should
-#' not be.
-#' @param omit_conditions a vector of conditions to be ommitted from the
+#' not be. Note that this is the number of additional conditions to administer
+#' beyond the starting conditions.
+#' @param omit_conditions A vector of conditions to be omitted from the
 #' simulation.
 #' @param min_se The minimum standard error of estimate needed to terminate
-#' adaptive testing. If min_see is specified, max_conditions should not be.
-#' @param link the name ("logit" or "probit") of the link function to be used in
+#' adaptive testing. If min_se is specified, max_conditions should not be.
+#' @param link The name ("logit" or "probit") of the link function to be used in
 #' the model.
 #'
-#' @return List with elements for all parameters estimated, standard error
-#' values for all parameters estimated, and the conditions selected for adaptive
-#' testing.
+#' @return A list with elements with the model used (model), true omega
+#' parameters (omega), various simulation parameters, final omega estimates
+#' (omega1) and information matrices (info1_omega), ongoing estimates of omega
+#' (ongoing_omega_est) and standard error of the estimates (ongoing_se_omega),
+#' and completed conditions (completed_conditions).
 #'
 #' @references
 #' Segall, D. O. (2009). Principles of Multidimensional Adaptive Testing. In W.
@@ -62,15 +65,15 @@
 #'  (pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8_3
 #'
 #' @examples
-#' res2 <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
+#' sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
 #'                     contrast_codes = "contr.poly", num_conditions = 10,
 #'                     num_contrasts = 2, constraints = NULL, key = ex3$key,
 #'                     omega = ex3$omega, item_disc = ex3$lambda,
 #'                     item_int = ex3$nu, conditions = ex3$condition,
 #'                     int_par = c(1, 2), start_conditions = 3,
 #'                     max_conditions = 3, link = "probit")
-#' summary(res2)
-#' plot(res2)
+#' summary(sim_res)
+#' plot(sim_res)
 #'
 #' @export cog_cat_sim
 #-------------------------------------------------------------------------------
@@ -158,9 +161,14 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   iter <- 1
   crit_se <- array(data = FALSE, dim = c(K, 1))
 
-  # STEP 1: Estimate parameters using complete data if not defined -------------
+  # STEP 1: Estimate item parameters using complete data if not defined --------
 
   if (is.null(x = item_int) || is.null(x = item_disc)  || is.null(x = omega)) {
+    cat(
+      "Estimating item parameters...",
+      "\n",
+      sep = " "
+    )
     tmp_arg <- list(
       data = y, model = model, guessing = guessing,
       contrast_codes = contrast_codes, num_conditions = num_conditions,
@@ -189,6 +197,11 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   }
 
   # STEP 2: Estimate omega from starting conditions ----------------------------
+  cat(
+    "Estimating omega from starting conditions...",
+    "\n",
+    sep = " "
+  )
   tmp_item_disc <- sweep(
     x = item_disc,
     MARGIN = 1,
@@ -216,9 +229,21 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   ongoing_omega_est <- tmp_res$omega1[, int_par, drop = FALSE]
   ongoing_se_omega <- do.call(rbind, se_omega)
 
-  # STEP 3: Select next condition ----------------------------------------------
-  while (any(!crit_se) && !(max_conditions <= iter)) {
+  cat(
+    "Adaptive Testing Start Time",
+    format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
+    "\n",
+    sep = " "
+  )
 
+  # STEP 3: Select next condition ----------------------------------------------
+  while (any(!crit_se) && !(max_conditions < iter)) {
+    cat(
+      "... CAT administration ",
+      iter,
+      "\n",
+      sep = ""
+    )
     incomplete_conditions <- lapply(
       X = 1:K,
       FUN = function(x) {
@@ -312,6 +337,12 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
     ongoing_se_omega <- cbind(ongoing_se_omega, do.call(rbind, se_omega))
     ongoing_crit_se <- cbind(ongoing_crit_se, crit_se)
   }
+  cat(
+    "Adaptive Testing End Time",
+    format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
+    "\n",
+    sep = " "
+  )
 
   return(
     structure(.Data = list(
@@ -319,6 +350,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
       "omega" = omega,
       "num_conditions" = num_conditions,
       "int_par" = int_par,
+      "start_conditions" = start_conditions,
       "max_conditions" = max_conditions,
       "min_se" = min_se,
       "omega1" = tmp_res$omega1,
