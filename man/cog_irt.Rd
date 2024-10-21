@@ -2,7 +2,7 @@
 % Please edit documentation in R/cog_irt.R
 \name{cog_irt}
 \alias{cog_irt}
-\title{Fit Item Response Theory Models With or Without a Design Matrix}
+\title{Fit Item Response Theory Models with Optional Contrast Effects}
 \usage{
 cog_irt(
   data = NULL,
@@ -23,8 +23,8 @@ subject's dichotomous responses (1 or 0) for the items indexed by each
 column.}
 
 \item{model}{An IRT model name. The options are "1p" for the one-parameter
-model, "2p" for the two parameter model, "3p" for the three-parameter, or
-"sdt" for a signal detection-weighted model.}
+model, "2p" for the two parameter model, "3p" for the three-parameter model,
+or "sdt" for the signal detection-weighted model.}
 
 \item{guessing}{Either a single numeric guessing value or a matrix of item
 guessing parameters (IJ by 1). This argument is only used when model = '3p'.}
@@ -54,20 +54,21 @@ the model.}
 \item{...}{Additional arguments.}
 }
 \value{
-A list with elements for all parameters estimated, information values
-for all parameters estimated, the model log-likelihood value, and the total
-number of estimated parameters in the model.
+A list with elements for all parameters estimated (omega1, nu1,
+and/or lambda1), information values for all parameters estimated
+(info1_omega, info1_nu, and/or info1_lambda), the model log-likelihood value
+(log_lik), and the total number of estimated parameters (par) in the model.
 }
 \description{
 This function estimates item response theory (IRT) model parameters. Users
-can optionally choose to request estimates of person parameters representing
-effects of the experimental contrast.
+can optionally estimate person parameters that account for experimental or
+longitudinal contrast effects.
 }
 \section{Dimensions}{
 
-I = Number of items per condition; J = Number of conditions; K = Number of
-examinees; M Number of ability (or trait) dimensions; N Number of contrasts
-(should include intercept).
+I = Number of items per condition; J = Number of conditions or time points;
+K = Number of examinees; M Number of ability (or trait) dimensions; N Number
+of contrast effects (including intercept).
 }
 
 \examples{
@@ -99,8 +100,9 @@ cor(ex1$omega, twoparamfit$omega1)
 # conditions/time points and specifying two contrast effects.
 # "contr.treatment" compares each level of condition to the baseline level.
 # Here, with only two levels of condition, one contrast effect (omega1) is
-# for baseline scores, and another (omega2) compares change between the second
-# and first measurement condition/time points.
+# for baseline scores, and another (omega2) compares change between the
+# second and first measurement condition/time points. That is, omega2 is the
+# change score.
 twoparamfit_cnstr <- cog_irt(data = ex4$y, model = '2p', contrast_codes =
                              "contr.treatment", num_conditions = 2,
                              num_contrasts = 2, constraints = TRUE)
@@ -117,25 +119,25 @@ cor(ex4$omega[, 2], twoparamfit_cnstr$omega1[, 2])
 
 # An alternative way to specify constraints. Here only the first and second
 # item parameters are constrained to be equal across conditions/time points.
-constraints <- matrix(data = c(1, 2, rep(0, ncol(x = ex4$y) - 2)), nrow = 1,
-                      ncol = ncol(x = ex4$y) / 2)
+# This is useful for situations in which only some items are repeated.
+constraints <- matrix(data = c(1, 2, rep(0, (ncol(x = ex4$y) / 2) - 2)),
+                      nrow = 1, ncol = ncol(x = ex4$y) / 2)
 twoparamfit_cnstr <- cog_irt(data = ex4$y, model = '2p',
                              contrast_codes = "contr.treatment",
                              num_conditions = 2, num_contrasts = 2,
                              constraints = constraints)
 
 # Fit the SDT model to the n-back data. No contrast effects are specified
-# in this example. omega1 is for discrimination (dprime) and omega2 is for bias
-# (ccenter).
+# in this example. omega1 is the SDT discrimination (dprime) parameter and
+# omega2 is the SDT for bias (C-centered) parameter.
 nback_fit <- cog_irt(data = nback$y, model = "sdt", key = nback$key)
 plot(nback_fit)
 
-# Fit the SDT model to the n-back data. In this case, different items were
-# administered in each condition, so item parameters are not constrained to
-# be equal. There are four memory load conditions, and we specify three
-# contrasts using "contr.poly". This provides intercept and linear
-# effects of memory load for both discrimination (dprime) and
-# bias (ccenter). omega1 and omega2 represent the intercept and linear
+# Fit the SDT model to the n-back data with contrast effects. There are four
+# memory loadconditions, and we specify two contrasts using "contr.poly".
+# This produces intercept and linear effects of memory load for both
+# the SDT discrimination (dprime) parameter and the SDT bias (C-centered)
+# parameter. omega1 and omega2 represent the intercept and linear
 # effects for discrimination (dprime), while omega3 and omega4 represent
 # the intercept and linear effects for bias (ccenter).
 nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
