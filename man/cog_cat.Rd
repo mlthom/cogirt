@@ -2,12 +2,12 @@
 % Please edit documentation in R/cog_cat.R
 \name{cog_cat}
 \alias{cog_cat}
-\title{Cognitive Testing Using Computerized Adaptive Testing}
+\title{Administer Cognitive Tests Using Computerized Adaptive Testing}
 \usage{
 cog_cat(rda = NULL, obj_fun = NULL, int_par = NULL)
 }
 \arguments{
-\item{rda}{An rda file (or list) containing y, kappa, gamma, lambda,
+\item{rda}{An RDA file (or list) containing y, kappa, gamma, lambda,
 condition, omega_mu, omega_sigma2, zeta_mu, zeta_sigma2, nu_mu, and
 nu_sigma2. y should be a 1 by IJ row vector. All items not administered
 should have NA values in y. See package documentation for definitions and
@@ -19,15 +19,23 @@ values for the selected model (character).}
 \item{int_par}{Intentional parameters. That is, the parameters to optimize
 precision (scalar).}
 }
+\value{
+A list with elements for omega parameter estimates (omega1),
+standard error of the estimates (se_omega), and the next condition to
+administer (next_condition).
+}
 \description{
-This function takes an rda file or list with select objects and returns omega
-estimates, standard error of omega, and the next best condition to administer
-for single subject computerized adaptive testing. Adaptive testing uses
-D-optimality (see Segall, 2009).
+This function accepts an RDA file or a list containing selected objects and
+returns omega estimates, the standard error of omega, and the optimal next
+condition to administer for single-subject computerized adaptive testing.
+Adaptive testing is guided by D-optimality (see Segall, 2009).
 }
 \examples{
+# Define an rda file
 rda = ex5
+# Set all items that are not part of 3 to NA (it not already NA)
 rda$y[which(!rda$condition \%in\% c(3))] <- NA
+# Determine next condition to administer
 cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 
 }
