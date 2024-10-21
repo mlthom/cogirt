@@ -412,6 +412,7 @@ mhrm <- function(
           omega0 <- omega1
         }
         if (verbose_mhrm) {
+          cat("\r                                                           \r")
           cat(
             "\r",
             "... at iteration ",
@@ -688,6 +689,7 @@ mhrm <- function(
           lambda0 <- lambda1
         }
         if (verbose_mhrm) {
+          cat("\r                                                           \r")
           cat(
             "\r",
             "... at iteration ",
@@ -937,6 +939,7 @@ mhrm <- function(
           nu0 <- nu1
         }
         if (verbose_mhrm) {
+          cat("\r                                                           \r")
           cat(
             "\r",
             "... at iteration ",
