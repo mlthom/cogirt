@@ -23,13 +23,9 @@ plot.cog_irt <- function(x, ...) {
       }))
       se_omega <- sqrt(x = errvar_omega)
       xlim <- c(min(omega), max(omega))
-      by.x <- round(x = seq(from = xlim[1],
-                            to = xlim[2],
-                            length.out = 7) * 10, digits = 0) / 10
+      by.x <- pretty(x = xlim, n = 7)
       ylim <- c(0, max(se_omega))
-      by.y <- round(x = seq(from = ylim[1],
-                            to = ylim[2],
-                            length.out = 7) * 10, digits = 0) / 10
+      by.y <- pretty(x = ylim, n = 7)
       plot(x = NULL, xlim = xlim, ylim = ylim, axes = FALSE,
            xlab = paste("omega", i, sep = ""),
            ylab = "Standard Error of Estimate", main = "")
@@ -42,4 +38,5 @@ plot.cog_irt <- function(x, ...) {
     }
     par(def_par)
   }
+  return(invisible(x = NULL))
 }
