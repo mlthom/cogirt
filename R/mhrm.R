@@ -105,32 +105,32 @@ mhrm <- function(
     chains <- ellipsis$chains
   }
   if (is.null(x = ellipsis$burn)) {
-    burn <- 0
+    burn <- 100
   } else {
     burn <- ellipsis$burn
   }
   if (is.null(x = ellipsis$thin)) {
-    thin <- 5
+    thin <- 10
   } else {
     thin <- ellipsis$thin
   }
   if (is.null(x = ellipsis$min_tune)) {
-    min_tune <- 0
+    min_tune <- 25
   } else {
     min_tune <- ellipsis$min_tune
   }
   if (is.null(x = ellipsis$tune_int)) {
-    tune_int <- 0
+    tune_int <- 25
   } else {
     tune_int <- ellipsis$tune_int
   }
   if (is.null(x = ellipsis$max_tune)) {
-    max_tune <- 0
+    max_tune <- 125
   } else {
     max_tune <- ellipsis$max_tune
   }
   if (is.null(x = ellipsis$niter)) {
-    niter <- 6
+    niter <- 150
   } else {
     niter <- ellipsis$niter
   }
@@ -176,12 +176,11 @@ mhrm <- function(
     est_nu = est_nu, omega0 = omega0, gamma0 = gamma0, lambda0 = lambda0,
     zeta0 = zeta0, nu0 = nu0, kappa0 = kappa0, omega_mu = omega_mu,
     omega_sigma2 = omega_sigma2, lambda_mu = lambda_mu,
-    lambda_sigma2 = lambda_sigma2, zeta_mu = zeta_mu, zeta_sigma2 = zeta_sigma2,
-    nu_mu = nu_mu, nu_sigma2 = nu_sigma2, burn = burn,
-    thin = thin, min_tune = min_tune, tune_int = tune_int, max_tune = max_tune,
-    niter = niter
+    lambda_sigma2 = lambda_sigma2, zeta_mu = zeta_mu,
+    zeta_sigma2 = zeta_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
+    burn = burn, thin = thin, min_tune = min_tune, tune_int = tune_int,
+    max_tune = max_tune, niter = niter, psrf = TRUE
   )
-
   # Update initial estimates and variance of candidates
   if (est_omega) {
     omega0 <- mhmcburn$omegaEAP
@@ -205,8 +204,9 @@ mhrm <- function(
     }
     info0_nu <- diag(x = 10, nrow = ncol(nu0))
   }
+
   # Set up mhrm loop parameters
-  tol <- .01
+  tol <- .001
   log_lik <- NA
   #start iteration
   if (verbose_mhrm) {
@@ -237,15 +237,15 @@ mhrm <- function(
 
       # STEP 1: Stochastic imputation ------------------------------------------
       mc_draws_at_iteration_k <- mhmc_mc(
-        chains = 3, y = y, obj_fun = obj_fun, link = link,
+        chains = chains, y = y, obj_fun = obj_fun, link = link,
         est_omega = est_omega, est_lambda = est_lambda, est_zeta = est_zeta,
         est_nu = est_nu, omega0 = omega0, gamma0 = gamma0, lambda0 = lambda0,
         zeta0 = zeta0, nu0 = nu0, kappa0 = kappa0, omega_mu = omega_mu,
         omega_sigma2 = omega_sigma2, lambda_mu = lambda_mu,
         lambda_sigma2 = lambda_sigma2, zeta_mu = zeta_mu,
         zeta_sigma2 = zeta_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
-        burn = burn, thin = thin, min_tune = min_tune,
-        tune_int = tune_int, max_tune = max_tune, niter = niter
+        burn = 4, thin = 1, min_tune = 5, tune_int = 5,
+        max_tune = 5, niter = 5
       )
 
       # STEP 2: Stochastic approximation ---------------------------------------
@@ -371,11 +371,11 @@ mhrm <- function(
       probs <- apply(omega1, 1, function(row) {
         mvtnorm::dmvnorm(row, mean = omega_mu, sigma = omega_sigma2)
       })
-      if (any(probs < .001 | probs > .999)) {
-        for (i in which(probs < .001 | probs > .999)) {
+      if (any(probs < .0001 | probs > .9999)) {
+        for (i in which(probs < .0001 | probs > .9999)) {
           omega1[i, ] <- pmax(
-            pmin(omega1[i, ], omega_mu + 2 * diag(x = omega_sigma2)),
-            omega_mu - 2 * diag(x = omega_sigma2)
+            pmin(omega1[i, ], omega_mu + 3 * diag(x = omega_sigma2)),
+            omega_mu - 3 * diag(x = omega_sigma2)
           )
         }
         if (!omega_warn) {
@@ -435,7 +435,7 @@ mhrm <- function(
             sep = " "
           )
         }
-      } else if (iter > max_iter_mhrm) {
+      } else if (iter == max_iter_mhrm) {
         if (verbose_mhrm) {
           cat(
             "\n... algorithm failed to converge at",
@@ -444,6 +444,7 @@ mhrm <- function(
             sep = " "
           )
         }
+        warning("MHRM omega estimates did not converge.", call. = FALSE)
       }
     }
   }
@@ -467,15 +468,15 @@ mhrm <- function(
 
       # STEP 1: Stochastic imputation ------------------------------------------
       mc_draws_at_iteration_k <- mhmc_mc(
-        chains = 3, y = y, obj_fun = obj_fun, link = link,
+        chains = chains, y = y, obj_fun = obj_fun, link = link,
         est_omega = est_omega, est_lambda = est_lambda, est_zeta = est_zeta,
         est_nu = est_nu, omega0 = omega0, gamma0 = gamma0, lambda0 = lambda0,
         zeta0 = zeta0, nu0 = nu0, kappa0 = kappa0, omega_mu = omega_mu,
         omega_sigma2 = omega_sigma2, lambda_mu = lambda_mu,
         lambda_sigma2 = lambda_sigma2, zeta_mu = zeta_mu,
         zeta_sigma2 = zeta_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
-        burn = burn, thin = thin, min_tune = min_tune,
-        tune_int = tune_int, max_tune = max_tune, niter = niter
+        burn = 4, thin = 1, min_tune = 5, tune_int = 5,
+        max_tune = 5, niter = 5
       )
 
       # STEP 2: Stochastic approximation ---------------------------------------
@@ -628,13 +629,13 @@ mhrm <- function(
           }
           lambda_vec <- c(lambda0)
           A <- numDeriv::jacobian(func = constr_fun, x = lambda_vec)
-          E <- lapply(seq(dim(inv_lambda)[3]), abind::asub, x = info1_lambda, dims = 3)
+          E <- lapply(seq(dim(inv_lambda)[3]), abind::asub, x = info1_lambda,
+                      dims = 3)
           E <- array_to_mat_func(E)
           E <- diag(diag(E))
           E.augment <- rbind(cbind(E, t(A)),
                              cbind(A, matrix(0, nrow(A), nrow(A))))
           E.augment.inv <- solve(E.augment)
-          #E.inv <- E.augment.inv[1:ncol(A), 1:ncol(A)]
           grad_lambda <- array(data = t(c(grad_lambda)) %*% constraints[[4]],
                                dim = dim(grad_lambda))
           lambda1 <- array(
@@ -647,11 +648,11 @@ mhrm <- function(
       probs <- apply(lambda1, 1, function(row) {
         mvtnorm::dmvnorm(row, mean = lambda_mu, sigma = lambda_sigma2)
       })
-      if (any(probs < .001 | probs > .999)) {
-        for (i in which(probs < .001 | probs > .999)) {
+      if (any(probs < .0001 | probs > .9999)) {
+        for (i in which(probs < .0001 | probs > .9999)) {
           lambda1[i, ] <- pmax(
-            pmin(lambda1[i, ], lambda_mu + 2 * diag(x = lambda_sigma2)),
-            lambda_mu - 2 * diag(x = lambda_sigma2)
+            pmin(lambda1[i, ], lambda_mu + 3 * diag(x = lambda_sigma2)),
+            lambda_mu - 3 * diag(x = lambda_sigma2)
           )
         }
         if (!lambda_warn) {
@@ -712,7 +713,7 @@ mhrm <- function(
             sep = " "
           )
         }
-      } else if (iter > max_iter_mhrm) {
+      } else if (iter == max_iter_mhrm) {
         if (verbose_mhrm) {
           cat(
             "\n... algorithm failed to converge at",
@@ -721,6 +722,7 @@ mhrm <- function(
             sep = " "
           )
         }
+        warning("MHRM lambda estimates did not converge.", call. = FALSE)
       }
     }
   }
@@ -743,15 +745,15 @@ mhrm <- function(
 
       # STEP 1: Stochastic imputation ------------------------------------------
       mc_draws_at_iteration_k <- mhmc_mc(
-        chains = 3, y = y, obj_fun = obj_fun, link = link,
+        chains = chains, y = y, obj_fun = obj_fun, link = link,
         est_omega = est_omega, est_lambda = est_lambda, est_zeta = est_zeta,
         est_nu = est_nu, omega0 = omega0, gamma0 = gamma0, lambda0 = lambda0,
         zeta0 = zeta0, nu0 = nu0, kappa0 = kappa0, omega_mu = omega_mu,
         omega_sigma2 = omega_sigma2, lambda_mu = lambda_mu,
         lambda_sigma2 = lambda_sigma2, zeta_mu = zeta_mu,
         zeta_sigma2 = zeta_sigma2, nu_mu = nu_mu, nu_sigma2 = nu_sigma2,
-        burn = burn, thin = thin, min_tune = min_tune,
-        tune_int = tune_int, max_tune = max_tune, niter = niter
+        burn = 4, thin = 1, min_tune = 5, tune_int = 5,
+        max_tune = 5, niter = 5
       )
 
       # STEP 2: Stochastic approximation ---------------------------------------
@@ -874,7 +876,9 @@ mhrm <- function(
               for (i in 1:nrow(constraints[[1]])) {
                 if ((sum(constraints[[1]][i, ] != 0) - 1) > 0) {
                   for (j in 2:(sum(constraints[[1]][i, ] != 0))) {
-                    out[count] <- x[which(x = constraints[[1]][i, ] != 0)[1], ] -  x[which(x = constraints[[1]][i, ] != 0)[j], ]
+                    out[count] <- x[
+                      which(x = constraints[[1]][i, ] != 0)[1],
+                      ] -  x[which(x = constraints[[1]][i, ] != 0)[j], ]
                     count <- count + 1
                   }
                 }
@@ -887,7 +891,6 @@ mhrm <- function(
             E.augment <- rbind(cbind(E, t(A)),
                                 cbind(A, matrix(0, nrow(A), nrow(A))))
             E.augment.inv <- solve(E.augment)
-            #E.inv <- E.augment.inv[1:ncol(A), 1:ncol(A)]
             grad_nu <- array(data = t(c(grad_nu)) %*% constraints[[2]],
                              dim = dim(grad_nu))
             nu1 <- nu0 + gain * (E.augment.inv[1:ncol(A), 1:ncol(A)] %*%
@@ -898,14 +901,14 @@ mhrm <- function(
       probs <- apply(nu1, 1, function(row) {
         mvtnorm::dmvnorm(row, mean = nu_mu, sigma = nu_sigma2)
       })
-      if (any(probs < .001 | probs > .999)) {
-        for (i in which(probs < .001 | probs > .999)) {
+      if (any(probs < .0001 | probs > .9999)) {
+        for (i in which(probs < .0001 | probs > .9999)) {
           nu1[i, ] <- pmax(
-            pmin(nu1[i, ], nu_mu + 2 * diag(x = nu_sigma2)),
-            nu_mu - 2 * diag(x = nu_sigma2)
+            pmin(nu1[i, ], nu_mu + 3 * diag(x = nu_sigma2)),
+            nu_mu - 3 * diag(x = nu_sigma2)
           )
         }
-        if (!lambda_warn) {
+        if (!nu_warn) {
           warning(paste(
             "Nu estimates were Winsorized due to implausible values,",
             "likely caused by items with all correct or incorrect",
@@ -962,7 +965,7 @@ mhrm <- function(
             sep = " "
           )
         }
-      } else if (iter > max_iter_mhrm) {
+      } else if (iter == max_iter_mhrm) {
         if (verbose_mhrm) {
           cat(
             "\n... algorithm failed to converge at",
@@ -971,6 +974,7 @@ mhrm <- function(
             sep = " "
           )
         }
+        warning("MHRM nu estimates did not converge.", call. = FALSE)
       }
     }
   }
