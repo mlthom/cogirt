@@ -324,7 +324,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "lambda_mu")]
   }
   if (is.null(x = ellipsis$lambda_sigma2)) {
-    lambda_sigma2 <- diag(x = 4, nrow = J * M)
+    lambda_sigma2 <- diag(x = 2, nrow = J * M)
   } else {
     lambda_sigma2 <- ellipsis$lambda_sigma2
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "lambda_sigma2")]
@@ -336,7 +336,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "nu_mu")]
   }
   if (is.null(x = ellipsis$nu_sigma2)) {
-    nu_sigma2 <- matrix(data = 1)
+    nu_sigma2 <- matrix(data = 10)
   } else {
     nu_sigma2 <- ellipsis$nu_sigma2
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "nu_sigma2")]
