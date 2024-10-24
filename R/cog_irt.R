@@ -219,17 +219,18 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       }
     } else if (model %in% c("2p", "3p")) {
       for (j in 1:J) {
-        lambda0[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <- apply(
-          X = y,
-          MARGIN = 2,
-          FUN = function(x) {
-            cor(x = jitter(x),
-                y = jitter(rowMeans(x = y, na.rm = TRUE)))
-          }
-        )[(1 + (j - 1) * I):(j * I)]
+        lambda0[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
+          sapply(
+            X = 1:ncol(y),
+            FUN = function(x) {
+              cor(x = jitter(y[, x]),
+                  y = jitter(rowMeans(x = y[, -x], na.rm = TRUE)))
+            }
+          )[(1 + (j - 1) * I):(j * I)]
       }
-      lambda0 <- lambda0 / sqrt(1 - (lambda0 ^ 2)) * ifelse(link == "logit",
-                                                            yes = 1.0, no = 1.7)
+      lambda0 <- lambda0 / sqrt((1 - lambda0^2)) * ifelse(link == "logit",
+                                                          yes = 1.7, no = 1.0)
+      # lambda0 <- ifelse(lambda0 > 0, 1, 0)
     } else if (model == "sdt") {
       measure_weights <-
         matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
@@ -277,8 +278,13 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   }
   zeta0 <- array(data = 0, dim = c(K, J * M))
   if (is.null(x = ellipsis$nu0)) {
-    nu0 <-  t(array(data = scale(x = colMeans(x = y, na.rm = TRUE)),
-                    dim = c(1, I * J)))
+    nu0 <-  t(array(
+      data = if (link == "logit") {
+        result <- qlogis(p = colMeans(x = y, na.rm = TRUE))
+      } else {
+        result <- qnorm(p = colMeans(x = y, na.rm = TRUE))
+      },
+      dim = c(1, I * J)))
   } else {
     nu0 <- ellipsis$nu0
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "nu0")]
@@ -299,7 +305,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "omega_mu")]
   }
   if (is.null(x = ellipsis$omega_sigma2)) {
-    omega_sigma2 <- diag(x = c(5), nrow = M * N, ncol = M * N)
+    omega_sigma2 <- diag(x = c(1), nrow = M * N, ncol = M * N)
   } else {
     omega_sigma2 <- ellipsis$omega_sigma2
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "omega_sigma2")]
@@ -330,7 +336,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "nu_mu")]
   }
   if (is.null(x = ellipsis$nu_sigma2)) {
-    nu_sigma2 <- matrix(data = 2)
+    nu_sigma2 <- matrix(data = 1)
   } else {
     nu_sigma2 <- ellipsis$nu_sigma2
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "nu_sigma2")]
@@ -368,7 +374,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "est_zeta")]
   }
   if (is.null(x = ellipsis$chains)) {
-    chains <- 1
+    chains <- NULL
   } else {
     chains <- ellipsis$chains
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "chains")]
