@@ -146,6 +146,18 @@ nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
                            num_contrasts = 2)
 plot(nback_fit_contr)
 
+# The cog_irt function will occasionally produce a warning indicating
+# that some parameter estimates were Windsorized for plausible results.
+# This typically happens due to perfectly correct or incorrect profiles.
+# In the nback data, for example, 4 examinees (157, 201, 268, 320) got all
+# targets wrong and all distractors correct. The program still finds
+# estimates for these subjects using priors, but they should be interpreted
+# cautiously, and perhaps more qualitatively than quantitatively. Below, we
+# see these participants received similar omega estimates, indicating a
+# conservative bias. That is, the bias intercept term (omega3) is very high.
+
+round(nback_fit_contr$omega[c(157, 201, 268, 320), ], 2)
+
 }
 \references{
 Embretson S. E., & Reise S. P. (2000). \emph{Item response theory for
