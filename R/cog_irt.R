@@ -146,7 +146,11 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
                     link = "probit", ...) {
   y <- as.matrix(x = data)
   if (!is.numeric(x = y)) {
-    stop("'y' contains non-numeric data.",
+    stop("'data' contains non-numeric values.",
+         call. = FALSE)
+  }
+  if (!all(unique(x = c(y)) %in% c(0, 1))) {
+    stop("CogIRT only supports dichotomous (0 vs. 1) data.",
          call. = FALSE)
   }
   if (is.null(x = model)) {
