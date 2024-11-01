@@ -11,12 +11,15 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Imports:
-  MASS,
-  abind,
-  mvtnorm,
-  parallel,
-  coda,
-  numDeriv
+    MASS,
+    abind,
+    mvtnorm,
+    parallel,
+    coda,
+    numDeriv,
+    grDevices,
+    graphics,
+    stats
 Depends: 
     R (>= 2.10)
 Suggests: 
