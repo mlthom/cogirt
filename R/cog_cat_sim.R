@@ -19,8 +19,8 @@
 #' condition.
 #' @param num_conditions The total number of possible conditions (required if
 #' using the R stats contrast function or when constraints = TRUE).
-#' @param num_contrasts The number of contrasts, including intercept (required if
-#' using the R stats contrast function or when constraints = TRUE).
+#' @param num_contrasts The number of contrasts, including intercept (required
+#' if using the R stats contrast function or when constraints = TRUE).
 #' @param constraints Either a logical (TRUE or FALSE) indicating that item
 #' parameters should be constrained to be equal over the J conditions, or a 1 by
 #' I vector of items that should be constrained to be equal across conditions.
@@ -138,7 +138,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
         if (is.null(x = constraints)) {
           stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)
-        } else if(is.logical(x = constraints)){
+        } else if (is.logical(x = constraints)) {
           if (constraints == FALSE) {
             stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)

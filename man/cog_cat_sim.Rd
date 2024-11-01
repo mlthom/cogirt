@@ -45,8 +45,8 @@ condition.}
 \item{num_conditions}{The total number of possible conditions (required if
 using the R stats contrast function or when constraints = TRUE).}
 
-\item{num_contrasts}{The number of contrasts, including intercept (required if
-using the R stats contrast function or when constraints = TRUE).}
+\item{num_contrasts}{The number of contrasts, including intercept (required
+if using the R stats contrast function or when constraints = TRUE).}
 
 \item{constraints}{Either a logical (TRUE or FALSE) indicating that item
 parameters should be constrained to be equal over the J conditions, or a 1 by

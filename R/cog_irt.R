@@ -200,7 +200,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
         if (is.null(x = constraints)) {
           stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)
-        } else if(is.logical(x = constraints)){
+        } else if (is.logical(x = constraints)) {
           if (constraints == FALSE) {
             stop("'constraints' must be TRUE when model is '2p' or '3p' and
                'num_conditions' > 1", call. = FALSE)
@@ -237,7 +237,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       for (j in 1:J) {
         lambda0[(1 + (j - 1) * I):(j * I), (1 + (j - 1) * M):(j * M)] <-
           sapply(
-            X = 1:ncol(y),
+            X = seq_len(ncol(y)),
             FUN = function(x) {
               cor(x = jitter(y[, x]),
                   y = jitter(rowMeans(x = y[, -x], na.rm = TRUE)))
@@ -246,7 +246,6 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       }
       lambda0 <- lambda0 / sqrt((1 - lambda0^2)) * ifelse(link == "logit",
                                                           yes = 1.7, no = 1.0)
-      # lambda0 <- ifelse(lambda0 > 0, 1, 0)
     } else if (model == "sdt") {
       measure_weights <-
         matrix(data = c(0.5, -1.0, 0.5, 1.0), nrow = 2, ncol = M, byrow = TRUE)
