@@ -1,0 +1,94 @@
+---
+title: "CogIRT"
+author: "Michael L. Thomas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CogIRT}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CogIRT)
+```
+
+# Introduction
+
+## Example 1
+
+In the example code below, models were fitted to the Example ex2 simulation data. The Example 2 data are based on the signal detection-weighted IRT model, and thus the sdt model should provide the best fit. These data model were simulated without experimental or longitudinal structural. In the code below, we fit each of the models to the data, and then compare them using the lrt (likelihood ratio test) function. For the sake of this presentation, the optional verbose_mhrm argument is set to FALSE and passed to the internal mhrm function to prevent the program from displaying estimation progress. Users will typically want to leave this argument set to its default (TRUE) setting.
+
+```{r}
+fit1p <- cog_irt(data = ex2$y, model = "1p", verbose_mhrm = FALSE)
+fit2p <- cog_irt(data = ex2$y, model = "2p", verbose_mhrm = FALSE)
+fitsdt <- cog_irt(data = ex2$y, key = ex2$key, model = "sdt",
+                  verbose_mhrm = FALSE)
+lrt(fit1p, fit2p, fitsdt)
+```
+
+The lrt function reports model log-likelihood values (logLik), the number of parameters estimated for each model (Par), Akaike and Bayesian Information Criterion values (AIC and BIC), the difference in model Chisq values, the degrees of freedom for the differences between models (Chisq diff), and the probability values for the differences (Pr(>Chisq)). As can be seen, the signal detection model produces the best fit (lowest AIC and BIC). Additionally, the two-parameter model fits significantly worse than the signal detection-weighted model.
+
+The CogIRT package provides summary methods so that we can see the resutls for best fitting model.
+
+```{r}
+summary(fitsdt)
+```
+
+## Example 2
+
+In the next xample, a two-parameter IRT model is fitted to the Example 4 (ex4) data. As noted above, Example 4 simulated data for a two-parameter IRT model based on a hypothetical longitudinal design. Specifically, it was assumed that the same 10 items were administered at 2 time-points to 50 examinees. Because the same items were hypothetically administered at each time point, the item slope parameters (lambda) and item intercept parameters (nu) were constrained to be equal across time. In the estimation code below, the constr argument is set to TRUE which constraints optimization of the item parameters.
+
+```{r}
+fit2pconstr <- cog_irt(data = ex4$y, model = '2p',
+                             contrast_codes = "contr.treatment",
+                             num_conditions = 2, num_contrasts = 2,
+                             constraints = TRUE, verbose_mhrm = FALSE)
+```
+
+The CogIRT package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called dummy coding scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferably because the first estimate (omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (omega1). This implies that the first panel (omega1) corresponds to time 1 scores and the second panel corresponds to difference score (omega2). For omega1, there is the expected "U-shaped" association between ability (or trait) estimates and error. That is, due to floor and ceiling effects, examinees in the middle of the ability distribution are measured more precicesly than examinees at the very high- or low-end of ability. The exact shape of the error distribution depends on the item parameters and ability scores in the sample.
+
+```{r, fig.dim = c(7.2, 4)}
+plot(fit2pconstr)
+```
+
+What is more novel is the pattern of error for omega2. Although still vaguely "U-shaped", the pattern is more complex. In fact, the shape is characteristic of the lower half of a tube. This is because error for the change scores is a function of the test properties, the score at time-point 1 (omega1), and change (omega2). Scores for participants who change little are measured precisely if they start and finish the study in the middle of the distribution, but are imprecisely measured if they start and finish in the  high- or low-ends of the distribution. Participants who start in the middle of the distribution and finish in either the low- or high-ends, or who start in the low- or high-ends and finish in the middle of distribution, and measured with moderate levels of the precision. This simulation highlights the complex nature of measurement in the context of change over time due to intervention or aging/maturation.
+
+## Example 3
+
+This vignette demonstrates how to use the CogIRT package to fit a signal detection theory (SDT) weighted item response theory model to the nback data that comes installed with the package. We begin by fitting a model without contrast effects and then extend it to include linear and quadratic contrasts. 
+
+We first fit the SDT model without any contrast effects. This basic model estimates parameters for discrimination (dprime) and bias (Ccenter).
+
+```{r, fig.dim = c(7.2, 4)}
+nback_fit <- cog_irt(
+  data = nback$y,
+  model = "sdt",
+  key = nback$key,
+  verbose_mhrm = FALSE
+)
+summary(nback_fit)
+plot(nback_fit)
+```
+
+To explore how memory load affects performance, we can add linear and quadratic contrast effects. These contrasts model systematic changes across the memory load levels.
+
+```{r, fig.dim = c(7.2, 5)}
+nback_fit_contr <- cog_irt(
+  data = nback$y,
+  model = "sdt",
+  contrast_codes = "contr.poly",
+  key = nback$key,
+  num_conditions = length(unique(nback$condition)),
+  num_contrasts = 3,  # Intercept, linear, and quadratic
+  verbose_mhrm = FALSE
+)
+summary(nback_fit_contr)
+plot(nback_fit_contr)
+```
