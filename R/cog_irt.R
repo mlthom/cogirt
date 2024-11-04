@@ -295,9 +295,13 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   if (is.null(x = ellipsis$nu0)) {
     nu0 <-  t(array(
       data = if (link == "logit") {
-        result <- qlogis(p = colMeans(x = y, na.rm = TRUE))
+        result <- qlogis(p = pmin(
+          pmax(colMeans(x = y, na.rm = TRUE), 0.01), 0.99)
+        )
       } else {
-        result <- qnorm(p = colMeans(x = y, na.rm = TRUE))
+        result <- qnorm(p = pmin(
+          pmax(colMeans(x = y, na.rm = TRUE), 0.01), 0.99)
+        )
       },
       dim = c(1, I * J)))
   } else {
