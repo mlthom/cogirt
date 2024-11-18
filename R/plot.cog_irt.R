@@ -27,7 +27,7 @@ plot.cog_irt <- function(x, ...) {
       ylim <- c(0, max(se_omega))
       by.y <- pretty(x = ylim, n = 7)
       plot(x = NULL, xlim = xlim, ylim = ylim, axes = FALSE,
-           xlab = paste("omega", i, sep = ""),
+           xlab = paste("Omega", i, sep = ""),
            ylab = "Standard Error of Estimate", main = "")
       abline(v = by.x, col = "gray", lty = 3)
       abline(h = by.y, col = "gray", lty = 3)
