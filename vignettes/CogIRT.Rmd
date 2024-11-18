@@ -21,9 +21,9 @@ library(CogIRT)
 
 # Introduction
 
-## Example 1
+## Compare Models
 
-In the example code below, models were fitted to the Example ex2 simulation data. The Example 2 data are based on the signal detection-weighted IRT model, and thus the sdt model should provide the best fit. These data model were simulated without experimental or longitudinal structural. In the code below, we fit each of the models to the data, and then compare them using the lrt (likelihood ratio test) function. For the sake of this presentation, the optional verbose_mhrm argument is set to FALSE and passed to the internal mhrm function to prevent the program from displaying estimation progress. Users will typically want to leave this argument set to its default (TRUE) setting.
+In the example code below, models were fitted to the Example 2 (ex2) simulation data. The ex2 data are based on the signal detection-weighted IRT model, and thus the sdt model should provide the best fit. These data were simulated without experimental or longitudinal structure. In the code below, we fit each of the models to the data and then compare them using the lrt (likelihood ratio test) function. For the sake of this example, the optional verbose_mhrm argument is set to FALSE to prevent the program from displaying estimation progress (users will typically want to leave this argument set to its default TRUE setting).
 
 ```{r}
 fit1p <- cog_irt(data = ex2$y, model = "1p", verbose_mhrm = FALSE)
@@ -33,17 +33,17 @@ fitsdt <- cog_irt(data = ex2$y, key = ex2$key, model = "sdt",
 lrt(fit1p, fit2p, fitsdt)
 ```
 
-The lrt function reports model log-likelihood values (logLik), the number of parameters estimated for each model (Par), Akaike and Bayesian Information Criterion values (AIC and BIC), the difference in model Chisq values, the degrees of freedom for the differences between models (Chisq diff), and the probability values for the differences (Pr(>Chisq)). As can be seen, the signal detection model produces the best fit (lowest AIC and BIC). Additionally, the two-parameter model fits significantly worse than the signal detection-weighted model.
-
-The CogIRT package provides summary methods so that we can see the resutls for best fitting model.
+The lrt function reports model log-likelihood values (logLik), the number of parameters estimated for each model (Par), Akaike and Bayesian Information Criterion values (AIC and BIC), the difference in model Chisq values, the degrees of freedom for the difference between models (Chisq diff), and the probability values for the differences (Pr(>Chisq)). As can be seen, the signal detection model produces the best fit (lowest AIC and BIC). The CogIRT package also provides summary methods as shown below.
 
 ```{r}
 summary(fitsdt)
 ```
 
-## Example 2
+In the summary table, Omega1 corresponds to the signal detection theory discrimination parameter (d'), and Omega2 corresponds to the signal detection theory bias parameter (C-centered).
 
-In the next xample, a two-parameter IRT model is fitted to the Example 4 (ex4) data. As noted above, Example 4 simulated data for a two-parameter IRT model based on a hypothetical longitudinal design. Specifically, it was assumed that the same 10 items were administered at 2 time-points to 50 examinees. Because the same items were hypothetically administered at each time point, the item slope parameters (lambda) and item intercept parameters (nu) were constrained to be equal across time. In the estimation code below, the constr argument is set to TRUE which constraints optimization of the item parameters.
+## Fit a Model to Multi-Time-Point Data with Constrained Item Parameters
+
+In the next example, a two-parameter IRT model is fitted to the Example 4 (ex4) data. The ex4 data were simulated based on a two-parameter IRT model and a hypothetical longitudinal study design. Specifically, it was assumed that the same 25 items were administered at 2 time-points to 200 examinees. Because the same items were hypothetically administered at each time point, the item slope parameters (lambda) and item intercept parameters (nu) were constrained to be equal across time. In the code below, the constraints argument is set to TRUE, which constrains the item parameters to be equal over the 2 time-points.
 
 ```{r}
 fit2pconstr <- cog_irt(data = ex4$y, model = '2p',
@@ -52,19 +52,17 @@ fit2pconstr <- cog_irt(data = ex4$y, model = '2p',
                              constraints = TRUE, verbose_mhrm = FALSE)
 ```
 
-The CogIRT package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called dummy coding scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferably because the first estimate (omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (omega1). This implies that the first panel (omega1) corresponds to time 1 scores and the second panel corresponds to difference score (omega2). For omega1, there is the expected "U-shaped" association between ability (or trait) estimates and error. That is, due to floor and ceiling effects, examinees in the middle of the ability distribution are measured more precicesly than examinees at the very high- or low-end of ability. The exact shape of the error distribution depends on the item parameters and ability scores in the sample.
+The CogIRT package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows the standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called "dummy coding" scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferable because the first estimate (omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (omega2). Thus, in the plot, this implies that the first panel (omega1) corresponds to time 1 scores, and the second panel corresponds to difference scores (omega2). For omega1, there is the expected "U-shaped" association between ability (or trait) estimates and error. That is, due to floor and ceiling effects, examinees in the middle of the ability distribution are measured more precisely than examinees at the very high or low ends of ability. The exact shape of the error distribution depends on the item parameters and ability scores in the sample.
 
 ```{r, fig.dim = c(7.2, 4)}
 plot(fit2pconstr)
 ```
 
-What is more novel is the pattern of error for omega2. Although still vaguely "U-shaped", the pattern is more complex. In fact, the shape is characteristic of the lower half of a tube. This is because error for the change scores is a function of the test properties, the score at time-point 1 (omega1), and change (omega2). Scores for participants who change little are measured precisely if they start and finish the study in the middle of the distribution, but are imprecisely measured if they start and finish in the  high- or low-ends of the distribution. Participants who start in the middle of the distribution and finish in either the low- or high-ends, or who start in the low- or high-ends and finish in the middle of distribution, and measured with moderate levels of the precision. This simulation highlights the complex nature of measurement in the context of change over time due to intervention or aging/maturation.
+What is more novel is the pattern of error for omega2. Although still vaguely "U-shaped", the pattern is more complex. In fact, the shape is characteristic of the lower half of a tube. This is because error for the change scores is a function of the test properties, the score at time-point 1 (omega1), and change (omega2). Scores for participants who change little are measured precisely if they start and finish the study in the middle of the distribution but are imprecisely measured if they start and finish at the high or low ends of the distribution. Participants who start in the middle of the distribution and finish in either the low or high ends, or who start in the low or high ends and finish in the middle of the distribution, are measured with moderate levels of precision. This simulation highlights the complex nature of measurement in the context of change over time due to intervention or aging/maturation.
 
-## Example 3
+## Fit a Model with Parameters for Experimental Structure
 
-This vignette demonstrates how to use the CogIRT package to fit a signal detection theory (SDT) weighted item response theory model to the nback data that comes installed with the package. We begin by fitting a model without contrast effects and then extend it to include linear and quadratic contrasts. 
-
-We first fit the SDT model without any contrast effects. This basic model estimates parameters for discrimination (dprime) and bias (Ccenter).
+This example uses the real (i.e., non-simulated) nback data that comes installed with the CogIRT package. The nback data comprise 100 item responses by 320 examinees across 4 memory load conditions. Since these are forced-choice accuracy data, we again use the signal detection-weighted model. We first fit the SDT model without any contrast effects. 
 
 ```{r, fig.dim = c(7.2, 4)}
 nback_fit <- cog_irt(
@@ -77,18 +75,57 @@ summary(nback_fit)
 plot(nback_fit)
 ```
 
-To explore how memory load affects performance, we can add linear and quadratic contrast effects. These contrasts model systematic changes across the memory load levels.
+To explore how memory load affects performance, we can add linear contrast effects. These contrasts model systematic changes across the memory load levels.
 
-```{r, fig.dim = c(7.2, 5)}
+```{r, fig.dim = c(7.2, 8)}
 nback_fit_contr <- cog_irt(
   data = nback$y,
   model = "sdt",
   contrast_codes = "contr.poly",
   key = nback$key,
   num_conditions = length(unique(nback$condition)),
-  num_contrasts = 3,  # Intercept, linear, and quadratic
+  num_contrasts = 2,  # Intercept and linear
   verbose_mhrm = FALSE
 )
 summary(nback_fit_contr)
 plot(nback_fit_contr)
 ```
+
+Note that the package warns the user: 'Omega estimates were Winsorized due to implausible values, likely caused by subjects with all correct or incorrect responses.' This warning is fairly common in datasets with perfect response profiles (i.e., either all correct or all incorrect). In this case, because the task involves forced-choice items with two types (targets and distractors), the error is driven by participants who answered all distractors correctly and all targets incorrectly, likely due to biased responding. As noted in the warning, users should interpret the estimates for such subjects with caution.
+
+The output is structured so that the first set of Omega estimates corresponds to the experimental effects on one latent ability/trait, the next set of outputs corresponds to the experimental effects on the second latent ability/trait, and so on. In this case, since we are using the signal detection-weighted model, the first measured ability is discrimination and the second is bias. In our analysis, we requested 2 contrasts (intercept effect and linear effect). Thus, Omega1 is the intercept value for discrimination, Omega2 is the linear slope estimate for discrimination, Omega3 is the intercept value for bias, and Omega4 is the linear slope estimate for bias.
+
+Focusing first on the interpretation of the plot output for Omega1 and Omega2 (i.e., the intercept and slope of discrimination), we can see that intercepts were measured more precisely than slopes. We also observe that memory performance declined as a function of memory load for most participants; that is, the discrimination slopes are generally negative. Turning to Omega3 and Omega4 (i.e., the intercept and slope for bias), we can see that most participants had intercept values between -1 and 1, but became more conservative as memory load increased (i.e., positive slopes for bias). Again, we see that intercepts were measured more precisely than slopes.
+
+## Adaptive Testing
+
+Computerized adaptive testing (CAT) is an assessment approach that uses algorithms to select optimal task items, minimizing the standard error of estimates. While CAT typically administers one item at a time, the CogIRT package can also adaptively select optimal task conditions (e.g., memory load levels). CogIRT supports both live and simulated adaptive testing.
+
+The two examples below use the Example 3 (ex3) and Example 5 (ex5) datasets provided in the package. Both are based on a signal detection-weighted model with an experimental structure consisting of a task comprising 10 conditions, each with 20 items (200 items total). The difference is that ex3 is a dataset with 50 subjects, while ex5 is a single-subject dataset.
+
+The cog_cat function operates on a single subject's data, making it suitable for live CAT applications. The example code uses the ex5 data to demonstrate the function's use. Since the simulated responses are provided for all items, most responses are set to NA in the example below to mimic a real adaptive testing situation, where only a subset of items are administered. The condition variable in the rda object helps identify items by task condition. For example, with 10 conditions of 20 items each, condition assigns values 1 through 10 to the respective item sets. In the code below, we set all items except those in condition 3 to NA (i.e., condition 3 is arbitrarily chosen to be the starting condition) and then use cog_cat to identify the next best item to administer.
+
+```{r}
+# Define an rda file
+rda = ex5
+# Set all items that are not part of 3 to NA (it not already NA)
+rda$y[which(!rda$condition %in% c(3))] <- NA
+# Determine next condition to administer
+cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
+```
+The output indicates that condition 10 will provide the most precise estimates of the intentional parameter (int_par). The information from this return list can be passed to software for stimulus presentation and response collection, such as PsychoPy or custom HTML/JavaScript. Most of the information about the model and parameter estimation is passed to the function via the rda object (see the package documentation for details on what the rda object must include). 
+
+In addition to live adaptive testing, the CogIRT package supports simulated adaptive testing using the cog_cat_sim function, as demonstrated in the code below. The summary method for cog_cat_sim provides details about the simulation, including bias, mean absolute error (MAE), and root mean square error (RMSE) for each Omega parameter specified by the int_par argument (i.e., the intentional parameter). Bias and MAE are calculated using either the true Omega values (if known from a simulation) or estimates derived from all available data. The plot method displays the individual and average standard errors of the estimates for each Omega parameter selected for adaptive testing.
+
+```{r, fig.dim = c(7.2, 4)}
+sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
+                    contrast_codes = "contr.poly", num_conditions = 10,
+                    num_contrasts = 2, constraints = NULL, key = ex3$key,
+                    omega = ex3$omega, item_disc = ex3$lambda,
+                    item_int = ex3$nu, conditions = ex3$condition,
+                    int_par = c(1, 2), start_conditions = 3,
+                    max_conditions = 3, link = "probit")
+summary(sim_res)
+plot(sim_res)
+```
+
