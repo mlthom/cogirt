@@ -126,7 +126,7 @@
 #' plot(nback_fit_contr)
 #'
 #' # The cog_irt function will occasionally produce a warning indicating
-#' # that some parameter estimates were Windsorized for plausible results.
+#' # that some parameter estimates were Winsorized for plausible results.
 #' # This typically happens due to perfectly correct or incorrect profiles.
 #' # In the nback data, for example, 4 examinees (157, 201, 268, 320) got all
 #' # targets wrong and all distractors correct. The program still finds
