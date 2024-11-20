@@ -109,8 +109,8 @@
 #' # Fit the SDT model to the n-back data. No contrast effects are specified
 #' # in this example. omega1 is the SDT discrimination (dprime) parameter and
 #' # omega2 is the SDT for bias (C-centered) parameter.
-#' nback_fit <- cog_irt(data = nback$y, model = "sdt", key = nback$key)
-#' plot(nback_fit)
+#' #nback_fit <- cog_irt(data = nback$y, model = "sdt", key = nback$key)
+#' #plot(nback_fit)
 #'
 #' # Fit the SDT model to the n-back data with contrast effects. There are four
 #' # memory loadconditions, and we specify two contrasts using "contr.poly".
@@ -119,11 +119,11 @@
 #' # parameter. omega1 and omega2 represent the intercept and linear
 #' # effects for discrimination (dprime), while omega3 and omega4 represent
 #' # the intercept and linear effects for bias (ccenter).
-#' nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
-#'                            contrast_codes = "contr.poly", key = nback$key,
-#'                            num_conditions = length(unique(nback$condition)),
-#'                            num_contrasts = 2)
-#' plot(nback_fit_contr)
+#' #nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
+#' #                          contrast_codes = "contr.poly", key = nback$key,
+#' #                            num_conditions = length(unique(nback$condition)),
+#' #                            num_contrasts = 2)
+#' #plot(nback_fit_contr)
 #'
 #' @export cog_irt
 #-------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     stop("'data' contains non-numeric values.",
          call. = FALSE)
   }
-  if (!all(unique(x = c(y)) %in% c(0, 1))) {
+  if (!all(unique(x = c(y)) %in% c(0, 1, NA))) {
     stop("CogIRT only supports dichotomous (0 vs. 1) data.",
          call. = FALSE)
   }
