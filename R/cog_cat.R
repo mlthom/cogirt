@@ -26,11 +26,8 @@
 #'  (pp. 57-75). https://doi.org/10.1007/978-0-387-85461-8_3
 #'
 #' @examples
-#' # Define an rda file
 #' rda = ex5
-#' # Set all items that are not part of 3 to NA (it not already NA)
 #' rda$y[which(!rda$condition %in% c(3))] <- NA
-#' # Determine next condition to administer
 #' cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 #'
 #' @export cog_cat

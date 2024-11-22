@@ -104,15 +104,17 @@ criterion (Segall, 2009) which allows the user to focus on a subset of
 intentional abilities (or traits).
 }
 \examples{
+\donttest{
 sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
-                    contrast_codes = "contr.poly", num_conditions = 10,
-                    num_contrasts = 2, constraints = NULL, key = ex3$key,
-                    omega = ex3$omega, item_disc = ex3$lambda,
-                    item_int = ex3$nu, conditions = ex3$condition,
-                    int_par = c(1, 2), start_conditions = 3,
-                    max_conditions = 3, link = "probit")
+                       contrast_codes = "contr.poly", num_conditions = 10,
+                       num_contrasts = 2, constraints = NULL, key = ex3$key,
+                       omega = ex3$omega, item_disc = ex3$lambda,
+                       item_int = ex3$nu, conditions = ex3$condition,
+                       int_par = c(1, 2), start_conditions = 3,
+                       max_conditions = 3, link = "probit")
 summary(sim_res)
 plot(sim_res)
+}
 
 }
 \references{
