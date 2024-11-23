@@ -31,11 +31,8 @@ condition to administer for single-subject computerized adaptive testing.
 Adaptive testing is guided by D-optimality (see Segall, 2009).
 }
 \examples{
-# Define an rda file
 rda = ex5
-# Set all items that are not part of 3 to NA (it not already NA)
 rda$y[which(!rda$condition \%in\% c(3))] <- NA
-# Determine next condition to administer
 cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 
 }
