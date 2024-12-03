@@ -7,6 +7,12 @@
 #' @param object An object of class 'cog_cat_sim'.
 #' @param ... Additional arguments.
 #'
+#' @return This function does not return a value to the R environment. Instead,
+#' it prints a comprehensive summary of the simulated computerized adaptive
+#' testing results to the console. The output includes model name and simulation
+#' settings as well as summary statistics for each parameter of interest. The
+#' function is intended for interactive use.
+#'
 #' @export
 #-------------------------------------------------------------------------------
 

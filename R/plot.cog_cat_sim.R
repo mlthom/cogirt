@@ -7,6 +7,9 @@
 #' @param x An object of class 'cog_cat_sim'.
 #' @param ... Additional arguments.
 #'
+#' @return This function returns a base R plot displayed in the graphics device.
+#' It does not return any value to the R environment.
+#'
 #' @export
 #-------------------------------------------------------------------------------
 

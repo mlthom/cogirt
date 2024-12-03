@@ -7,6 +7,9 @@
 #' @param x An x of class 'cog_irt'.
 #' @param ... Additional arguments.
 #'
+#' @return This function returns a base R plot displayed in the graphics device.
+#' It does not return any value to the R environment.
+#'
 #' @export
 #-------------------------------------------------------------------------------
 

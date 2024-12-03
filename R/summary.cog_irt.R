@@ -6,6 +6,14 @@
 #' @param object An object of class 'cog_irt'.
 #' @param ... Additional arguments.
 #'
+#' @return This function does not return a value to the R environment. Instead,
+#' it prints a detailed summary of the specified IRT model to the console. The
+#' output includes the type of IRT model (e.g., One-Parameter, Two-Parameter,
+#' etc.), the number of subjects and items in the dataset, the log-likelihood of
+#' the model, and summary statistics (mean, standard deviation, median standard
+#' error, and reliability) for estimated parameters. The function is intended
+#' for interactive use to review the results of the fitted model.
+#'
 #' @export
 #-------------------------------------------------------------------------------
 

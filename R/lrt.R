@@ -6,6 +6,8 @@
 #' @param object An object of class 'cogirt'.
 #' @param ... Additional arguments.
 #'
+#' @return An object of class "anova".
+#'
 #' @export
 #-------------------------------------------------------------------------------
 
