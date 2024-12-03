@@ -116,7 +116,6 @@ mhmc_sc <- function(
       sep = " "
     )
   }
-  set.seed(1)
   # Initialize objects to save recent draws for tuning, objects to save final
   # draws, and objects to save final draws. For candidate proposal variance(see
   # BDA3 p. 296.
