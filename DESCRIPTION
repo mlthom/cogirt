@@ -10,8 +10,9 @@ Description: CogIRT is an R package designed to support the application of item
     enables users to analyze and improve the measurement of individual 
     differences in hypothesized contrast effects, particularly in the context of
     tasks, interventions, or maturational/aging effects. The package offers 
-    tools for parameter estimation, model comparisons, computerized adaptive 
-    testing, and data simulation.
+    tools for parameter estimation, model comparisons, computerized adaptive
+    testing, and data simulation. The methods are based on Thomas et al. (2020) 
+    <doi:10.1177/0013164420919898>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
