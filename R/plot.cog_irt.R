@@ -17,6 +17,8 @@ plot.cog_irt <- function(x, ...) {
   if (nrow(x = x$omega1) == 1) {
     cat("Plot is only valid for datasets with more than one subject.")
   } else {
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(expr = par(... = oldpar))
     def_par <- par()["mfrow"]
     par(mfrow = n2mfrow(nr.plots = ncol(x = x$omega1), asp = 2))
     for (i in seq_len(ncol(x = x$omega1))) {

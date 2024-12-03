@@ -14,6 +14,8 @@
 #-------------------------------------------------------------------------------
 
 plot.cog_cat_sim <- function(x, ...) {
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(expr = par(... = oldpar))
   def_par <- par()["mfrow"]
   par(mfrow = n2mfrow(nr.plots = length(x = x$int_par), asp = 2))
   for (i in seq_len(length.out = length(x = x$int_par))) {
