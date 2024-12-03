@@ -6,7 +6,7 @@
 \alias{CogIRT-package}
 \title{CogIRT: Cognitive Testing Using Item Response Theory}
 \description{
-Item response theory (IRT) tools for experimental cognitive testing.
+CogIRT is an R package designed to support the application of item response theory (IRT) psychometric models in cognitive science research. It enables users to analyze and improve the measurement of individual differences in hypothesized contrast effects, particularly in the context of tasks, interventions, or maturational/aging effects. The package offers tools for parameter estimation, model comparisons, computerized adaptive testing, and data simulation.
 }
 \author{
 \strong{Maintainer}: Michael Thomas \email{michael.l.thomas@colostate.edu}

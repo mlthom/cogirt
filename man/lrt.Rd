@@ -11,6 +11,9 @@ lrt(object, ...)
 
 \item{...}{Additional arguments.}
 }
+\value{
+An object of class "anova".
+}
 \description{
 This function compares fit of models produced by CogIRT.
 }

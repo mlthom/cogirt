@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+This function returns a base R plot displayed in the graphics device.
+It does not return any value to the R environment.
+}
 \description{
 This function produces plots for parameter estimates produced for various
 CogIRT models.

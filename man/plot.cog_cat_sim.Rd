@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+This function returns a base R plot displayed in the graphics device.
+It does not return any value to the R environment.
+}
 \description{
 This function produces plots for standard errors for
 cog_cat_sim results
