@@ -135,7 +135,7 @@ mhrm <- function(
     niter <- ellipsis$niter
   }
   if (is.null(x = ellipsis$max_iter_mhrm)) {
-    max_iter_mhrm <- 200
+    max_iter_mhrm <- 400
   } else {
     max_iter_mhrm <- ellipsis$max_iter_mhrm
   }
@@ -206,7 +206,7 @@ mhrm <- function(
   }
 
   # Set up mhrm loop parameters
-  tol <- .001
+  tol <- .01
   log_lik <- NA
   #start iteration
   if (verbose_mhrm) {
