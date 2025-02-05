@@ -79,7 +79,7 @@ The CogIRT package also provides plot methods. We plot the ex4 fitted model obje
 plot(fit2pconstr)
 ```
 
-![](figure/fit2pconstr-plot-1.png)
+![](fit2pconstr-plot-1.png)
 
 ## Fit a Model with Parameters for Experimental Structure
 
@@ -118,7 +118,7 @@ summary(nback_fit)
 plot(nback_fit)
 ```
 
-![](figure/nback_fit-plot-1.png)
+![](nback_fit-plot-1.png)
 
 To explore how memory load affects performance, we can add linear contrast effects. These contrasts model systematic changes across the memory load levels.
 
@@ -160,7 +160,7 @@ summary(nback_fit_contr)
 plot(nback_fit_contr)
 ```
 
-![](figure/nback_fit_contr-plot-1.png)
+![](nback_fit_contr-plot-1.png)
 
 The output is structured so that the first set of Omega estimates corresponds to the experimental effects on one latent ability/trait, the next set of outputs corresponds to the experimental effects on the second latent ability/trait, and so on. In this case, since we are using the signal detection-weighted model, the first measured ability is discrimination and the second is bias. In our analysis, we requested 2 contrasts (intercept effect and linear effect). Thus, Omega1 is the intercept value for discrimination, Omega2 is the linear slope estimate for discrimination, Omega3 is the intercept value for bias, and Omega4 is the linear slope estimate for bias.
 
@@ -235,5 +235,5 @@ summary(sim_res)
 plot(sim_res)
 ```
 
-![](figure/sim_res-plot-1.png)
+![](sim_res-plot-1.png)
 
