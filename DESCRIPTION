@@ -1,7 +1,7 @@
 Package: CogIRT
 Type: Package
 Title: Cognitive Testing Using Item Response Theory
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
     person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre"))
     )
