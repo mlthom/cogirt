@@ -181,17 +181,21 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "lambda0")]
   }
   if (!is.null(x = contrast_codes)) {
-    if (contrast_codes %in% c("contr.helmert", "contr.poly", "contr.sum",
-                              "contr.treatment", "contr.SAS")) {
-      codes <- cbind(1, get(x = contrast_codes)(n = J))[, 1:N]
-      tmp <- matrix(data = 0, nrow = J * M, ncol = M * N)
-      for (j in 1:J) {
-        for (m in 1:M) {
-          tmp[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
-            codes[j, ]
+    if (is.matrix(x = contrast_codes)) {
+      gamma0 <- contrast_codes
+    } else {
+      if (contrast_codes %in% c("contr.helmert", "contr.poly", "contr.sum",
+                                "contr.treatment", "contr.SAS")) {
+        codes <- cbind(1, get(x = contrast_codes)(n = J))[, 1:N]
+        tmp <- matrix(data = 0, nrow = J * M, ncol = M * N)
+        for (j in 1:J) {
+          for (m in 1:M) {
+            tmp[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+              codes[j, ]
+          }
         }
+        gamma0 <- tmp
       }
-      gamma0 <- tmp
     }
   } else {
     gamma0 <- diag(x = 1, nrow = J * M, ncol = M * N)
