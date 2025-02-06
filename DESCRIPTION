@@ -1,11 +1,11 @@
-Package: CogIRT
+Package: cogirt
 Type: Package
 Title: Cognitive Testing Using Item Response Theory
 Version: 1.0.0
 Authors@R: c(
     person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre"))
     )
-Description: The CogIRT package is designed to help users psychometrically 
+Description: The cogirt package is designed to help users psychometrically 
     analyze latent individual differences related to tasks, interventions, or 
     maturational/aging effects in the context of experimental or longitudinal 
     cognitive research. The package provides tools for parameter estimation, 

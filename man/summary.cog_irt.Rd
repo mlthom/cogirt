@@ -21,5 +21,5 @@ error, and reliability) for estimated parameters. The function is intended
 for interactive use to review the results of the fitted model.
 }
 \description{
-This function provides summary statistics for CogIRT models.
+This function provides summary statistics for cogirt models.
 }

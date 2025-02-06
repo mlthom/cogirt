@@ -2,7 +2,7 @@
 % Please edit documentation in R/lrt.R
 \name{lrt}
 \alias{lrt}
-\title{Method of anova for CogIRT S3}
+\title{Method of anova for cogirt S3}
 \usage{
 lrt(object, ...)
 }
@@ -15,5 +15,5 @@ lrt(object, ...)
 An object of class "anova".
 }
 \description{
-This function compares fit of models produced by CogIRT.
+This function compares fit of models produced by cogirt.
 }

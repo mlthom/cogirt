@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-#' Method of Plot for CogIRT S3
+#' Method of Plot for cogirt S3
 #'
 #' This function produces plots for parameter estimates produced for various
-#' CogIRT models.
+#' cogirt models.
 #'
 #' @param x An x of class 'cog_irt'.
 #' @param ... Additional arguments.

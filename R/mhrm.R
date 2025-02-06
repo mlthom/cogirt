@@ -148,14 +148,14 @@ mhrm <- function(
     if (gamma0 %in% c("contr.helmert", "contr.poly", "contr.sum",
                       "contr.treatment", "contr.SAS")) {
       contrast_codes <- cbind(1, get(x = gamma0)(n = J))[, 1:N]
-      tmp <- matrix(data = 0, nrow = J * M, ncol = M * N)
+      cogirt <- matrix(data = 0, nrow = J * M, ncol = M * N)
       for (j in 1:J) {
         for (m in 1:M) {
-          tmp[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+          cogirt[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
             contrast_codes[j, ]
         }
       }
-      gamma0 <- tmp
+      gamma0 <- cogirt
     }
   }
   omega_warn <- FALSE
@@ -252,7 +252,7 @@ mhrm <- function(
 
       gain <- 1 / iter
 
-      tmp <- deriv_omega(
+      cogirt <- deriv_omega(
         y = y,
         omega = omega0,
         omega_mu = omega_mu,
@@ -326,14 +326,14 @@ mhrm <- function(
         link = link
       )
       grad_omega <- matrix(
-        data = unlist(tmp$fpd),
+        data = unlist(cogirt$fpd),
         nrow = nrow(omega0),
         ncol = ncol(omega0),
         byrow = TRUE
       )
       info <- array(
         data = unlist(
-          tmp$post_info),
+          cogirt$post_info),
         dim =  c(ncol(omega0), ncol(omega0), nrow(y))
       )
       info1_omega <- array(data = info0_omega, dim = dim(x = info)) +
@@ -483,7 +483,7 @@ mhrm <- function(
 
       gain <- 1 / iter
 
-      tmp <- deriv_lambda(
+      cogirt <- deriv_lambda(
         y = y,
         omega = if (est_omega) {
           matrix(
@@ -554,14 +554,14 @@ mhrm <- function(
         link = link
       )
       grad_lambda <- matrix(
-        data = unlist(tmp$fpd),
+        data = unlist(cogirt$fpd),
         nrow = nrow(lambda0),
         ncol = ncol(lambda0),
         byrow = TRUE
       )
       info <- array(
         data = unlist(
-          tmp$post_info),
+          cogirt$post_info),
         dim =  c(ncol(lambda0), ncol(lambda0), ncol(y))
       )
       info1_lambda <- array(data = info0_lambda, dim = dim(x = info)) +
@@ -760,7 +760,7 @@ mhrm <- function(
 
       gain <- 1 / iter
 
-      tmp <- deriv_nu(
+      cogirt <- deriv_nu(
         y = y,
         omega = if (est_omega) {
           matrix(
@@ -827,14 +827,14 @@ mhrm <- function(
         link = link
       )
       grad_nu <- matrix(
-        data = unlist(tmp$fpd),
+        data = unlist(cogirt$fpd),
         nrow = nrow(nu0),
         ncol = ncol(nu0),
         byrow = TRUE
       )
       info <- array(
         data = unlist(
-          tmp$post_info),
+          cogirt$post_info),
         dim =  c(ncol(nu0), ncol(nu0), ncol(y))
       )
       info1_nu <- array(data = info0_nu, dim = dim(x = info)) +

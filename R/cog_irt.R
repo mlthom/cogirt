@@ -72,7 +72,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
          call. = FALSE)
   }
   if (!all(unique(x = c(y)) %in% c(0, 1, NA))) {
-    stop("CogIRT only supports dichotomous (0 vs. 1) data.",
+    stop("cogirt only supports dichotomous (0 vs. 1) data.",
          call. = FALSE)
   }
   if (is.null(x = model)) {
@@ -187,14 +187,14 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       if (contrast_codes %in% c("contr.helmert", "contr.poly", "contr.sum",
                                 "contr.treatment", "contr.SAS")) {
         codes <- cbind(1, get(x = contrast_codes)(n = J))[, 1:N]
-        tmp <- matrix(data = 0, nrow = J * M, ncol = M * N)
+        cogirt <- matrix(data = 0, nrow = J * M, ncol = M * N)
         for (j in 1:J) {
           for (m in 1:M) {
-            tmp[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
+            cogirt[(m + M * (j - 1)), (((m - 1) * N + 1):((m - 1) * N + N))] <-
               codes[j, ]
           }
         }
-        gamma0 <- tmp
+        gamma0 <- cogirt
       }
     }
   } else {

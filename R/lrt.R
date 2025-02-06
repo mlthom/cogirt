@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
-#' Method of anova for CogIRT S3
+#' Method of anova for cogirt S3
 #'
-#' This function compares fit of models produced by CogIRT.
+#' This function compares fit of models produced by cogirt.
 #'
 #' @param object An object of class 'cogirt'.
 #' @param ... Additional arguments.

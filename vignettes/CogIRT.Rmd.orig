@@ -1,9 +1,9 @@
 ---
-title: "CogIRT"
+title: "cogirt"
 author: "Michael L. Thomas"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CogIRT}
+  %\VignetteIndexEntry{cogirt}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(CogIRT)
+library(cogirt)
 ```
 
 # Introduction
@@ -33,7 +33,7 @@ fitsdt <- cog_irt(data = ex2$y, key = ex2$key, model = "sdt",
 lrt(fit1p, fit2p, fitsdt)
 ```
 
-The lrt function reports model log-likelihood values (logLik), the number of parameters estimated for each model (Par), Akaike and Bayesian Information Criterion values (AIC and BIC), the difference in model Chisq values, the degrees of freedom for the difference between models (Chisq diff), and the probability values for the differences (Pr(>Chisq)). As can be seen, the signal detection model produces the best fit (lowest AIC and BIC). The CogIRT package also provides summary methods as shown below. The model used will ultimately determine the interpretation of each Omega parameter.
+The lrt function reports model log-likelihood values (logLik), the number of parameters estimated for each model (Par), Akaike and Bayesian Information Criterion values (AIC and BIC), the difference in model Chisq values, the degrees of freedom for the difference between models (Chisq diff), and the probability values for the differences (Pr(>Chisq)). As can be seen, the signal detection model produces the best fit (lowest AIC and BIC). The cogirt package also provides summary methods as shown below. The model used will ultimately determine the interpretation of each Omega parameter.
 
 ```{r}
 summary(fitsdt)
@@ -52,7 +52,7 @@ fit2pconstr <- cog_irt(data = ex4$y, model = '2p',
                              constraints = TRUE, verbose_mhrm = FALSE)
 ```
 
-The CogIRT package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows the standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called "dummy coding" scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferable because the first estimate (Omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (Omega2). Thus, in the plot, this implies that the first panel (Omega1) corresponds to time 1 scores, and the second panel corresponds to difference scores (Omega2).
+The cogirt package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows the standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called "dummy coding" scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferable because the first estimate (Omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (Omega2). Thus, in the plot, this implies that the first panel (Omega1) corresponds to time 1 scores, and the second panel corresponds to difference scores (Omega2).
 
 ```{r fit2pconstr-plot, fig.dim = c(7.2, 4), fig.cap=""}
 plot(fit2pconstr)
@@ -60,7 +60,7 @@ plot(fit2pconstr)
 
 ## Fit a Model with Parameters for Experimental Structure
 
-This example uses the real (i.e., non-simulated) nback data that comes installed with the CogIRT package. The nback data comprise 100 item responses by 320 examinees across 4 memory load conditions. Since these are forced-choice accuracy data, we again use the signal detection-weighted model. We first fit the SDT model without any contrast effects.
+This example uses the real (i.e., non-simulated) nback data that comes installed with the cogirt package. The nback data comprise 100 item responses by 320 examinees across 4 memory load conditions. Since these are forced-choice accuracy data, we again use the signal detection-weighted model. We first fit the SDT model without any contrast effects.
 
 ```{r}
 nback_fit <- cog_irt(
@@ -103,7 +103,7 @@ The output is structured so that the first set of Omega estimates corresponds to
 
 ## Adaptive Testing
 
-Computerized adaptive testing (CAT) is an assessment approach that uses algorithms to select optimal task items, minimizing the standard error of estimates. While CAT typically administers one item at a time, the CogIRT package can also adaptively select optimal task conditions (e.g., memory load levels). CogIRT supports both live and simulated adaptive testing.
+Computerized adaptive testing (CAT) is an assessment approach that uses algorithms to select optimal task items, minimizing the standard error of estimates. While CAT typically administers one item at a time, the cogirt package can also adaptively select optimal task conditions (e.g., memory load levels). cogirt supports both live and simulated adaptive testing.
 
 The two examples below use the Example 3 (ex3) and Example 5 (ex5) datasets provided in the package. Both are based on a signal detection-weighted model with an experimental structure consisting of a task comprising 10 conditions, each with 20 items (200 items total). The difference is that ex3 is a dataset with 50 subjects, while ex5 is a single-subject dataset.
 
@@ -120,7 +120,7 @@ cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 
 The output indicates that condition 10 will provide the most precise estimates of the intentional parameter (int_par). The information from this return list can be passed to software for stimulus presentation and response collection, such as PsychoPy or custom HTML/JavaScript. Most of the information about the model and parameter estimation is passed to the function via the rda object (see the package documentation for details on what the rda object must include).
 
-In addition to live adaptive testing, the CogIRT package supports simulated adaptive testing using the cog_cat_sim function, as demonstrated in the code below.
+In addition to live adaptive testing, the cogirt package supports simulated adaptive testing using the cog_cat_sim function, as demonstrated in the code below.
 
 ```{r}
 sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,

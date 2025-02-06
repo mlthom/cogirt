@@ -1,10 +1,10 @@
-citHeader("To cite CogIRT in publications use:")
+citHeader("To cite cogirt in publications use:")
 
 bibentry(
   bibtype = "Manual",
-  title = "CogIRT: Item Response Theory for Cognitive Testing",
+  title = "cogirt: Item Response Theory for Cognitive Testing",
   author = person(c("Michael Thomas")),
   year = "2024",
   note = "R package version 0.1.0",
-  url = "https://CRAN.R-project.org/package=CogIRT"
+  url = "https://CRAN.R-project.org/package=cogirt"
 )

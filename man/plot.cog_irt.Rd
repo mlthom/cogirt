@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.cog_irt.R
 \name{plot.cog_irt}
 \alias{plot.cog_irt}
-\title{Method of Plot for CogIRT S3}
+\title{Method of Plot for cogirt S3}
 \usage{
 \method{plot}{cog_irt}(x, ...)
 }
@@ -17,5 +17,5 @@ It does not return any value to the R environment.
 }
 \description{
 This function produces plots for parameter estimates produced for various
-CogIRT models.
+cogirt models.
 }

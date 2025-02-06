@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#' Method of Plot for Simulated Adaptive Testing Using CogIRT S3
+#' Method of Plot for Simulated Adaptive Testing Using cogirt S3
 #'
 #' This function produces plots for standard errors for
 #' cog_cat_sim results

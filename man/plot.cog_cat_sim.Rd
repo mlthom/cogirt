@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.cog_cat_sim.R
 \name{plot.cog_cat_sim}
 \alias{plot.cog_cat_sim}
-\title{Method of Plot for Simulated Adaptive Testing Using CogIRT S3}
+\title{Method of Plot for Simulated Adaptive Testing Using cogirt S3}
 \usage{
 \method{plot}{cog_cat_sim}(x, ...)
 }

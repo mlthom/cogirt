@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 #' Method of Summary for cog_irt S3
 #'
-#' This function provides summary statistics for CogIRT models.
+#' This function provides summary statistics for cogirt models.
 #'
 #' @param object An object of class 'cog_irt'.
 #' @param ... Additional arguments.
@@ -33,7 +33,7 @@ summary.cog_irt <- function(object, ...) {
     "\n",
     "-------------------------------------------------------------------------",
     "\n",
-    paste("CogIRT: IRT Estimates for the ", mod_name, sep = ""),
+    paste("cogirt: IRT Estimates for the ", mod_name, sep = ""),
     "\n",
     "-------------------------------------------------------------------------",
     "\n",

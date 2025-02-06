@@ -21,7 +21,7 @@ summary.cog_cat_sim <- function(object, ...) {
     "\n",
     "-------------------------------------------------------------------------",
     "\n",
-    "CogIRT: Results of Simulated Computerized Adaptive Testing",
+    "cogirt: Results of Simulated Computerized Adaptive Testing",
     "\n",
     "-------------------------------------------------------------------------",
     "\n",
