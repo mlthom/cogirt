@@ -33,7 +33,7 @@ mhmc_sc(
   max_tune = NULL,
   niter = NULL,
   weight = 1,
-  verbose_mhmc = FALSE
+  verbose = FALSE
 )
 }
 \arguments{
@@ -95,7 +95,7 @@ values for the selected model (character).}
 
 \item{weight}{Determines the weight of old versus new covariance matrix.}
 
-\item{verbose_mhmc}{Print progress of MHMC sampler.}
+\item{verbose}{Print progress of MHMC sampler.}
 }
 \value{
 List with elements omega_draws (list of (niter - burn) / thin draws

@@ -26,10 +26,10 @@ library(cogirt)
 In the code below, models were fitted to the Example 2 (ex2) simulation data. The ex2 data are based on the signal detection-weighted IRT model, and thus the sdt model should provide the best fit. These data were simulated without experimental or longitudinal structure. We fit each of the models to the data and then compare them using the lrt (likelihood ratio test) function.
 
 ```{r}
-fit1p <- cog_irt(data = ex2$y, model = "1p", verbose_mhrm = FALSE)
-fit2p <- cog_irt(data = ex2$y, model = "2p", verbose_mhrm = FALSE)
+fit1p <- cog_irt(data = ex2$y, model = "1p", verbose = FALSE)
+fit2p <- cog_irt(data = ex2$y, model = "2p", verbose = FALSE)
 fitsdt <- cog_irt(data = ex2$y, key = ex2$key, model = "sdt",
-                  verbose_mhrm = FALSE)
+                  verbose = FALSE)
 lrt(fit1p, fit2p, fitsdt)
 ```
 
@@ -49,7 +49,7 @@ In the next example, a two-parameter IRT model is fitted to the Example 4 (ex4) 
 fit2pconstr <- cog_irt(data = ex4$y, model = '2p',
                              contrast_codes = "contr.treatment",
                              num_conditions = 2, num_contrasts = 2,
-                             constraints = TRUE, verbose_mhrm = FALSE)
+                             constraints = TRUE, verbose = FALSE)
 ```
 
 The cogirt package also provides plot methods. We plot the ex4 fitted model object (fit2pconstr). The plot shows the standard error of estimate for the fitted parameters. Note that in the function call we used the R base stats package contr.treatment function to define the contrast_codes argument. contr.treatment produces weights that follow the so-called "dummy coding" scheme. These are not true contrast codes because they do not sum to 0. However, in the context of longitudinal research, this coding scheme may sometimes be preferable because the first estimate (Omega1) corresponds to the subject's time 1 score and the second estimate corresponds to the subject's change or difference score between the first and second time point (Omega2). Thus, in the plot, this implies that the first panel (Omega1) corresponds to time 1 scores, and the second panel corresponds to difference scores (Omega2).
@@ -67,7 +67,7 @@ nback_fit <- cog_irt(
   data = nback$y,
   model = "sdt",
   key = nback$key,
-  verbose_mhrm = FALSE
+  verbose = FALSE
 )
 ```
 
@@ -88,7 +88,7 @@ nback_fit_contr <- cog_irt(
   key = nback$key,
   num_conditions = 4,
   num_contrasts = 2,  # Intercept and linear
-  verbose_mhrm = FALSE
+  verbose = FALSE
 )
 ```
 

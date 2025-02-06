@@ -181,7 +181,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
         FALSE
       },
       est_nu = if (is.null(x = item_int)) TRUE else FALSE,
-      link = link, verbose_mhrm = FALSE
+      link = link, verbose = FALSE
     )
     tmp_arg$omega0 <- omega
     tmp_arg$lambda0 <- item_disc
@@ -215,7 +215,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
     contrast_codes = contrast_codes, num_conditions = num_conditions,
     num_contrasts = num_contrasts, constraints = constraints, key = key,
     omega0 = omega0, est_lambda = FALSE, est_nu = FALSE,
-    lambda0 = tmp_item_disc, nu0 = item_int, link = link, verbose_mhrm = FALSE
+    lambda0 = tmp_item_disc, nu0 = item_int, link = link, verbose = FALSE
   )
   se_omega <- lapply(
     X = tmp_res$info1_omega,
@@ -290,7 +290,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
             lambda0 = tmp_item_disc,
             nu0 = item_int,
             link = link,
-            verbose_mhrm = FALSE
+            verbose = FALSE
           )[["info1_omega"]][[1]]
         }
         next_condition[k, ] <- incomplete_conditions[[k]][
@@ -319,7 +319,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
       num_contrasts = num_contrasts, constraints = constraints, key = key,
       omega0 = tmp_res$omega1[, , drop = FALSE], est_lambda = FALSE,
       est_nu = FALSE, lambda0 = tmp_item_disc, nu0 = item_int, link = link,
-      verbose_mhrm = FALSE
+      verbose = FALSE
     )
     se_omega <- ifelse(
       test = crit_se,

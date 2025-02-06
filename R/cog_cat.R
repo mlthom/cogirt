@@ -74,7 +74,7 @@ cog_cat <- function(rda = NULL, obj_fun = NULL, int_par = NULL) {
     tune_int = 0,
     max_tune = 0,
     niter = 6,
-    verbose_mhrm = FALSE,
+    verbose = FALSE,
     max_iter_mhrm = 200
   )
 

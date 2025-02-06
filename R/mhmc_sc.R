@@ -37,7 +37,7 @@
 #' @param max_tune Determines when tunning ends (scalar).
 #' @param niter Number of iterations of the MHMC sampler.
 #' @param weight Determines the weight of old versus new covariance matrix.
-#' @param verbose_mhmc Print progress of MHMC sampler.
+#' @param verbose Print progress of MHMC sampler.
 #'
 #' @return List with elements omega_draws (list of (niter - burn) / thin draws
 #' for K by MN omega matrix), lambda_draws (list of (niter - burn) / thin draws
@@ -88,7 +88,7 @@ mhmc_sc <- function(
     max_tune = NULL,
     niter = NULL,
     weight = 1,
-    verbose_mhmc = FALSE
+    verbose = FALSE
 ) {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package \"MASS\" needed for the mhmc_sc function to work. Please
@@ -106,7 +106,7 @@ mhmc_sc <- function(
          call. = FALSE)
   }
 
-  if (verbose_mhmc) {
+  if (verbose) {
     cat(
       "\n",
       "MCMC LOG",
@@ -681,7 +681,7 @@ mhmc_sc <- function(
     lambda0 <- lambda1
     zeta0 <- zeta1
     nu0 <- nu1
-    if (i %in% seq(from = 1, to = niter, by = thin) && verbose_mhmc) {
+    if (i %in% seq(from = 1, to = niter, by = thin) && verbose) {
       cat("Iter.",
           format(x = i, width = 4, justify = "left"), sep = "",
           append = TRUE

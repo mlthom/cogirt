@@ -139,10 +139,10 @@ mhrm <- function(
   } else {
     max_iter_mhrm <- ellipsis$max_iter_mhrm
   }
-  if (is.null(x = ellipsis$verbose_mhrm)) {
-    verbose_mhrm <- TRUE
+  if (is.null(x = ellipsis$verbose)) {
+    verbose <- TRUE
   } else {
-    verbose_mhrm <- ellipsis$verbose_mhrm
+    verbose <- ellipsis$verbose
   }
   if (is.character(x = gamma0)) {
     if (gamma0 %in% c("contr.helmert", "contr.poly", "contr.sum",
@@ -162,7 +162,7 @@ mhrm <- function(
   lambda_warn <- FALSE
   nu_warn <- FALSE
   # STEP 0: MCMC burn in -------------------------------------------------------
-  if (verbose_mhrm) {
+  if (verbose) {
     cat(
       "MCMC Burn-In Start Time",
       format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -209,7 +209,7 @@ mhrm <- function(
   tol <- .01
   log_lik <- NA
   #start iteration
-  if (verbose_mhrm) {
+  if (verbose) {
     cat(
       "... burn-in completed at",
       format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -223,7 +223,7 @@ mhrm <- function(
   go <- TRUE
   if (est_omega) {
 
-    if (verbose_mhrm) {
+    if (verbose) {
       cat(
         "Omega MHRM Start Time",
         format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -411,7 +411,7 @@ mhrm <- function(
           info0_omega <- info1_omega
           omega0 <- omega1
         }
-        if (verbose_mhrm) {
+        if (verbose) {
           cat("\r                                                           \r")
           cat(
             "\r",
@@ -427,7 +427,7 @@ mhrm <- function(
         iter <= max_iter_mhrm
       ) {
         go <- FALSE
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm converged at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -436,7 +436,7 @@ mhrm <- function(
           )
         }
       } else if (iter == max_iter_mhrm) {
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm failed to converge at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -454,7 +454,7 @@ mhrm <- function(
   go <- TRUE
   if (est_lambda) {
 
-    if (verbose_mhrm) {
+    if (verbose) {
       cat(
         "Lambda MHRM Start Time",
         format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -689,7 +689,7 @@ mhrm <- function(
           info0_lambda <- info1_lambda
           lambda0 <- lambda1
         }
-        if (verbose_mhrm) {
+        if (verbose) {
           cat("\r                                                           \r")
           cat(
             "\r",
@@ -705,7 +705,7 @@ mhrm <- function(
         iter <= max_iter_mhrm
       ) {
         go <- FALSE
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm converged at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -714,7 +714,7 @@ mhrm <- function(
           )
         }
       } else if (iter == max_iter_mhrm) {
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm failed to converge at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -732,7 +732,7 @@ mhrm <- function(
   go <- TRUE
   if (est_nu) {
 
-    if (verbose_mhrm) {
+    if (verbose) {
       cat(
         "Nu MHRM Start Time",
         format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -941,7 +941,7 @@ mhrm <- function(
           info0_nu <- info1_nu
           nu0 <- nu1
         }
-        if (verbose_mhrm) {
+        if (verbose) {
           cat("\r                                                           \r")
           cat(
             "\r",
@@ -957,7 +957,7 @@ mhrm <- function(
         iter <= max_iter_mhrm
       ) {
         go <- FALSE
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm converged at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -966,7 +966,7 @@ mhrm <- function(
           )
         }
       } else if (iter == max_iter_mhrm) {
-        if (verbose_mhrm) {
+        if (verbose) {
           cat(
             "\n... algorithm failed to converge at",
             format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
@@ -1003,7 +1003,7 @@ mhrm <- function(
   )$p
   log_lik <- sum(x = log(x = (p ^ y) * (1 - p) ^ (1 - y)), na.rm = TRUE)
 
-  if (verbose_mhrm) {
+  if (verbose) {
     cat(
       "Final logLik is ",
       format(x = round(x = log_lik, digits = 4), nsmall = 4),
