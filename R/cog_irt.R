@@ -137,7 +137,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     J <- 1
   }
   if (J == 1) I <- ncol(x = y) else I <- ncol(x = y) / J
-  if (I %% 1 != 0) {
+  if ((I %% 1 != 0) & !is.matrix(x = contrast_codes)) {
     stop("Number of items in y must be a multiple of J.",
          call. = FALSE)
   }
