@@ -29,9 +29,9 @@ fitsdt <- cog_irt(data = ex2$y, key = ex2$key, model = "sdt",
                   verbose = FALSE)
 lrt(fit1p, fit2p, fitsdt)
 #>         logLik Par    AIC    BIC Chisq diff df diff Pr(>Chisq)    
-#> fit1p  -930.47 150 2160.9 2447.7                                  
-#> fit2p  -881.17 250 2262.3 2740.3      98.60     100     0.5208    
-#> fitsdt -823.26 200 2046.5 2428.9     115.81      50  3.884e-07 ***
+#> fit1p  -930.79 150 2161.6 2448.4                                  
+#> fit2p  -877.15 250 2254.3 2732.3     107.28     100     0.2912    
+#> fitsdt -821.73 200 2043.5 2425.9     110.83      50  1.681e-06 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -48,12 +48,12 @@ summary(fitsdt)
 #>  
 #>  Number of Subjects =  50 
 #>  Number of Items    =  100 
-#>  log-Likelihood     =  -823.2627 
+#>  log-Likelihood     =  -821.7321 
 #>  
 #>                       Mean              SD      Median SEE     Reliability 
-#>  Omega1              2.110           0.788           0.681           0.608 
-#>  Omega2              0.883           0.551           0.389           0.711 
-#>  Nu                  0.752           0.596           0.566           0.347 
+#>  Omega1              2.084           0.785           0.681           0.605 
+#>  Omega2              1.003           0.547           0.388           0.707 
+#>  Nu                  0.744           0.625           0.576           0.331 
 #> 
 #>  -------------------------------------------------------------------------
 ```
@@ -79,7 +79,7 @@ The cogirt package also provides plot methods. We plot the ex4 fitted model obje
 plot(fit2pconstr)
 ```
 
-![](fit2pconstr-plot-1.png)
+![](vigfig-fit2pconstr-plot-1.png)
 
 ## Fit a Model with Parameters for Experimental Structure
 
@@ -107,18 +107,18 @@ summary(nback_fit)
 #>  
 #>  Number of Subjects =  320 
 #>  Number of Items    =  100 
-#>  log-Likelihood     =  -11071.84 
+#>  log-Likelihood     =  -11071.38 
 #>  
 #>                       Mean              SD      Median SEE     Reliability 
-#>  Omega1              1.126           0.828           0.347           0.836 
-#>  Omega2              0.195           0.476           0.181           0.855 
-#>  Nu                  0.507           0.650           0.107           0.968 
+#>  Omega1              1.186           0.827           0.348           0.835 
+#>  Omega2              0.182           0.475           0.181           0.855 
+#>  Nu                  0.484           0.650           0.107           0.968 
 #> 
 #>  -------------------------------------------------------------------------
 plot(nback_fit)
 ```
 
-![](nback_fit-plot-1.png)
+![](vigfig-nback_fit-plot-1.png)
 
 To explore how memory load affects performance, we can add linear contrast effects. These contrasts model systematic changes across the memory load levels.
 
@@ -147,20 +147,20 @@ summary(nback_fit_contr)
 #>  
 #>  Number of Subjects =  320 
 #>  Number of Items    =  100 
-#>  log-Likelihood     =  -10170.93 
+#>  log-Likelihood     =  -10171.54 
 #>  
 #>                       Mean              SD      Median SEE     Reliability 
-#>  Omega1              1.290           0.855           0.401           0.814 
-#>  Omega2             -1.300           0.702           0.685           0.518 
-#>  Omega3              0.095           0.470           0.220           0.810 
-#>  Omega4              0.298           0.417           0.422           0.491 
-#>  Nu                  0.541           0.588           0.110           0.958 
+#>  Omega1              1.323           0.856           0.401           0.814 
+#>  Omega2             -1.274           0.701           0.685           0.517 
+#>  Omega3              0.125           0.468           0.218           0.808 
+#>  Omega4              0.366           0.412           0.420           0.484 
+#>  Nu                  0.520           0.593           0.109           0.958 
 #> 
 #>  -------------------------------------------------------------------------
 plot(nback_fit_contr)
 ```
 
-![](nback_fit_contr-plot-1.png)
+![](vigfig-nback_fit_contr-plot-1.png)
 
 The output is structured so that the first set of Omega estimates corresponds to the experimental effects on one latent ability/trait, the next set of outputs corresponds to the experimental effects on the second latent ability/trait, and so on. In this case, since we are using the signal detection-weighted model, the first measured ability is discrimination and the second is bias. In our analysis, we requested 2 contrasts (intercept effect and linear effect). Thus, Omega1 is the intercept value for discrimination, Omega2 is the linear slope estimate for discrimination, Omega3 is the intercept value for bias, and Omega4 is the linear slope estimate for bias.
 
@@ -181,11 +181,11 @@ rda$y[which(!rda$condition %in% c(3))] <- NA
 # Determine next condition to administer
 cog_cat(rda = rda, obj_fun = dich_response_model, int_par = 1)
 #> $omega1
-#>          [,1]      [,2]        [,3]       [,4]
-#> [1,] 2.073415 -1.908678 -0.09465789 0.05455807
+#>          [,1]      [,2]       [,3]       [,4]
+#> [1,] 2.136139 -1.922106 -0.0680018 0.05211245
 #> 
 #> $se_omega
-#> [1] 0.7081466 0.8256730 0.3775583 0.3141252
+#> [1] 0.6959268 0.8251967 0.3705272 0.3140548
 #> 
 #> $next_condition
 #> [1] 10
@@ -205,11 +205,11 @@ sim_res <- cog_cat_sim(data = ex3$y, model = 'sdt', guessing = NULL,
                     int_par = c(1, 2), start_conditions = 3,
                     max_conditions = 3, link = "probit")
 #> Estimating omega from starting conditions... 
-#> Adaptive Testing Start Time 12/09/24 12:03:05 
+#> Adaptive Testing Start Time 02/06/25 21:29:50 
 #> ... CAT administration 1
 #> ... CAT administration 2
 #> ... CAT administration 3
-#> Adaptive Testing End Time 12/09/24 12:06:42
+#> Adaptive Testing End Time 02/06/25 21:33:46
 ```
 
 The summary method for cog_cat_sim provides details about the simulation, including bias, mean absolute error (MAE), and root mean square error (RMSE) for each Omega parameter specified by the int_par argument (i.e., the intentional parameter). Bias and MAE are calculated using either the true Omega values (if known from a simulation) or estimates derived from all available data. The plot method displays the individual and average standard errors of the estimates for each Omega parameter selected for adaptive testing.
@@ -228,12 +228,12 @@ summary(sim_res)
 #>  Minimum Standard Error Criterion =  -Inf 
 #>  
 #>                       Bias             MAE            RMSE 
-#>  Omega 1            -0.163           0.356           0.449 
-#>  Omega 2             0.325           0.570           0.757 
+#>  Omega 1            -0.157           0.345           0.441 
+#>  Omega 2             0.305           0.560           0.748 
 #> 
 #>  -------------------------------------------------------------------------
 plot(sim_res)
 ```
 
-![](sim_res-plot-1.png)
+![](vigfig-sim_res-plot-1.png)
 
