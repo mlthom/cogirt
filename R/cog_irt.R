@@ -71,6 +71,10 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     stop("'data' contains non-numeric values.",
          call. = FALSE)
   }
+  # Check if any column in 'y' has all NA values
+  if (any(colSums(!is.na(y)) == 0)) {
+    stop("Some columns in the data contain only missing values.", call. = FALSE)
+  }
   if (!all(unique(x = c(y)) %in% c(0, 1, NA))) {
     stop("cogirt only supports dichotomous (0 vs. 1) data.",
          call. = FALSE)
