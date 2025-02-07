@@ -1,12 +1,9 @@
-Package: 'cogirt'
+Package: cogirt
 Type: Package
 Title: Cognitive Testing Using Item Response Theory
 Version: 1.0.0
-Authors@R: c(
-    person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre"))
-    )
-Description: Psychometrically analyze latent individual differences related to tasks, interventions, or maturational/aging effects in the context of experimental or longitudinal cognitive research using methods first described by Thomas et al. (2020) 
-    <doi:10.1177/0013164420919898>.
+Authors@R: c(person("Michael", "Thomas", email = "michael.l.thomas@colostate.edu", role = c("aut","cre")))
+Description: Psychometrically analyze latent individual differences related to tasks, interventions, or maturational/aging effects in the context of experimental or longitudinal cognitive research using methods first described by Thomas et al. (2020) <doi:10.1177/0013164420919898>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
