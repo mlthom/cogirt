@@ -30,6 +30,7 @@ mhrm(
   J = NULL,
   M = NULL,
   N = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -103,6 +104,8 @@ stats contrast function).}
 
 \item{N}{Number of contrasts including intercept (required if using the R
 stats contrast function).}
+
+\item{verbose}{Logical (TRUE or FALSE) indicating whether to print progress.}
 
 \item{...}{Additional arguments.}
 }

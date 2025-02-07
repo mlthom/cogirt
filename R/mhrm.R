@@ -48,6 +48,7 @@
 #' stats contrast function).
 #' @param N Number of contrasts including intercept (required if using the R
 #' stats contrast function).
+#' @param verbose Logical (TRUE or FALSE) indicating whether to print progress.
 #' @param ... Additional arguments.
 #'
 #' @return List with elements for all parameters estimated, information values
@@ -91,6 +92,7 @@ mhrm <- function(
     J = NULL,
     M = NULL,
     N = NULL,
+    verbose = TRUE,
     ...
 ) {
   if (!requireNamespace("abind", quietly = TRUE)) {
@@ -138,11 +140,6 @@ mhrm <- function(
     max_iter_mhrm <- 400
   } else {
     max_iter_mhrm <- ellipsis$max_iter_mhrm
-  }
-  if (is.null(x = ellipsis$verbose)) {
-    verbose <- TRUE
-  } else {
-    verbose <- ellipsis$verbose
   }
   if (is.character(x = gamma0)) {
     if (gamma0 %in% c("contr.helmert", "contr.poly", "contr.sum",

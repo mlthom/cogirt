@@ -22,7 +22,8 @@ cog_cat_sim(
   max_conditions = Inf,
   omit_conditions = NULL,
   min_se = -Inf,
-  link = "probit"
+  link = "probit",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -90,6 +91,8 @@ adaptive testing. If min_se is specified, max_conditions should not be.}
 
 \item{link}{The name ("logit" or "probit") of the link function to be used in
 the model.}
+
+\item{verbose}{Logical (TRUE or FALSE) indicating whether to print progress.}
 }
 \value{
 A list with elements with the model used (model), true omega

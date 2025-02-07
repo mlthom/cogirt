@@ -14,6 +14,7 @@ cog_irt(
   constraints = NULL,
   key = NULL,
   link = "probit",
+  verbose = TRUE,
   ...
 )
 }
@@ -50,6 +51,8 @@ distractor (IJ). Required when model = 'sdt'.}
 
 \item{link}{The name ("logit" or "probit") of the link function to be used in
 the model.}
+
+\item{verbose}{Logical (TRUE or FALSE) indicating whether to print progress.}
 
 \item{...}{Additional arguments.}
 }

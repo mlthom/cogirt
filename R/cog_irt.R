@@ -29,6 +29,7 @@
 #' distractor (IJ). Required when model = 'sdt'.
 #' @param link The name ("logit" or "probit") of the link function to be used in
 #' the model.
+#' @param verbose Logical (TRUE or FALSE) indicating whether to print progress.
 #' @param ... Additional arguments.
 #'
 #' @section Dimensions:
@@ -65,7 +66,7 @@
 cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
                     contrast_codes = NULL,  num_conditions = NULL,
                     num_contrasts = NULL, constraints = NULL, key = NULL,
-                    link = "probit", ...) {
+                    link = "probit", verbose = TRUE, ...) {
   y <- as.matrix(x = data)
   if (!is.numeric(x = y)) {
     stop("'data' contains non-numeric values.",
@@ -422,7 +423,8 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     constraints = constraints,
     J = J,
     M = M,
-    N = N),
+    N = N,
+    verbose = verbose),
     ellipsis
   ))
 

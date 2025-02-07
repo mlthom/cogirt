@@ -52,6 +52,7 @@
 #' adaptive testing. If min_se is specified, max_conditions should not be.
 #' @param link The name ("logit" or "probit") of the link function to be used in
 #' the model.
+#' @param verbose Logical (TRUE or FALSE) indicating whether to print progress.
 #'
 #' @return A list with elements with the model used (model), true omega
 #' parameters (omega), various simulation parameters, final omega estimates
@@ -87,7 +88,7 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
                         conditions = NULL, int_par = NULL,
                         start_conditions = NULL, max_conditions = Inf,
                         omit_conditions = NULL, min_se = -Inf,
-                        link = "probit") {
+                        link = "probit", verbose = TRUE) {
   y <- as.matrix(x = data)
   if (!is.numeric(x = y)) {
     stop("'y' contains non-numeric data.",
@@ -166,11 +167,13 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   # STEP 1: Estimate item parameters using complete data if not defined --------
 
   if (is.null(x = item_int) || is.null(x = item_disc)  || is.null(x = omega)) {
-    cat(
+    if (verbose) {
+      cat(
       "Estimating item parameters...",
       "\n",
       sep = " "
-    )
+      )
+    }
     tmp_arg <- list(
       data = y, model = model, guessing = guessing,
       contrast_codes = contrast_codes, num_conditions = num_conditions,
@@ -199,11 +202,13 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   }
 
   # STEP 2: Estimate omega from starting conditions ----------------------------
-  cat(
-    "Estimating omega from starting conditions...",
-    "\n",
-    sep = " "
-  )
+  if (verbose) {
+      cat(
+      "Estimating omega from starting conditions...",
+      "\n",
+      sep = " "
+    )
+  }
   tmp_item_disc <- sweep(
     x = item_disc,
     MARGIN = 1,
@@ -231,21 +236,25 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
   ongoing_omega_est <- tmp_res$omega1[, int_par, drop = FALSE]
   ongoing_se_omega <- do.call(rbind, se_omega)
 
-  cat(
-    "Adaptive Testing Start Time",
-    format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
-    "\n",
-    sep = " "
-  )
+  if (verbose) {
+    cat(
+      "Adaptive Testing Start Time",
+      format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
+      "\n",
+      sep = " "
+    )
+  }
 
   # STEP 3: Select next condition ----------------------------------------------
   while (any(!crit_se) && !(max_conditions < iter)) {
-    cat(
-      "... CAT administration ",
-      iter,
-      "\n",
-      sep = ""
-    )
+    if (verbose) {
+      cat(
+        "... CAT administration ",
+        iter,
+        "\n",
+        sep = ""
+      )
+    }
     incomplete_conditions <- lapply(
       X = 1:K,
       FUN = function(x) {
@@ -339,12 +348,14 @@ cog_cat_sim <- function(data = NULL, model = NULL, guessing = NULL,
     ongoing_se_omega <- cbind(ongoing_se_omega, do.call(rbind, se_omega))
     ongoing_crit_se <- cbind(ongoing_crit_se, crit_se)
   }
-  cat(
-    "Adaptive Testing End Time",
-    format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
-    "\n",
-    sep = " "
-  )
+  if (verbose) {
+    cat(
+      "Adaptive Testing End Time",
+      format(x = Sys.time(), format = "%m/%d/%y %H:%M:%S"),
+      "\n",
+      sep = " "
+    )
+  }
 
   return(
     structure(.Data = list(
