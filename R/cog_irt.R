@@ -72,9 +72,11 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     stop("'data' contains non-numeric values.",
          call. = FALSE)
   }
-  # Check if any column in 'y' has all NA values
   if (any(colSums(!is.na(y)) == 0)) {
     stop("Some columns in the data contain only missing values.", call. = FALSE)
+  }
+  if (any(rowSums(!is.na(y)) == 0)) {
+    stop("Some rows in the data contain only missing values.", call. = FALSE)
   }
   if (!all(unique(x = c(y)) %in% c(0, 1, NA))) {
     stop("cogirt only supports dichotomous (0 vs. 1) data.",
@@ -167,7 +169,8 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
             X = seq_len(ncol(y)),
             FUN = function(x) {
               cor(x = jitter(y[, x]),
-                  y = jitter(rowMeans(x = y[, -x], na.rm = TRUE)))
+                  y = jitter(rowMeans(x = y[, -x], na.rm = TRUE)),
+                  use = "pairwise.complete.obs")
             }
           )[(1 + (j - 1) * I):(j * I)]
       }
