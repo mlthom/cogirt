@@ -121,16 +121,27 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
            call. = FALSE)
     }
   }
-  if (model %in% c("2p", "3p")) {
+  if (isFALSE(ellipsis$est_lambda) && is.null(ellipsis$lambda0)) {
+    stop("est_lambda is FALSE or NULL but lambda0 not supplied", call. = FALSE)
+  }
+  if (isFALSE(ellipsis$est_nu) && is.null(ellipsis$nu0)) {
+    stop("est_nu is FALSE or NULL but nu0 not supplied", call. = FALSE)
+  }
+  if (
+    model %in% c("2p", "3p") &&
+    (!isFALSE(ellipsis$est_lambda) && !isFALSE(ellipsis$est_nu))
+  ) {
     if (!is.null(x = num_conditions)) {
       if (num_conditions > 1) {
         if (is.null(x = constraints)) {
-          stop("'constraints' must be TRUE when model is '2p' or '3p' and
-               'num_conditions' > 1", call. = FALSE)
+          stop("'constraints' must be TRUE or item parameters must be supplied
+               when model is '2p' or '3p' and 'num_conditions' > 1",
+               call. = FALSE)
         } else if (is.logical(x = constraints)) {
           if (constraints == FALSE) {
-            stop("'constraints' must be TRUE when model is '2p' or '3p' and
-               'num_conditions' > 1", call. = FALSE)
+            stop("'constraints' must be TRUE or item parameters must be
+                 supplied when model is '2p' or '3p' and 'num_conditions' > 1",
+                 call. = FALSE)
           }
         }
       }
