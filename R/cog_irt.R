@@ -73,13 +73,6 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     stop("'data' contains non-numeric values.",
          call. = FALSE)
   }
-  if (
-    any(colSums(!is.na(y)) == 0) &
-    (is.null(x = ellipsis$lambda0) || is.null(x = ellipsis$nu0))
-  ) {
-    stop("Item starting values required when any data column is entirely missing.",
-         call. = FALSE)
-  }
   if (any(rowSums(!is.na(y)) == 0)) {
     stop("Some rows in the data contain only missing values.", call. = FALSE)
   }
@@ -141,6 +134,20 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
           }
         }
       }
+    }
+  }
+  if (model %in% c("2p", "3p")) {
+    if (
+      any(colSums(!is.na(y)) == 0) &&
+      (is.null(x = ellipsis$lambda0) || is.null(x = ellipsis$nu0))
+    ) {
+      stop("lambda0 and nu0 starting values are required when any data column is
+           entirely missing.", call. = FALSE)
+    }
+  } else if (model == "sdt") {
+    if (any(colSums(!is.na(y)) == 0) && is.null(x = ellipsis$nu0)) {
+      stop("nu0 starting values are required when any data column is entirely
+           missing.", call. = FALSE)
     }
   }
   if (!is.null(num_conditions)) {
