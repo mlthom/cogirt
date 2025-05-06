@@ -327,9 +327,9 @@ mhrm <- function(
         ncol = ncol(omega0),
         byrow = TRUE
       )
-      info <- array(
+      info <- -1 * array(
         data = unlist(
-          tmp_deriv_omega$post_info),
+          tmp_deriv_omega$spd),
         dim =  c(ncol(omega0), ncol(omega0), nrow(y))
       )
       info1_omega <- array(data = info0_omega, dim = dim(x = info)) +
@@ -555,9 +555,9 @@ mhrm <- function(
         ncol = ncol(lambda0),
         byrow = TRUE
       )
-      info <- array(
+      info <- -1 * array(
         data = unlist(
-          tmp_deriv_lambda$post_info),
+          tmp_deriv_lambda$spd),
         dim =  c(ncol(lambda0), ncol(lambda0), ncol(y))
       )
       info1_lambda <- array(data = info0_lambda, dim = dim(x = info)) +
@@ -828,9 +828,9 @@ mhrm <- function(
         ncol = ncol(nu0),
         byrow = TRUE
       )
-      info <- array(
+      info <- -1 * array(
         data = unlist(
-          tmp_deriv_nu$post_info),
+          tmp_deriv_nu$spd),
         dim =  c(ncol(nu0), ncol(nu0), ncol(y))
       )
       info1_nu <- array(data = info0_nu, dim = dim(x = info)) +
@@ -1054,7 +1054,7 @@ mhrm <- function(
       NULL
     },
     "info1_omega" = if (est_omega) {
-      tmp_omega_deriv$post_info
+      tmp_omega_deriv$spd
     } else {
       NULL
     },
@@ -1064,7 +1064,7 @@ mhrm <- function(
       NULL
     },
     "info1_lambda" = if (est_lambda) {
-      tmp_lambda_deriv$post_info
+      tmp_lambda_deriv$spd
     } else {
       NULL
     },
@@ -1074,7 +1074,7 @@ mhrm <- function(
       NULL
     },
     "info1_nu" = if (est_nu) {
-      tmp_nu_deriv$post_info
+      tmp_nu_deriv$spd
     } else {
       NULL
     },

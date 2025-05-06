@@ -508,11 +508,11 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   return(
     structure(.Data = list(
       "omega1" = if (est_omega) tmp_res$omega1 else omega0,
-      "info1_omega" = tmp_omega_deriv$post_info,
+      "info1_omega" = lapply(X = tmp_omega_deriv$spd, FUN = function (x) x * -1),
       "nu1" = if (est_nu) tmp_res$nu1 else nu0,
-      "info1_nu" = tmp_nu_deriv$post_info,
+      "info1_nu" = lapply(X = tmp_nu_deriv$spd, FUN = function (x) x * -1),
       "lambda1" = if (est_lambda) tmp_res$lambda1 else lambda0,
-      "info1_lambda" = tmp_lambda_deriv$post_info,
+      "info1_lambda" = lapply(X = tmp_lambda_deriv$spd, FUN = function (x) x * -1),
       "log_lik" = tmp_res$log_lik,
       "y" = y,
       "par" = par
