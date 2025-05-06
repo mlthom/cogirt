@@ -67,13 +67,18 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
                     contrast_codes = NULL,  num_conditions = NULL,
                     num_contrasts = NULL, constraints = NULL, key = NULL,
                     link = "probit", verbose = TRUE, ...) {
+  ellipsis <- list(...)
   y <- as.matrix(x = data)
   if (!is.numeric(x = y)) {
     stop("'data' contains non-numeric values.",
          call. = FALSE)
   }
-  if (any(colSums(!is.na(y)) == 0)) {
-    stop("Some columns in the data contain only missing values.", call. = FALSE)
+  if (
+    any(colSums(!is.na(y)) == 0) &
+    (is.null(x = ellipsis$lambda0) || is.null(x = ellipsis$nu0))
+  ) {
+    stop("Item starting values required when any data column is entirely missing.",
+         call. = FALSE)
   }
   if (any(rowSums(!is.na(y)) == 0)) {
     stop("Some rows in the data contain only missing values.", call. = FALSE)
@@ -153,7 +158,6 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   } else {
     N <- 1
   }
-  ellipsis <- list(...)
   K <- nrow(x = y)
   if (model == "sdt") M <- 2 else M <- 1
   if (is.null(x = ellipsis$lambda0)) {
