@@ -144,7 +144,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       stop("lambda0 and nu0 starting values are required when any data column is
            entirely missing.", call. = FALSE)
     }
-  } else if (model == "sdt") {
+  } else if (model %in% c("1p", "sdt")) {
     if (any(colSums(!is.na(y)) == 0) && is.null(x = ellipsis$nu0)) {
       stop("nu0 starting values are required when any data column is entirely
            missing.", call. = FALSE)
