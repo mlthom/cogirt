@@ -127,10 +127,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
   if (isFALSE(ellipsis$est_nu) && is.null(ellipsis$nu0)) {
     stop("est_nu is FALSE or NULL but nu0 not supplied", call. = FALSE)
   }
-  if (
-    model %in% c("2p", "3p") &&
-    (!isFALSE(ellipsis$est_lambda) && !isFALSE(ellipsis$est_nu))
-  ) {
+  if (model %in% c("2p", "3p") && !isFALSE(ellipsis$est_lambda)) {
     if (!is.null(x = num_conditions)) {
       if (num_conditions > 1) {
         if (is.null(x = constraints)) {
