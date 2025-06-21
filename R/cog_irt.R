@@ -174,7 +174,16 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
     N <- 1
   }
   K <- nrow(x = y)
-  if (model == "sdt") M <- 2 else M <- 1
+  if (is.null(x = ellipsis$M)) {
+    if (model == "sdt") M <- 2 else M <- 1
+  } else{
+    M <- ellipsis$M
+    ellipsis <- ellipsis[-1 * which(x = names(x = ellipsis) == "M")]
+    if (is.null(x = ellipsis$lambda0)) {
+      stop("lambda0 must be supplied when M > 1.",
+           call. = FALSE)
+    }
+  }
   if (is.null(x = ellipsis$lambda0)) {
     lambda0 <- matrix(data = 0, nrow = I * J, ncol = J * M)
     if (model == "1p") {
