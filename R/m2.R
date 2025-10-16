@@ -20,7 +20,7 @@
 #-------------------------------------------------------------------------------
 
 m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
-               eps    = 1e-8) {
+               eps = 1e-8) {
   if (is.null(fit$omega1)) {
     stop("Model does not appear to be fitted to data.",
          call. = FALSE)
@@ -58,7 +58,7 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
   var_item  <- pmax(p_item_hat * (1 - p_item_hat) / K, eps)
   var_pair <- pmax(p_pair_hat * (1 - p_pair_hat) / K, eps)
 
-  M2 <- sum((d^2) / c(var_item, var_pair))
+  M2 <- sum((d^2) / c(var_item, var_pair), na.rm = T)
   p_count <- fit$par
   df <- max(length(d) - p_count, 1L)
   c1 <- (K - 1) / K
@@ -67,8 +67,8 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
 
   pval   <- stats::pchisq(ifelse(type == "M2", M2, M2s), df, lower.tail = FALSE)
   RMSEA2 <- sqrt(x = max((ifelse(type == "M2", M2, M2s) - df) / (df * (K - 1)), 0))
-  SRMR_item = sqrt(mean((p_item_obs - p_item_hat)^2))
-  SRMR_pair = sqrt(mean((p_pair_obs - p_pair_hat)^2))
+  SRMR_item = sqrt(mean((p_item_obs - p_item_hat)^2, na.rm = T))
+  SRMR_pair = sqrt(mean((p_pair_obs - p_pair_hat)^2, na.rm = T))
 
   # ---- SRMSR (mirt-style): RMS of residual correlations ----
   build_corr_from_margins <- function(p1, p2, J=IJ, pairs, eps = 1e-12) {
@@ -143,8 +143,9 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
 # m2(fitsdt, link = "probit")
 # m2(fitsdt, type = "M2*", link = "probit")
 
-
-# nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
+# tmp <- nback$y
+# tmp[1:10, 10] <- NA
+# nback_fit_contr <- cog_irt(data = tmp, model = "sdt",
 # contrast_codes = "contr.poly", key = nback$key,
 # num_conditions = length(unique(nback$condition)),
 # num_contrasts = 2)
