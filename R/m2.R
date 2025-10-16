@@ -59,27 +59,27 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
   var_pair <- pmax(p_pair_hat * (1 - p_pair_hat) / K, eps)
 
   M2 <- sum((d^2) / c(var_item, var_pair))
+  p_count <- fit$par
+  df <- max(length(d) - p_count, 1L)
   c1 <- (K - 1) / K
   c2 <- df / (K - 1)
   M2s <- c1 * (M2 - c2)
 
-  p_count <- fit$par
-  df <- max(length(d) - p_count, 1L)
   pval   <- stats::pchisq(ifelse(type == "M2", M2, M2s), df, lower.tail = FALSE)
   RMSEA2 <- sqrt(x = max((ifelse(type == "M2", M2, M2s) - df) / (df * (K - 1)), 0))
   SRMR_item = sqrt(mean((p_item_obs - p_item_hat)^2))
   SRMR_pair = sqrt(mean((p_pair_obs - p_pair_hat)^2))
 
   # ---- SRMSR (mirt-style): RMS of residual correlations ----
-  build_corr_from_margins <- function(p1, p2, J, pairs, eps = 1e-12) {
+  build_corr_from_margins <- function(p1, p2, J=IJ, pairs, eps = 1e-12) {
     # p1: length-J item means           (E[Y_j])
     # p2: length-J(J-1)/2 joint means   (E[Y_j Y_k]) in same order as `pairs`
     # returns: J x J correlation matrix on the 0/1 scale
 
     # variances on the diagonal
-    var_j <- pmax(p1 * (1 - p1), eps)
+    var_item <- pmax(p1 * (1 - p1), eps)
     Sigma <- matrix(0, J, J)
-    diag(Sigma) <- var_j
+    diag(Sigma) <- var_item
 
     # fill covariances from joint probs
     # Cov(Y_j, Y_k) = E[Y_j Y_k] - E[Y_j] E[Y_k]
@@ -91,8 +91,8 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
     }
 
     # convert to correlations (guard zero-variance)
-    sd_j <- sqrt(var_j)
-    denom <- outer(sd_j, sd_j, "*")
+    sd_item <- sqrt(var_item)
+    denom <- outer(sd_item, sd_item, "*")
     R <- Sigma / denom
     diag(R) <- 1
     R[!is.finite(R)] <- NA_real_   # if any degenerate items
@@ -100,8 +100,8 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
   }
 
   # Observed and model-implied correlation matrices
-  R_obs <- build_corr_from_margins(pj_obs,  pjk_obs,  J, pairs, eps)
-  R_hat <- build_corr_from_margins(pj_hat,  pjk_hat,  J, pairs, eps)
+  R_obs <- build_corr_from_margins(p_item_obs,  p_pair_obs,  IJ, pairs, eps)
+  R_hat <- build_corr_from_margins(p_item_hat,  p_pair_hat,  IJ, pairs, eps)
 
   # SRMSR = RMS of off-diagonal residual correlations
   lt <- lower.tri(R_obs)
@@ -143,10 +143,10 @@ m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
 # m2(fitsdt, link = "probit")
 # m2(fitsdt, type = "M2*", link = "probit")
 
-#
+
 # nback_fit_contr <- cog_irt(data = nback$y, model = "sdt",
-                           # contrast_codes = "contr.poly", key = nback$key,
-                           # num_conditions = length(unique(nback$condition)),
-                           # num_contrasts = 2)
+# contrast_codes = "contr.poly", key = nback$key,
+# num_conditions = length(unique(nback$condition)),
+# num_contrasts = 2)
 # m2(nback_fit_contr, link = "probit")
 # m2(nback_fit_contr, type = "M2*", link = "probit")
