@@ -61,6 +61,7 @@ A list with elements for all parameters estimated (omega1, nu1,
 and/or lambda1), information values for all parameters estimated
 (info1_omega, info1_nu, and/or info1_lambda), the model log-likelihood value
 (log_lik), and the total number of estimated parameters (par) in the model.
+Other outputs are returned for the purpose of computing model fit statistics.
 }
 \description{
 This function estimates item response theory (IRT) model parameters. Users
