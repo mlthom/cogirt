@@ -41,6 +41,8 @@
 #' and/or lambda1), information values for all parameters estimated
 #' (info1_omega, info1_nu, and/or info1_lambda), the model log-likelihood value
 #' (log_lik), and the total number of estimated parameters (par) in the model.
+#' gamma0 and zeta0 are also returned for the purpose of computing model
+#' fit statistics.
 #'
 #' @references
 #' Embretson S. E., & Reise S. P. (2000). \emph{Item response theory for
@@ -530,6 +532,8 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       "info1_nu" = lapply(X = tmp_nu_deriv$spd, FUN = function (x) x * -1),
       "lambda1" = if (est_lambda) tmp_res$lambda1 else lambda0,
       "info1_lambda" = lapply(X = tmp_lambda_deriv$spd, FUN = function (x) x * -1),
+      "gamma0" = gamma0,
+      "zeta0" = zeta0,
       "log_lik" = tmp_res$log_lik,
       "y" = y,
       "par" = par
