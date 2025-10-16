@@ -16,7 +16,7 @@
 #' hierarchical item factor models. \emph{British Journal of Mathematical and
 #' Statistical Psychology, 66}, 245-276.
 #'
-#' @export
+#' @export m2
 #-------------------------------------------------------------------------------
 
 m2 <- function(fit, type = "M2", link = c("probit","logit"), n_mc   = 50000,
