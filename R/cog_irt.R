@@ -537,6 +537,7 @@ cog_irt <- function(data = NULL, model = NULL, guessing = NULL,
       "omega_mu" = omega_mu,
       "omega_sigma2" = omega_sigma2,
       "link" = link,
+      "model" = model,
       "log_lik" = tmp_res$log_lik,
       "y" = y,
       "par" = par
