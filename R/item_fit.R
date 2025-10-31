@@ -70,52 +70,69 @@ item_fit <- function(
   item_sx2_list <- vector("list", I)
 
   for (j in seq_len(I)) {
-    # rest score for item j
+    # rest score for this item
     rest <- rowSums(Y, na.rm = TRUE) - Y[, j]
 
-    # make groups by rest score
+    # target quantile cuts
     probs <- seq(0, 1, length.out = n_groups + 1L)
     cuts  <- stats::quantile(rest, probs = probs, na.rm = TRUE)
-    grp   <- cut(rest, breaks = unique(cuts), include.lowest = TRUE)
-    tabs  <- split(seq_len(N), grp)
+
+    # remove duplicates
+    uq_cuts <- unique(cuts)
+
+    if (length(uq_cuts) < 2L) {
+      # can't form quantile groups -> bail out for this item
+      item_sx2_list[[j]] <- data.frame(
+        item   = j,
+        X2     = NA_real_,
+        df     = 0L,
+        p      = NA_real_,
+        reason = "quantiles_collapsed",
+        stringsAsFactors = FALSE
+      )
+      next
+    }
+
+    grp  <- cut(rest, breaks = uq_cuts, include.lowest = TRUE)
+    tabs <- split(seq_len(N), grp)
 
     X2 <- 0
     df <- 0
 
     for (g in tabs) {
       ng <- length(g)
-
-      # skip tiny groups
       if (ng < min_n) next
 
       p_obs <- mean(Y[g, j], na.rm = TRUE)
       p_mod <- mean(P[g, j], na.rm = TRUE)
 
       var_g <- ng * p_mod * (1 - p_mod)
-
-      # skip groups where model says prob ~0 or ~1
       if (!is.finite(var_g) || var_g < 1e-10) next
 
       X2 <- X2 + (ng * p_obs - ng * p_mod)^2 / var_g
       df <- df + 1L
     }
 
-    # compute p-value only if we actually used at least 1 group
     if (df > 0) {
       pval <- stats::pchisq(X2, df = df, lower.tail = FALSE)
+      reason <- NA_character_
     } else {
       pval <- NA_real_
+      reason <- "no_usable_groups"
     }
 
     item_sx2_list[[j]] <- data.frame(
-      item = j,
-      X2   = X2,
-      df   = df,
-      p    = pval
+      item   = j,
+      X2     = X2,
+      df     = df,
+      p      = pval,
+      reason = reason,
+      stringsAsFactors = FALSE
     )
   }
 
   item_sx2 <- do.call(rbind, item_sx2_list)
+
 
 
   ## 3) Q3 (stable) + 4) modified Q3
