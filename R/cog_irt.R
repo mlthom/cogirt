@@ -43,6 +43,10 @@
 #' (log_lik), and the total number of estimated parameters (par) in the model.
 #' Other outputs are returned for the purpose of computing model fit statistics.
 #'
+#' The log_lik value is the joint log-likelihood of the observed responses,
+#' conditional on the estimated item and person parameters, rather than a
+#' marginal log-likelihood based only on the item parameters.
+#'
 #' @references
 #' Embretson S. E., & Reise S. P. (2000). \emph{Item response theory for
 #' psychologists.} Mahwah, N.J.: L. Erlbaum Associates.
