@@ -974,7 +974,7 @@ mhrm <- function(
       }
     }
   }
-  # Compute final loglikelihood value
+  # Compute final conditional loglikelihood value
   p <- obj_fun(
     y = y,
     omega = if (est_omega) {
@@ -1001,12 +1001,14 @@ mhrm <- function(
 
   if (verbose) {
     cat(
-      "Final logLik is ",
+      "Final conditional logLik is ",
       format(x = round(x = log_lik, digits = 4), nsmall = 4),
       "\n",
       sep = " "
     )
   }
+  # Compute final marginal loglikelihood value
+  # TBD
   if (est_omega) {
     tmp_omega_deriv <- deriv_omega(
       y = y,
