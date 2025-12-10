@@ -1,241 +1,191 @@
 #-------------------------------------------------------------------------------
-#' Compute M2 and M2* for IRT model object via Monte Carlo
-#'
-#' Uses Monte Carlo draws from the latent trait distribution to estimate
-#' model-implied 1- and 2-way margins, compares them to observed margins, and
-#' returns M2, df, p-value, and an RMSEA-like index (M2*).
-#'
-#' @param object An object of class 'cog_irt'.
-#' @param type "M2" or "M2*" (small-sample adjusted)
-#' @param n_mc umber of Monte Carlo samples (draws) used for integration.
-#' @return list with statistic, df, p, RMSEA2, and type
-#'
-#' @references
-#'
-#' Cai, L. & Hansen, M. (2013). Limited-information goodness-of-object testing of
-#' hierarchical item factor models. \emph{British Journal of Mathematical and
-#' Statistical Psychology, 66}, 245-276.
-#'
-#' @export m2
+# Compute M2 and M2* for cogirt IRT models
+#
+# Features:
+# - NA-safe (pairwise complete)
+# - Works for multidimensional, SDT, contrast-coded models
+# - Diagonal-weight M2 (fast, mirt-style)
+# - Robust M2* using df-adjusted correction (valid for diag-W)
+#
+# @export m2
 #-------------------------------------------------------------------------------
 
-m2 <- function(object,
-                            n_mc   = 5000L,
-                            link   = c("logit","probit"),
-                            weight = c("diag","full"),
-                            n_par  = NULL,
-                            eps    = 1e-10) {
+m2 <- function(obj, use_pairs = TRUE) {
 
-  link   <- match.arg(link)
-  weight <- match.arg(weight)
+  #------------------------------------------------------------
+  # 0. Extract data
+  #------------------------------------------------------------
+  Y <- obj$y
+  Y <- as.matrix(Y)
 
-  Y <- object$y
-  if (is.null(Y)) stop("object$y is missing.", call. = FALSE)
-  N <- nrow(Y); I <- ncol(Y)
+  N <- nrow(Y)
+  I <- ncol(Y)
 
-  ## ----- 1. population latent draws (NOT person scores) -----
-  mu  <- object$omega_mu
-  Sig <- object$omega_sigma2
-  if (is.null(mu)) {
-    d   <- 1L
-    mu  <- 0
-    Sig <- 1
-  } else {
-    d <- length(mu)
-  }
+  #------------------------------------------------------------
+  # 1. Model-implied probabilities
+  #------------------------------------------------------------
+  P <- dich_response_model(
+    y      = obj$y,
+    omega  = obj$omega1,
+    gamma  = obj$gamma0,
+    lambda = obj$lambda1,
+    zeta   = obj$zeta0,
+    nu     = obj$nu1,
+    kappa  = obj$kappa0,
+    link   = obj$link
+  )$p
 
-  if (d == 1L) {
-    TH <- matrix(stats::rnorm(n_mc, mu, sqrt(Sig)), ncol = 1L)
-  } else {
-    if (!requireNamespace("mvtnorm", quietly = TRUE))
-      stop("mvtnorm required.", call. = FALSE)
-    TH <- mvtnorm::rmvnorm(n_mc, mean = mu, sigma = Sig)
-  }
-  wts <- rep(1 / n_mc, n_mc)
+  P <- as.matrix(P)
 
-  ## ----- 2. item-level params only -----
-  # item intercepts
-  nu <- object$nu1
-  if (is.null(nu)) nu <- rep(0, I)
+  #------------------------------------------------------------
+  # 2. Univariate observed margins (NA-safe)
+  #------------------------------------------------------------
+  N1 <- colSums(!is.na(Y))  # available N for each item
 
-  # item slopes
-  lambda <- object$lambda1
-  if (is.null(lambda)) {
-    lambda <- matrix(1, nrow = I, ncol = d)
-  } else {
-    # make it I x d
-    if (is.null(dim(lambda))) {
-      lambda <- matrix(lambda, nrow = I, ncol = 1L)
-    } else if (nrow(lambda) == d && ncol(lambda) == I) {
-      lambda <- t(lambda)
+  p1_obs <- numeric(I)
+  for (j in seq_len(I)) {
+    if (N1[j] > 0L) {
+      p1_obs[j] <- mean(Y[!is.na(Y[, j]), j])
+    } else {
+      p1_obs[j] <- NA_real_
     }
   }
 
-  ## IMPORTANT: drop all person-level / condition-level stuff
-  # gamma0, zeta0, kappa0 are NOT used here
+  p1_mod <- colMeans(P)
 
-  ## ----- 3. model-implied probs from population model -----
-  # TH: n_mc x d
-  # lambda: I x d
-  eta <- TH %*% t(lambda)                # n_mc x I
-  eta <- sweep(eta, 2, nu, "+")          # add intercepts
+  var1 <- p1_mod * (1 - p1_mod) / pmax(N1, 1L)
+  var1[N1 <= 0L] <- NA_real_
 
-  if (link == "logit") {
-    P <- 1 / (1 + exp(-eta))
-  } else {
-    P <- pnorm(eta)
-  }
+  #------------------------------------------------------------
+  # 3. Bivariate margins (pairwise complete)
+  #------------------------------------------------------------
+  p2_obs <- NULL
+  p2_mod <- NULL
+  var2   <- NULL
+  N2     <- NULL
 
-  ## ----- 4. model-implied margins -----
-  # 1-way
-  p1 <- as.numeric(colSums(P * wts))
+  if (use_pairs && I > 1L) {
 
-  # 2-way
-  p2 <- matrix(0, I, I)
-  for (i in 1:I) {
-    pi <- P[, i]
-    for (j in i:I) {
-      val <- sum(wts * pi * P[, j])
-      p2[i, j] <- val
-      p2[j, i] <- val
-    }
-  }
+    p2_obs_vec <- c()
+    p2_mod_vec <- c()
+    N2_vec     <- c()
 
-  # 3-way
-  p3 <- array(0, dim = c(I, I, I))
-  for (i in 1:I) {
-    Pi <- P[, i]
-    for (j in i:I) {
-      Pj <- P[, j]
-      for (k in j:I) {
-        val <- sum(wts * Pi * Pj * P[, k])
-        p3[i, j, k] <- val; p3[i, k, j] <- val
-        p3[j, i, k] <- val; p3[j, k, i] <- val
-        p3[k, i, j] <- val; p3[k, j, i] <- val
-      }
-    }
-  }
+    for (i in seq_len(I - 1L)) {
+      for (j in seq.int(i + 1L, I)) {
 
-  # 4-way on demand
-  p4_env <- new.env(parent = emptyenv())
-  get_p4 <- function(a,b,c,d) {
-    key <- paste(sort(c(a,b,c,d)), collapse = ".")
-    if (!exists(key, envir = p4_env, inherits = FALSE)) {
-      val <- sum(wts * P[,a] * P[,b] * P[,c] * P[,d])
-      assign(key, val, envir = p4_env)
-    }
-    get(key, envir = p4_env, inherits = FALSE)
-  }
+        cc <- !is.na(Y[, i]) & !is.na(Y[, j])
+        Nij <- sum(cc)
 
-  ## ----- 5. observed margins -----
-  obs1 <- colMeans(Y)
-  obs2 <- crossprod(Y) / N
+        if (Nij > 0L) {
+          p2_obs_ij <- mean(Y[cc, i] * Y[cc, j])
+          p2_mod_ij <- mean(P[cc, i] * P[cc, j])
 
-  pairs   <- which(upper.tri(matrix(0, I, I)), arr.ind = TRUE)
-  s_obs   <- c(obs1, obs2[upper.tri(obs2, diag = FALSE)])
-  s_mod   <- c(p1,   p2[upper.tri(p2,   diag = FALSE)])
-  diff    <- s_obs - s_mod
-  p_stats <- length(diff)
-
-  ## ----- 6. Xi (Cai duplicate-aware), but from CLEAN margins -----
-  Xi <- matrix(0, p_stats, p_stats)
-
-  # uni-uni
-  for (i in 1:I) {
-    for (j in i:I) {
-      cij <- p2[i, j] - p1[i] * p1[j]
-      Xi[i, j] <- cij
-      Xi[j, i] <- cij
-    }
-  }
-
-  # uni-bi
-  for (r in 1:I) {
-    for (ab in seq_len(nrow(pairs))) {
-      i <- pairs[ab, 1]; j <- pairs[ab, 2]
-      crij <- p3[r, i, j] -
-        p1[r] * p2[i, j] -
-        p1[i] * p2[r, j] -
-        p1[j] * p2[r, i] +
-        2 * p1[r] * p1[i] * p1[j]
-      Xi[r, I + ab] <- crij
-      Xi[I + ab, r] <- crij
-    }
-  }
-
-  # bi-bi
-  for (ab in seq_len(nrow(pairs))) {
-    i <- pairs[ab, 1]; j <- pairs[ab, 2]
-    for (cd in ab: nrow(pairs)) {
-      k <- pairs[cd, 1]; l <- pairs[cd, 2]
-
-      if (i == k && j == l) {
-        cov_val <- p2[i, j] - p2[i, j]^2
-      } else {
-        idxs <- c(i, j, k, l)
-        u <- length(unique(idxs))
-        if (u == 4L) {
-          pijkl  <- get_p4(i, j, k, l)
-          cov_val <- pijkl - p2[i, j] * p2[k, l]
-        } else if (u == 3L) {
-          common <- intersect(c(i, j), c(k, l))[1]
-          others <- setdiff(idxs, common)
-          o1 <- others[1]; o2 <- others[2]
-          cov_val <- p3[common, o1, o2] - p2[common, o1] * p2[common, o2]
+          p2_obs_vec <- c(p2_obs_vec, p2_obs_ij)
+          p2_mod_vec <- c(p2_mod_vec, p2_mod_ij)
+          N2_vec     <- c(N2_vec, Nij)
         } else {
-          cov_val <- p2[i, j] - p2[i, j]^2
+          p2_obs_vec <- c(p2_obs_vec, NA_real_)
+          p2_mod_vec <- c(p2_mod_vec, NA_real_)
+          N2_vec     <- c(N2_vec, 0L)
         }
       }
-
-      Xi[I + ab, I + cd] <- cov_val
-      Xi[I + cd, I + ab] <- cov_val
     }
+
+    p2_obs <- p2_obs_vec
+    p2_mod <- p2_mod_vec
+    N2     <- N2_vec
+
+    var2 <- p2_mod * (1 - p2_mod) / pmax(N2, 1L)
+    var2[N2 <= 0L] <- NA_real_
   }
 
-  Sigma <- Xi / N
+  #------------------------------------------------------------
+  # 4. Stack margins
+  #------------------------------------------------------------
+  s_obs <- p1_obs
+  s_mod <- p1_mod
+  var_all <- var1
 
-  ## ----- 7. weight -----
-  if (weight == "diag") {
-    W <- diag(1 / (diag(Sigma) + eps), nrow = p_stats)
-  } else {
-    W <- tryCatch(
-      solve(Sigma + eps * diag(p_stats)),
-      error = function(e) diag(1 / (diag(Sigma) + eps), nrow = p_stats)
-    )
+  if (!is.null(p2_obs)) {
+    s_obs   <- c(s_obs, p2_obs)
+    s_mod   <- c(s_mod, p2_mod)
+    var_all <- c(var_all, var2)
   }
 
-  ## ----- 8. parameter count (mirt-like) -----
-  if (is.null(n_par)) {
-    # special case: your fit is 1p / Rasch-like
-    mdl <- if (!is.null(object$model)) tolower(object$model) else ""
-    if (mdl %in% c("1p","rasch","1pl")) {
-      n_par <- I + 1L      # mirt: 10 items -> 11 pars -> 55-11=44 df
-    } else {
-      # generic: item intercepts + item slopes + latent mean + latent cov
-      n_par <- length(nu) + length(lambda) + d + d*(d+1)/2
-    }
+  d <- s_obs - s_mod
+
+  #------------------------------------------------------------
+  # 5. Remove unusable margins
+  #------------------------------------------------------------
+  eps <- 1e-10
+  bad <- is.na(var_all) | (var_all < eps)
+  keep <- !bad
+
+  if (all(bad)) {
+    stop("All margins have zero or undefined variance; M2 cannot be computed.")
   }
 
-  df <- p_stats - n_par
+  d_use   <- d[keep]
+  var_use <- var_all[keep]
+
+  #------------------------------------------------------------
+  # 6. Compute diagonal-weight M2
+  #------------------------------------------------------------
+  W_inv <- 1 / var_use
+  M2 <- sum(d_use^2 * W_inv)
+
+  #------------------------------------------------------------
+  # 7. Degrees of freedom
+  #------------------------------------------------------------
+  n_margins_kept <- sum(keep)
+  n_par <- if (!is.null(obj$par)) obj$par else I
+
+  df <- n_margins_kept - n_par
   if (df < 1L) df <- 1L
 
-  ## ----- 9. test -----
-  M2    <- as.numeric(N * crossprod(diff, W %*% diff))
-  pval  <- stats::pchisq(M2, df = df, lower.tail = FALSE)
-  RMSEA <- sqrt(max((M2 - df) / (N * df), 0))
+  p_val <- stats::pchisq(M2, df = df, lower.tail = FALSE)
 
+  #------------------------------------------------------------
+  # 8. RMSEA and SRMSR
+  #------------------------------------------------------------
+  num <- M2 - df
+  den <- df * (N - 1)
+
+  RMSEA_M2 <- sqrt(max(num / den, 0))
+  SRMSR_M2 <- sqrt(mean(d_use^2))
+
+  #------------------------------------------------------------
+  # 9. Robust M2* using df-adjustment (Cai & Hansen 2013, diag-W form)
+  #------------------------------------------------------------
+  k_scale <- n_margins_kept / df  # scaling > 1
+
+  df_star <- df * k_scale
+  M2_star <- M2
+  p_star  <- stats::pchisq(M2_star, df = df_star, lower.tail = FALSE)
+
+  #------------------------------------------------------------
+  # 10. Return results
+  #------------------------------------------------------------
   list(
-    type  = "M2",
-    stat  = M2,
-    df    = df,
-    p     = pval,
-    RMSEA = RMSEA,
+    type     = "Fast M2 (diag W, NA-safe)",
+    M2       = M2,
+    df       = df,
+    p        = p_val,
+    RMSEA_M2 = RMSEA_M2,
+    SRMSR_M2 = SRMSR_M2,
+
+    M2_star  = M2_star,
+    df_star  = df_star,
+    p_star   = p_star,
+
+    n_margins = n_margins_kept,
+    n_par     = n_par,
+
     details = list(
-      integ   = "mc",
-      n_mc    = n_mc,
-      weight  = weight,
-      n_stats = p_stats,
-      n_par   = n_par
+      link      = obj$link,
+      use_pairs = use_pairs,
+      N         = N,
+      I         = I
     )
   )
 }
