@@ -21,11 +21,11 @@
 
 fit <- function(object, ...) {
 
-  object <- fit2pcogirt #CHANGE!!!!!!!!!!!!!!!
+  #object <- fit2pcogirt #CHANGE!!!!!!!!!!!!!!!
 
   ellipsis <- list(...)
   #moreve this next line later
-  ellipsis <- NULL
+  #ellipsis <- NULL
   if (is.null(x = ellipsis$chains)) {
     chains <- 3
   } else {
