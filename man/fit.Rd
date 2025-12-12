@@ -8,16 +8,13 @@ fit(object, ...)
 }
 \arguments{
 \item{object}{An object of class 'cog_irt'.}
-
-\item{num_ppc}{Number of posterior predictive replications. Default 200.}
 }
 \value{
-A list with elements for fit information q3, q3_avg, q3_max,
-q3_avg_ppp, q3_max_ppp, q3_pair_ppp
+A list with elements for fit information q3, ppp_q3
 }
 \description{
 Computes Yen's Q3 (residual correlations) and associated posterior predictive
-p-values (PPP) computed via parametric replication.
+p-values (PPP).
 }
 \references{
 :
@@ -25,5 +22,7 @@ Yen, W. M. (1984). Effects of local item dependence on the fit and equating
 performance of the three-parameter logistic model. \emph{Applied
 Psychological Measurement, 8}, 125-145.
 
-PPP reference see Longitudinalitemresponsemodelingandposterior predictivecheckinginRandStan
+Li, T., Xie, C., & Jiao, H. (2017). Assessing fit of alternative
+unidimensional polytomous IRT models using posterior predictive model
+checking. Psychological Methods, 22(2), 397-408.
 }
